@@ -1,0 +1,139 @@
+<!-- ====================================================
+     NAVBAR  —  sticky, responsive, accessible
+     ==================================================== -->
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
+<div class="site-header-wrap" id="siteHeaderWrap">
+  <header class="mx-auto flex max-w-[1536px] items-center justify-between gap-4 px-4 py-4 sm:px-8 lg:px-14">
+
+    <!-- ── Logo ── -->
+    <a href="/" class="flex shrink-0 items-center gap-2" aria-label="Maths Manthra Home">
+      <img
+        src="/assets/hippo.png"
+        alt="Maths Manthra logo"
+        class="h-9 w-9 rounded-full object-contain sm:h-10 sm:w-10"
+        onerror="this.style.display='none'"
+        loading="eager"
+      />
+      <span class="font-display text-base font-bold tracking-tight sm:text-xl">
+        <span class="text-white">Manthra</span><span class="bg-gradient-to-r from-fuchsia-400 to-orange-300 bg-clip-text text-transparent">Beads</span>
+      </span>
+      <span class="hidden -ml-1 flex-col font-body text-[8px] font-semibold tracking-[0.2em] text-indigo-200/70 sm:flex" aria-hidden="true">ABACUS ACADEMY</span>
+    </a>
+
+    <!-- ── Desktop center pill nav ── -->
+    <nav class="hidden items-center gap-1 rounded-full border border-white/10 bg-white/5 px-2 py-1.5 backdrop-blur-md lg:flex" aria-label="Main navigation">
+      <a href="/"                   id="navHome"    class="nav-link rounded-full px-4 py-2 text-sm font-medium text-indigo-100/80 transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400 focus-visible:outline-offset-2">Home</a>
+      <a href="/abacus-interactive" id="navAbacus"  class="nav-link rounded-full px-4 py-2 text-sm font-medium text-indigo-100/80 transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400 focus-visible:outline-offset-2">Abacus</a>
+      <a href="/about"              id="navAbout"   class="nav-link rounded-full px-4 py-2 text-sm font-medium text-indigo-100/80 transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400 focus-visible:outline-offset-2">About</a>
+      <a href="/contact"            id="navContact" class="nav-link rounded-full px-4 py-2 text-sm font-medium text-indigo-100/80 transition hover:bg-white/10 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400 focus-visible:outline-offset-2">Contact</a>
+    </nav>
+
+    <!-- ── Desktop CTA ── -->
+    <a href="/contact" class="hidden shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_30px_rgba(80,140,255,0.45)] transition hover:brightness-110 lg:flex" aria-label="Book a free demo">
+      Book a Free Demo <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+    </a>
+
+    <!-- ── Mobile hamburger ── -->
+    <button
+      id="mobileMenuBtn"
+      class="ml-auto flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white lg:hidden"
+      aria-label="Open navigation menu"
+      aria-expanded="false"
+      aria-controls="mobileMenu"
+    >
+      <i id="menuIcon" class="fa-solid fa-bars text-sm" aria-hidden="true"></i>
+    </button>
+
+  </header>
+
+  <!-- ── Mobile Navigation Drawer ── -->
+  <div
+    id="mobileMenu"
+    class="mx-4 mb-3 rounded-2xl border border-white/10 bg-[#0b0f2e] px-4 pb-4 lg:hidden"
+    role="navigation"
+    aria-label="Mobile navigation"
+  >
+    <nav class="flex flex-col gap-1 pt-2">
+      <a href="/"                   class="mobile-nav-link flex min-h-[44px] items-center rounded-xl px-4 py-2.5 text-sm font-medium text-indigo-100/80 transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400">Home</a>
+      <a href="/abacus-interactive" class="mobile-nav-link flex min-h-[44px] items-center rounded-xl px-4 py-2.5 text-sm font-medium text-indigo-100/80 transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400">Abacus</a>
+      <a href="/about"              id="mobileNavAbout"   class="mobile-nav-link flex min-h-[44px] items-center rounded-xl px-4 py-2.5 text-sm font-medium text-indigo-100/80 transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400">About</a>
+      <a href="/contact"            id="mobileNavContact" class="mobile-nav-link flex min-h-[44px] items-center rounded-xl px-4 py-2.5 text-sm font-medium text-indigo-100/80 transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400">Contact</a>
+      <a href="/contact" class="mt-2 flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110">
+        Book a Free Demo <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+      </a>
+    </nav>
+  </div>
+</div>
+
+<!-- ── Navbar JS: toggle, scroll darken, active state, close-on-outside-click ── -->
+<script>
+(function () {
+  const btn      = document.getElementById('mobileMenuBtn');
+  const menu     = document.getElementById('mobileMenu');
+  const icon     = document.getElementById('menuIcon');
+  const header   = document.getElementById('siteHeaderWrap');
+
+  // ── Toggle drawer ──
+  function openMenu() {
+    menu.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+    icon.classList.replace('fa-bars', 'fa-xmark');
+    btn.setAttribute('aria-label', 'Close navigation menu');
+  }
+
+  function closeMenu() {
+    menu.classList.remove('open');
+    btn.setAttribute('aria-expanded', 'false');
+    icon.classList.replace('fa-xmark', 'fa-bars');
+    btn.setAttribute('aria-label', 'Open navigation menu');
+  }
+
+  function toggleMenu() {
+    menu.classList.contains('open') ? closeMenu() : openMenu();
+  }
+
+  btn.addEventListener('click', function (e) {
+    e.stopPropagation();
+    toggleMenu();
+  });
+
+  // ── Close on outside click ──
+  document.addEventListener('click', function (e) {
+    if (!menu.contains(e.target) && !btn.contains(e.target)) {
+      closeMenu();
+    }
+  });
+
+  // ── Close on Escape key ──
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closeMenu();
+  });
+
+  // ── Close when a mobile nav link is clicked ──
+  menu.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', closeMenu);
+  });
+
+  // ── Scroll: add .scrolled class to header wrap ──
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 20) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  // ── Active nav state based on current path ──
+  var path = window.location.pathname;
+  document.querySelectorAll('.nav-link, .mobile-nav-link').forEach(function (link) {
+    var href = link.getAttribute('href');
+    var isActive = (href === '/' && path === '/') ||
+                   (href !== '/' && path.startsWith(href));
+    if (isActive) {
+      link.style.color = '#fff';
+      link.style.background = 'rgba(255,255,255,0.1)';
+    }
+  });
+})();
+</script>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Maths Manthra – Abacus, Vedic Maths, Online Tuition, Edupreneur Workshops. Boost your child's concentration, memory, and confidence through interactive learning programs." />
+    <title>Maths Manthra – Abacus Academy</title>
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Tailwind CSS (CDN build w/ inline config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', "sans-serif"],
+              body: ['"Poppins"', "sans-serif"],
+            },
+            colors: {
+              night: {
+                950: "#070a1f",
+                900: "#0b0f2e",
+                800: "#12183f",
+                700: "#1a2150",
+              },
+            },
+            boxShadow: {
+              glow: "0 0 25px rgba(255, 200, 60, 0.55)",
+              "glow-blue": "0 0 30px rgba(80, 140, 255, 0.45)",
+              "glow-pink": "0 0 25px rgba(255, 90, 200, 0.5)",
+            },
+            screens: {
+              xs: "380px",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Site-wide responsive CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+
+  <body class="font-body bg-night-950 overflow-x-hidden">
+
+    <!-- ============================= HERO SECTION ============================= -->
+    <section class="relative w-full overflow-x-hidden bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740]">
+
+      <!-- Starfield / ambient glow background -->
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
+        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
+        <!-- tiny stars -->
+        <span class="absolute top-[8%] left-[15%] h-1 w-1 rounded-full bg-white/70"></span>
+        <span class="absolute top-[18%] left-[45%] h-1 w-1 rounded-full bg-white/50"></span>
+        <span class="absolute top-[6%] left-[70%] h-1.5 w-1.5 rounded-full bg-white/60"></span>
+        <span class="absolute top-[40%] left-[8%] h-1 w-1 rounded-full bg-white/40"></span>
+        <span class="absolute top-[65%] left-[92%] h-1 w-1 rounded-full bg-white/50"></span>
+      </div>
+
+      <!-- ── NAVBAR ── -->
+      <%- include('partials/navbar') %>
+
+      <!-- ── HERO CONTENT ── -->
+      <div id="main-content" class="relative z-10 mx-auto max-w-[1536px] px-4 pt-8 sm:px-8 lg:px-14 lg:pt-6">
+        <div class="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-10">
+
+          <!-- ============ LEFT: COPY ============ -->
+          <div class="relative z-20 max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
+
+            <!-- Badge -->
+            <span class="inline-flex items-center gap-1 rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold tracking-wide text-white backdrop-blur-md sm:px-4">
+              WHERE <span class="text-amber-400 ml-1">MATH</span>&nbsp;COMES ALIVE
+            </span>
+
+            <!-- H1: fluid responsive sizing -->
+            <h1 class="mt-4 font-display font-extrabold leading-[1.1] text-white fluid-h1 sm:mt-5">
+              Abacus Learning
+              <br />
+              Through
+              <span class="relative inline-block text-amber-400">
+                Adventure
+                <svg
+                  class="absolute -bottom-1 left-0 w-full sm:-bottom-2"
+                  height="10"
+                  viewBox="0 0 220 10"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path d="M2 8C40 2 180 2 218 8" stroke="#FBBF24" stroke-width="3" stroke-linecap="round" />
+                </svg>
+              </span>
+              <i class="fa-solid fa-sparkle ml-1 align-top text-xl text-fuchsia-300 sm:text-2xl" aria-hidden="true"></i>
+            </h1>
+
+            <!-- Subtitle -->
+            <p class="mt-4 text-sm leading-relaxed text-indigo-100/80 sm:mt-5 sm:max-w-md sm:text-base lg:text-lg">
+              Boost concentration, memory, and confidence with our interactive
+              Abacus programs.
+            </p>
+
+            <!-- Buttons -->
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-3 lg:justify-start sm:mt-7 sm:gap-4">
+              <a
+                href="/abacus-interactive"
+                id="startLearningBtn"
+                class="inline-flex min-h-[44px] items-center gap-2 rounded-full bg-gradient-to-r from-amber-400 to-fuchsia-500 px-6 py-3 text-sm font-bold text-white shadow-glow transition hover:brightness-105 sm:px-7"
+              >
+                Start Learning Now
+                <i class="fa-solid fa-rocket" aria-hidden="true"></i>
+              </a>
+              <a
+                href="#"
+                class="inline-flex min-h-[44px] items-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white backdrop-blur-md transition hover:bg-white/10 sm:px-6"
+              >
+                <span class="flex h-6 w-6 items-center justify-center rounded-full bg-white/15" aria-hidden="true">
+                  <i class="fa-solid fa-play text-[10px]"></i>
+                </span>
+                Watch Demo
+              </a>
+            </div>
+
+            <!-- Stats strip -->
+            <div
+              class="mt-6 inline-flex flex-wrap items-center gap-x-4 gap-y-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-md sm:mt-8 sm:gap-x-6 sm:px-5 sm:py-4"
+              role="list"
+              aria-label="Key statistics"
+            >
+              <div class="flex items-center gap-2" role="listitem">
+                <span class="text-lg" aria-hidden="true">😊</span>
+                <div class="leading-tight">
+                  <p class="text-sm font-bold text-white">50K+</p>
+                  <p class="text-[10px] text-indigo-200/70">Happy Students</p>
+                </div>
+              </div>
+              <div class="h-7 w-px bg-white/10 hidden xs:block" aria-hidden="true"></div>
+              <div class="flex items-center gap-2" role="listitem">
+                <i class="fa-solid fa-graduation-cap text-base text-fuchsia-300" aria-hidden="true"></i>
+                <div class="leading-tight">
+                  <p class="text-sm font-bold text-white">200+</p>
+                  <p class="text-[10px] text-indigo-200/70">Expert Trainers</p>
+                </div>
+              </div>
+              <div class="h-7 w-px bg-white/10 hidden xs:block" aria-hidden="true"></div>
+              <div class="flex items-center gap-2" role="listitem">
+                <i class="fa-solid fa-earth-americas text-base text-cyan-300" aria-hidden="true"></i>
+                <div class="leading-tight">
+                  <p class="text-sm font-bold text-white">15+</p>
+                  <p class="text-[10px] text-indigo-200/70">Countries</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ============ RIGHT: ILLUSTRATION ============ -->
+          <div class="relative mx-auto w-full max-w-[560px] overflow-hidden lg:max-w-[900px] img-aspect-hero">
+
+            <!-- Floating castle island (top-left) -->
+            <img
+              src="/images/floating_island.png"
+              alt="Floating castle island"
+              class="absolute left-[2%] top-[4%] w-[22%] drop-shadow-[0_15px_20px_rgba(0,0,0,0.4)]"
+              loading="lazy"
+            />
+
+            <!-- Floating village island (right) — moved inward to prevent clip -->
+            <img
+              src="/images/village-island.png"
+              alt="Floating village island"
+              class="absolute right-[0%] top-[32%] w-[22%] drop-shadow-[0_15px_20px_rgba(0,0,0,0.4)]"
+              loading="lazy"
+            />
+
+            <!-- Balloon -->
+            <img
+              src="/images/balloon.png"
+              alt="Hot air balloon"
+              class="absolute right-[4%] top-[0%] z-30 w-[15%] sm:w-[18%]"
+              loading="lazy"
+            />
+
+            <!-- Floating math symbols — hidden on very small screens -->
+            <span class="deco-math-symbol absolute left-[42%] top-[2%] font-display text-2xl font-extrabold text-emerald-400 drop-shadow-[0_0_8px_rgba(52,211,153,0.8)] sm:text-3xl" aria-hidden="true">7</span>
+            <span class="deco-math-symbol absolute left-[62%] top-[12%] font-display text-xl font-extrabold text-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.8)] sm:text-2xl" aria-hidden="true">×</span>
+            <span class="deco-math-symbol absolute left-[72%] top-[6%] font-display text-xl font-extrabold text-fuchsia-400 drop-shadow-[0_0_8px_rgba(232,121,249,0.8)] sm:text-2xl" aria-hidden="true">3</span>
+            <span class="deco-math-symbol absolute left-[75%] top-[20%] font-display text-xl font-extrabold text-amber-300 drop-shadow-[0_0_8px_rgba(252,211,77,0.8)] sm:text-2xl" aria-hidden="true">5</span>
+            <span class="deco-math-symbol absolute left-[64%] top-[24%] font-display text-lg font-extrabold text-orange-300 drop-shadow-[0_0_8px_rgba(253,186,116,0.8)] sm:text-xl" aria-hidden="true">+</span>
+            <span class="deco-math-symbol absolute left-[82%] top-[22%] font-display text-lg font-extrabold text-sky-300 drop-shadow-[0_0_8px_rgba(125,211,252,0.8)] sm:text-xl" aria-hidden="true">÷</span>
+            <span class="deco-math-symbol absolute left-[88%] top-[32%] font-display text-lg font-extrabold text-fuchsia-300 drop-shadow-[0_0_8px_rgba(240,171,252,0.8)] sm:text-xl" aria-hidden="true">2</span>
+
+            <!-- Main hero character (base island) -->
+            <img
+              id="heroCharacter"
+              src="/images/main_hippo.png"
+              alt="Interactive Abacus learning character"
+              class="absolute bottom-0 left-[4%] w-[92%] drop-shadow-[0_25px_35px_rgba(0,0,0,0.55)]"
+              style="transition: opacity 0.3s ease;"
+              loading="eager"
+            />
+
+            <!-- Clouds -->
+            <img
+              src="/images/clouds.png"
+              alt=""
+              class="absolute left-[10%] top-[10%] z-20 w-[26%]"
+              aria-hidden="true"
+              loading="lazy"
+            />
+
+            <!-- Junior Level signpost -->
+            <div class="absolute bottom-[26%] right-[1%] rotate-[-2deg] rounded-md border-2 border-amber-800/70 bg-gradient-to-b from-amber-700 to-amber-900 px-3 py-1.5 text-center shadow-lg sm:px-4 sm:py-2" aria-label="Junior Level">
+              <p class="font-display text-xs font-bold text-white sm:text-sm">Junior Level</p>
+              <p class="text-[9px] font-medium text-amber-100/90 sm:text-[10px]">Learn • Play • Excel</p>
+            </div>
+
+            <!-- Treasure chest — moved inward -->
+            <div class="deco-treasure absolute bottom-[1%] right-[1%] h-20 w-20 drop-shadow-[0_0_15px_rgba(251,191,36,0.6)] sm:h-28 sm:w-28" aria-hidden="true">
+              <img src="/images/treasure.png" alt="Treasure Chest" class="h-full w-full object-contain" loading="lazy" />
+            </div>
+
+            <!-- Daily Challenge pill — kept inward -->
+            <a
+              href="#"
+              class="deco-challenge-pill absolute bottom-[14%] right-[0%] flex items-center gap-1 rounded-full border border-white/10 bg-gradient-to-r from-indigo-600 to-violet-600 px-3 py-1.5 text-[10px] font-semibold text-white shadow-[0_0_30px_rgba(80,140,255,0.45)] sm:bottom-[3%] sm:px-4 sm:py-2 sm:text-xs"
+            >
+              Daily Challenge&nbsp;·&nbsp;Play Now
+              <i class="fa-solid fa-arrow-right text-[9px]" aria-hidden="true"></i>
+            </a>
+
+            <!-- Butterfly decorative -->
+            <span class="absolute -left-[2%] bottom-[6%] text-2xl sm:text-3xl" aria-hidden="true" role="presentation">🦋</span>
+          </div>
+        </div>
+
+        <!-- ── BOTTOM GLASS CONTROL PANEL ── -->
+        <div
+          class="relative z-20 mt-8 mb-8 flex flex-col gap-5 rounded-3xl border border-white/10 bg-white/5 p-4 backdrop-blur-xl sm:p-6 lg:mt-4 lg:flex-row lg:items-center lg:justify-between lg:gap-4 hero-bottom-panel"
+        >
+          <!-- Select Level -->
+          <div class="flex-1">
+            <p class="mb-3 text-center text-sm font-semibold text-white lg:text-left">Select Level</p>
+            <!-- 4-column grid on ≤380px, flex row on ≥480px -->
+            <div class="level-btn-row" role="radiogroup" aria-label="Select learning level">
+              <button class="level-btn active flex flex-col items-center gap-1.5" data-character="hippo" aria-pressed="true">
+                <div class="level-card-inner relative h-16 w-16 overflow-hidden rounded-2xl border-2 border-cyan-400 bg-gradient-to-b from-indigo-800/80 to-indigo-950/80 shadow-[0_0_20px_rgba(34,211,238,0.35)] transition hover:scale-105 xs:h-20 xs:w-20">
+                  <img src="/images/face_hippo.png" alt="Junior Hippo" class="h-full w-full object-cover" loading="lazy" />
+                </div>
+                <span class="text-xs font-semibold text-white">Junior</span>
+              </button>
+
+              <button class="level-btn flex flex-col items-center gap-1.5" data-character="leo" aria-pressed="false">
+                <div class="level-card-inner relative h-16 w-16 overflow-hidden rounded-2xl border-2 border-cyan-400 bg-gradient-to-b from-indigo-800/80 to-indigo-950/80 shadow-[0_0_20px_rgba(34,211,238,0.35)] transition hover:scale-105 xs:h-20 xs:w-20">
+                  <img src="/images/face_leo.png" alt="Intermediate Leo" class="h-full w-full object-cover" loading="lazy" />
+                </div>
+                <span class="text-xs font-semibold text-white">Intermediate</span>
+              </button>
+
+              <button class="level-btn flex flex-col items-center gap-1.5" data-character="astro" aria-pressed="false">
+                <div class="level-card-inner relative h-16 w-16 overflow-hidden rounded-2xl border-2 border-cyan-400 bg-gradient-to-b from-indigo-800/80 to-indigo-950/80 shadow-[0_0_20px_rgba(34,211,238,0.35)] transition hover:scale-105 xs:h-20 xs:w-20">
+                  <img src="/images/face_astro.png" alt="Advanced Astro" class="h-full w-full object-cover" loading="lazy" />
+                </div>
+                <span class="text-xs font-semibold text-white">Advanced</span>
+              </button>
+
+              <button class="level-btn flex flex-col items-center gap-1.5" data-character="master" aria-pressed="false">
+                <div class="level-card-inner relative h-16 w-16 overflow-hidden rounded-2xl border-2 border-cyan-400 bg-gradient-to-b from-indigo-800/80 to-indigo-950/80 shadow-[0_0_20px_rgba(34,211,238,0.35)] transition hover:scale-105 xs:h-20 xs:w-20">
+                  <img src="/images/face_trophy.png" alt="Master Trophy" class="h-full w-full object-cover" loading="lazy" />
+                </div>
+                <span class="text-xs font-semibold text-white">Master</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Divider (desktop only) -->
+          <div class="hidden h-16 w-px bg-white/10 lg:block" aria-hidden="true"></div>
+
+          <!-- Adjust Rods -->
+          <div class="flex-1">
+            <p class="mb-3 text-center text-sm font-semibold text-white lg:text-left">Adjust Rods</p>
+            <div class="flex items-center justify-center gap-4 lg:justify-start">
+              <button
+                id="btnDecreaseRods"
+                class="flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gradient-to-b from-amber-400 to-amber-600 text-night-950 shadow-glow transition hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                aria-label="Decrease rod count"
+              >
+                <i class="fa-solid fa-minus" aria-hidden="true"></i>
+              </button>
+
+              <div class="text-center leading-tight min-w-[52px]">
+                <p id="rodCountDisplay" class="font-display text-2xl font-extrabold text-white transition-transform duration-200">13</p>
+                <p class="text-[11px] text-indigo-200/70">Rods</p>
+              </div>
+
+              <button
+                id="btnIncreaseRods"
+                class="flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-full bg-gradient-to-b from-amber-400 to-amber-600 text-night-950 shadow-glow transition hover:brightness-110 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                aria-label="Increase rod count"
+              >
+                <i class="fa-solid fa-plus" aria-hidden="true"></i>
+              </button>
+
+              <!-- Dynamic Mini Abacus Preview (interactive link) -->
+              <a
+                href="/abacus-interactive"
+                id="miniAbacusPreviewLink"
+                class="ml-2 hidden flex-col gap-1 rounded-2xl border border-white/10 bg-indigo-950/70 px-3 py-2 md:flex transition hover:border-amber-400/50 hover:bg-indigo-900/80 group cursor-pointer"
+                title="Click to open interactive abacus with these rods"
+                aria-label="Interactive abacus rod preview"
+              >
+                <div id="miniBeadsUpper" class="flex gap-1 justify-center items-center"></div>
+                <div class="h-0.5 w-full bg-white/20 rounded-full my-0.5 group-hover:bg-amber-400/40 transition"></div>
+                <div id="miniBeadsLower" class="flex gap-1 justify-center items-center"></div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- ========================= END HERO SECTION ========================= -->
+
+    <!-- Script to handle character/level change & dynamic adjust rods -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        // --- CHARACTER / LEVEL SELECTION ---
+        var levelButtons = document.querySelectorAll('.level-btn');
+        var heroCharacter = document.getElementById('heroCharacter');
+
+        var characterImages = {
+          hippo:  '/images/main_hippo.png',
+          leo:    '/images/main_leo.png',
+          astro:  '/images/main_astro.png',
+          master: '/images/main_hippo.png'
+        };
+
+        var characterToMode = {
+          hippo:  'junior',
+          leo:    'intermediate',
+          astro:  'advanced',
+          master: 'master'
+        };
+
+        var modeToCharacter = {
+          junior:       'hippo',
+          intermediate: 'leo',
+          advanced:     'astro',
+          master:       'master'
+        };
+
+        var currentMode = localStorage.getItem('abacus_mode') || 'junior';
+
+        // Set initial character button active state
+        var initialChar = modeToCharacter[currentMode] || 'hippo';
+        levelButtons.forEach(function (btn) {
+          var char = btn.getAttribute('data-character');
+          var isMatch = (char === initialChar);
+          btn.classList.toggle('active', isMatch);
+          btn.setAttribute('aria-pressed', isMatch ? 'true' : 'false');
+          if (isMatch && heroCharacter && characterImages[char]) {
+            heroCharacter.src = characterImages[char];
+          }
+        });
+
+        levelButtons.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            levelButtons.forEach(function (b) {
+              b.classList.remove('active');
+              b.setAttribute('aria-pressed', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-pressed', 'true');
+
+            var char = btn.getAttribute('data-character');
+            currentMode = characterToMode[char] || 'junior';
+            try { localStorage.setItem('abacus_mode', currentMode); } catch (e) {}
+
+            updateLinksAndPreview();
+
+            if (heroCharacter) {
+              heroCharacter.style.opacity = '0';
+              setTimeout(function () {
+                heroCharacter.src = characterImages[char];
+                heroCharacter.style.opacity = '1';
+              }, 250);
+            }
+          });
+        });
+
+        // --- DYNAMIC ADJUST RODS SYSTEM ---
+        var ROD_OPTIONS = [3, 5, 7, 10, 13, 15, 17];
+        var savedRods = parseInt(localStorage.getItem('abacus_rods'), 10);
+        var initialIndex = ROD_OPTIONS.indexOf(savedRods);
+        var currentRodIndex = initialIndex !== -1 ? initialIndex : 4; // default to 13 (index 4)
+
+        var btnDecrease = document.getElementById('btnDecreaseRods');
+        var btnIncrease = document.getElementById('btnIncreaseRods');
+        var rodDisplay = document.getElementById('rodCountDisplay');
+        var miniUpper = document.getElementById('miniBeadsUpper');
+        var miniLower = document.getElementById('miniBeadsLower');
+        var startLearningBtn = document.getElementById('startLearningBtn');
+        var miniAbacusPreviewLink = document.getElementById('miniAbacusPreviewLink');
+
+        function renderMiniBeads(rodCount) {
+          if (!miniUpper || !miniLower) return;
+          miniUpper.innerHTML = '';
+          miniLower.innerHTML = '';
+
+          // Bead color palette based on mode
+          var upperColors = {
+            junior:       ['bg-rose-400', 'bg-amber-400', 'bg-emerald-400', 'bg-sky-400', 'bg-fuchsia-400'],
+            intermediate: ['bg-red-500', 'bg-rose-500', 'bg-red-600'],
+            advanced:     ['bg-amber-600', 'bg-amber-700', 'bg-yellow-600'],
+            master:       ['bg-amber-700', 'bg-stone-600', 'bg-yellow-700']
+          };
+
+          var lowerColors = {
+            junior:       ['bg-indigo-400', 'bg-violet-400', 'bg-cyan-400', 'bg-teal-400'],
+            intermediate: ['bg-red-700', 'bg-rose-800'],
+            advanced:     ['bg-amber-900', 'bg-stone-700'],
+            master:       ['bg-stone-800', 'bg-neutral-700']
+          };
+
+          var uPal = upperColors[currentMode] || upperColors.junior;
+          var lPal = lowerColors[currentMode] || lowerColors.junior;
+
+          var beadSizeClass = rodCount <= 7 ? 'h-3.5 w-3.5' : (rodCount <= 13 ? 'h-3 w-3' : 'h-2.5 w-2.5');
+
+          for (var i = 0; i < rodCount; i++) {
+            var uColor = uPal[i % uPal.length];
+            var lColor = lPal[i % lPal.length];
+
+            // Upper bead
+            var uBead = document.createElement('span');
+            uBead.className = beadSizeClass + ' rounded-full ' + uColor + ' shadow-sm transition-all duration-200 transform hover:scale-125';
+            miniUpper.appendChild(uBead);
+
+            // Lower bead
+            var lBead = document.createElement('span');
+            lBead.className = beadSizeClass + ' rounded-full ' + lColor + ' opacity-90 shadow-sm transition-all duration-200 transform hover:scale-125';
+            miniLower.appendChild(lBead);
+          }
+        }
+
+        function updateLinksAndPreview() {
+          var currentRods = ROD_OPTIONS[currentRodIndex];
+
+          if (rodDisplay) {
+            rodDisplay.textContent = currentRods;
+            // Micro bump animation
+            rodDisplay.classList.add('scale-110', 'text-amber-400');
+            setTimeout(function () {
+              rodDisplay.classList.remove('scale-110', 'text-amber-400');
+            }, 180);
+          }
+
+          if (btnDecrease) {
+            btnDecrease.disabled = (currentRodIndex === 0);
+          }
+          if (btnIncrease) {
+            btnIncrease.disabled = (currentRodIndex === ROD_OPTIONS.length - 1);
+          }
+
+          var targetUrl = '/abacus-interactive?rods=' + currentRods + '&mode=' + currentMode;
+          if (startLearningBtn) {
+            startLearningBtn.setAttribute('href', targetUrl);
+          }
+          if (miniAbacusPreviewLink) {
+            miniAbacusPreviewLink.setAttribute('href', targetUrl);
+          }
+
+          try {
+            localStorage.setItem('abacus_rods', currentRods);
+            localStorage.setItem('abacus_mode', currentMode);
+          } catch (e) {}
+
+          renderMiniBeads(currentRods);
+        }
+
+        if (btnDecrease) {
+          btnDecrease.addEventListener('click', function () {
+            if (currentRodIndex > 0) {
+              currentRodIndex--;
+              updateLinksAndPreview();
+            }
+          });
+        }
+
+        if (btnIncrease) {
+          btnIncrease.addEventListener('click', function () {
+            if (currentRodIndex < ROD_OPTIONS.length - 1) {
+              currentRodIndex++;
+              updateLinksAndPreview();
+            }
+          });
+        }
+
+        // Initialize state
+        updateLinksAndPreview();
+      });
+    </script>
+  </body>
+</html>

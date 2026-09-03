@@ -1,0 +1,220 @@
+/* ============================================================
+   abacus.css  -  BrainyBeads Virtual Abacus
+   Pure CSS: frame, rods, beads, animations, mode themes
+   ============================================================ */
+
+.abacus-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0b1030 0%, #141b4d 50%, #0a1740 100%);
+  overflow-x: hidden;
+  font-family: "Poppins", sans-serif;
+}
+
+.ambient-blob { position: absolute; border-radius: 50%; pointer-events: none; filter: blur(90px); }
+.blob-indigo  { background: rgba(99,102,241,0.18); }
+.blob-fuchsia { background: rgba(217,70,239,0.10); }
+.blob-cyan    { background: rgba(34,211,238,0.09); }
+
+/* TOOLBAR */
+.toolbar-glass {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.10);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 1.25rem;
+}
+.toolbar-label {
+  font-size: 0.6875rem; font-weight: 600;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: rgba(165,180,252,0.65); margin-bottom: 0.375rem;
+}
+
+.select-pill {
+  appearance: none; -webkit-appearance: none;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #fff; border-radius: 9999px;
+  padding: 0.45rem 2rem 0.45rem 0.9rem;
+  font-size: 0.8125rem; font-weight: 600;
+  font-family: "Poppins", sans-serif; cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='rgba(165,180,252,0.6)'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 0.65rem center;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.select-pill:focus { outline: none; border-color: rgba(167,139,250,0.6); box-shadow: 0 0 0 3px rgba(167,139,250,0.15); }
+.select-pill option { background: #141b4d; color: #fff; }
+
+.icon-btn {
+  display: inline-flex; align-items: center; gap: 0.45rem;
+  border-radius: 9999px; padding: 0.48rem 1rem;
+  font-size: 0.78rem; font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  border: 1px solid rgba(255,255,255,0.12);
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.85); cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+.icon-btn:hover { background: rgba(255,255,255,0.12); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+.icon-btn:active { transform: translateY(0); }
+.icon-btn.amber { background: linear-gradient(135deg,#f59e0b,#d97706); border-color: transparent; color: #0b0f2e; box-shadow: 0 0 18px rgba(245,158,11,0.4); }
+.icon-btn.amber:hover { filter: brightness(1.1); }
+.icon-btn.indigo { background: linear-gradient(135deg,#6366f1,#7c3aed); border-color: transparent; color: #fff; box-shadow: 0 0 18px rgba(99,102,241,0.4); }
+.icon-btn.indigo:hover { filter: brightness(1.1); }
+
+/* VALUE DISPLAY */
+.value-display {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.09);
+  backdrop-filter: blur(12px);
+  border-radius: 1rem; padding: 0.6rem 1.4rem;
+  display: inline-flex; align-items: baseline; gap: 0.5rem;
+}
+.value-label { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(165,180,252,0.6); }
+.value-number {
+  font-family: "Baloo 2", sans-serif; font-size: 2rem; font-weight: 800; line-height: 1;
+  background: linear-gradient(135deg,#fbbf24,#f472b6,#818cf8);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  min-width: 4ch; text-align: right;
+}
+
+/* ABACUS FRAME */
+.abacus-wrapper { display: flex; justify-content: center; align-items: center; padding: 2rem 1rem; }
+
+.abacus-frame-outer {
+  position: relative; border-radius: 1.1rem;
+  box-shadow: 0 28px 60px rgba(0,0,0,0.80), 0 8px 20px rgba(0,0,0,0.60),
+    inset 0 1px 0 rgba(255,255,255,0.1), inset 0 -2px 6px rgba(0,0,0,0.5),
+    0 0 50px rgba(0,0,0,0.3);
+  background: linear-gradient(165deg, #222222 0%, #151515 25%, #1c1c1c 55%, #050505 100%);
+}
+.abacus-frame-outer::before {
+  content: ""; position: absolute; inset: 0; border-radius: inherit;
+  background: repeating-linear-gradient(92deg,transparent,transparent 3px,rgba(255,255,255,0.015) 3px,rgba(255,255,255,0.015) 4px);
+  pointer-events: none;
+}
+
+.abacus-frame-inner {
+  margin: 14px; border-radius: 0.6rem;
+  background: linear-gradient(180deg, #111111 0%, #050505 100%);
+  box-shadow: inset 0 0 30px rgba(0,0,0,0.9), inset 0 1px 0 rgba(255,255,255,0.05);
+  position: relative; overflow: visible;
+}
+
+/* DIVIDER */
+.abacus-divider {
+  position: absolute; left: 0; right: 0; height: 18px; z-index: 10;
+  background: linear-gradient(180deg, #333333 0%, #222222 40%, #111111 100%);
+  box-shadow: 0 3px 10px rgba(0,0,0,0.6), 0 -1px 3px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.08), inset 0 -1px 0 rgba(0,0,0,0.4);
+}
+.abacus-divider::before {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg,transparent,transparent 5px,rgba(255,255,255,0.02) 5px,rgba(255,255,255,0.02) 6px);
+}
+
+/* ROD COLUMNS */
+.abacus-rods-container { display: flex; position: relative; width: 100%; height: 100%; }
+.rod-column { display: flex; flex-direction: column; align-items: center; position: relative; flex: 1; min-width: 0; }
+
+/* STEEL ROD */
+.rod-shaft {
+  position: absolute; top: 0; bottom: 0; width: 5px; left: 50%; transform: translateX(-50%);
+  z-index: 1; border-radius: 3px;
+  background: linear-gradient(90deg,#4a5568 0%,#718096 20%,#e2e8f0 40%,#a0aec0 60%,#718096 80%,#4a5568 100%);
+  box-shadow: 1px 0 3px rgba(0,0,0,0.4),-1px 0 2px rgba(255,255,255,0.08),inset 0 0 4px rgba(0,0,0,0.3);
+}
+
+/* BEAD SECTIONS */
+.bead-section-upper { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; position: relative; z-index: 5; width: 100%; }
+.bead-section-lower { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; position: relative; z-index: 5; width: 100%; }
+
+/* BEADS */
+.bead {
+  position: relative; border-radius: 2px; cursor: pointer; flex-shrink: 0;
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  transition: transform 200ms ease-out, filter 0.2s ease, box-shadow 0.25s ease;
+  z-index: 6; will-change: transform;
+}
+.bead::before {
+  content: ""; position: absolute; top: 15%; left: 18%; width: 35%; height: 28%;
+  background: radial-gradient(ellipse at center,rgba(255,255,255,0.75) 0%,rgba(255,255,255,0) 100%);
+  border-radius: 50%; pointer-events: none;
+}
+.bead::after {
+  content: ""; position: absolute; bottom: 12%; right: 15%; width: 22%; height: 16%;
+  background: radial-gradient(ellipse at center,rgba(255,255,255,0.3) 0%,rgba(255,255,255,0) 100%);
+  border-radius: 50%; pointer-events: none;
+}
+.bead:hover { filter: brightness(1.15); }
+.bead:active { filter: brightness(1.25); }
+
+/* ROD DOTS */
+.rod-dot {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 6px; height: 6px; border-radius: 50%; z-index: 12; box-shadow: 0 0 6px currentColor;
+}
+.dot-units, .dot-thousands, .dot-millions, .dot-billions { background: #ffffff; color: #ffffff; }
+
+.rod-label {
+  position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%);
+  font-size: 0.42rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+  white-space: nowrap; color: rgba(165,180,252,0.45); pointer-events: none;
+}
+
+/* ---- JUNIOR ---- */
+
+.mode-junior .bead.upper-type { background: radial-gradient(circle at 35% 35%,#ff8fa3,#e11d48); box-shadow: 0 4px 14px rgba(225,29,72,0.5),inset 0 -2px 5px rgba(0,0,0,0.3); }
+.mode-junior .bead.lower-type[data-idx="0"] { background: radial-gradient(circle at 35% 35%,#fdba74,#ea580c); box-shadow: 0 4px 14px rgba(234,88,12,0.5),inset 0 -2px 5px rgba(0,0,0,0.3); }
+.mode-junior .bead.lower-type[data-idx="1"] { background: radial-gradient(circle at 35% 35%,#fde047,#ca8a04); box-shadow: 0 4px 14px rgba(202,138,4,0.5),inset 0 -2px 5px rgba(0,0,0,0.3); }
+.mode-junior .bead.lower-type[data-idx="2"] { background: radial-gradient(circle at 35% 35%,#86efac,#16a34a); box-shadow: 0 4px 14px rgba(22,163,74,0.5),inset 0 -2px 5px rgba(0,0,0,0.3); }
+.mode-junior .bead.lower-type[data-idx="3"] { background: radial-gradient(circle at 35% 35%,#93c5fd,#2563eb); box-shadow: 0 4px 14px rgba(37,99,235,0.5),inset 0 -2px 5px rgba(0,0,0,0.3); }
+.mode-junior .bead.active { filter: brightness(1.18) saturate(1.3); }
+
+/* ---- INTERMEDIATE ---- */
+
+.mode-intermediate .rod-shaft { background: linear-gradient(90deg, #374151 0%, #4B5563 20%, #9CA3AF 50%, #4B5563 80%, #374151 100%); }
+.mode-intermediate .bead { background: oklch(70.4% 0.191 22.216); box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 -2px 4px rgba(0,0,0,0.3); }
+.mode-intermediate .bead:hover { background: oklch(63.7% 0.237 25.331); filter: none; }
+.mode-intermediate .bead.active { background: oklch(57.7% 0.245 27.325); box-shadow: 0 5px 12px rgba(0,0,0,0.5), inset 0 -2px 4px rgba(0,0,0,0.3); filter: none; }
+
+/* ---- ADVANCED ---- */
+
+.mode-advanced .rod-shaft { background: linear-gradient(90deg, #374151 0%, #4B5563 20%, #9CA3AF 50%, #4B5563 80%, #374151 100%); }
+.mode-advanced .bead { background: radial-gradient(circle at 40% 30%, #A67556 0%, #8B5A3C 45%, #5E3923 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.5), inset 0 -2px 4px rgba(0,0,0,0.3); }
+.mode-advanced .bead.upper-type { background: radial-gradient(circle at 40% 30%, #B08264 0%, #8B5A3C 45%, #5E3923 100%); }
+.mode-advanced .bead.active { filter: brightness(1.1); box-shadow: 0 5px 12px rgba(0,0,0,0.6), inset 0 -2px 4px rgba(0,0,0,0.3); }
+
+/* ---- MASTER ---- */
+
+.mode-master .rod-shaft { background: linear-gradient(90deg, #374151 0%, #4B5563 20%, #9CA3AF 50%, #4B5563 80%, #374151 100%); }
+.mode-master .bead { background: radial-gradient(circle at 40% 30%, #8A5A39 0%, #6B4226 45%, #3D2211 100%); box-shadow: 0 4px 8px rgba(0,0,0,0.6), inset 0 -2px 4px rgba(0,0,0,0.4); }
+.mode-master .bead.upper-type { background: radial-gradient(circle at 40% 30%, #9C6843 0%, #6B4226 45%, #3D2211 100%); }
+.mode-master .bead.active { filter: brightness(1.15); box-shadow: 0 5px 12px rgba(0,0,0,0.7), inset 0 -2px 4px rgba(0,0,0,0.4); }
+
+
+/* MODE BUTTONS */
+.mode-btn {
+  display: inline-flex; align-items: center; gap: 0.35rem;
+  padding: 0.35rem 0.85rem; border-radius: 9999px;
+  font-size: 0.72rem; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; border: 1px solid rgba(255,255,255,0.10);
+  background: rgba(255,255,255,0.04); color: rgba(255,255,255,0.55);
+  cursor: pointer; transition: all 0.2s; font-family: "Poppins", sans-serif;
+}
+.mode-btn:hover { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.85); }
+.mode-btn[data-mode="junior"].active       { border-color: rgba(167,139,250,0.55); background: rgba(167,139,250,0.12); color: #c4b5fd; }
+.mode-btn[data-mode="intermediate"].active { border-color: rgba(34,211,238,0.55);  background: rgba(34,211,238,0.10);  color: #67e8f9; }
+.mode-btn[data-mode="advanced"].active     { border-color: rgba(99,102,241,0.55);  background: rgba(99,102,241,0.12);  color: #a5b4fc; }
+.mode-btn[data-mode="master"].active       { border-color: rgba(156,163,175,0.55); background: rgba(156,163,175,0.10); color: #e5e7eb; }
+
+/* FOCUS */
+.bead:focus-visible { outline: 2px solid rgba(251,191,36,0.9); outline-offset: 2px; }
+.icon-btn:focus-visible,.mode-btn:focus-visible,.select-pill:focus-visible { outline: 2px solid rgba(167,139,250,0.8); outline-offset: 2px; }
+
+.info-strip { font-size: 0.65rem; color: rgba(165,180,252,0.4); text-align: center; letter-spacing: 0.08em; }
+
+@media (max-width: 640px) {
+  .abacus-frame-outer { border-radius: 0.75rem; }
+  .abacus-frame-inner { margin: 8px; }
+  .value-number { font-size: 1.5rem; }
+}

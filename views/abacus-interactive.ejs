@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual Abacus | ManthraBeads Abacus Academy</title>
+    <meta name="description" content="Interactive virtual soroban abacus for ManthraBeads Academy students. Practice arithmetic with Junior, Intermediate, Advanced and Master modes." />
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+              body:    ['"Poppins"', 'sans-serif'],
+            },
+            colors: {
+              night: { 950:'#070a1f', 900:'#0b0f2e', 800:'#12183f', 700:'#1a2150' },
+            },
+            boxShadow: {
+              glow:        '0 0 25px rgba(255,200,60,0.55)',
+              'glow-blue': '0 0 30px rgba(80,140,255,0.45)',
+              'glow-pink': '0 0 25px rgba(255,90,200,0.5)',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Abacus CSS -->
+    <link rel="stylesheet" href="/css/abacus.css" />
+
+    <!-- Site-wide responsive CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+
+    <style>
+      /* Scroll overflow for page */
+      html, body { scroll-behavior: smooth; }
+    </style>
+  </head>
+
+  <body id="abacusBody" class="abacus-page font-body mode-junior">
+
+    <!-- ====================================================
+         AMBIENT BACKGROUND BLOBS (fixed behind everything)
+         ==================================================== -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
+      <div class="ambient-blob blob-indigo"  style="width:600px;height:600px;top:-120px;left:10%"></div>
+      <div class="ambient-blob blob-fuchsia" style="width:500px;height:500px;top:30%;right:-80px"></div>
+      <div class="ambient-blob blob-cyan"    style="width:400px;height:400px;bottom:0;left:45%;transform:translateX(-50%)"></div>
+      <span class="absolute top-[8%]  left-[15%] h-1   w-1   rounded-full bg-white/70"></span>
+      <span class="absolute top-[18%] left-[45%] h-1   w-1   rounded-full bg-white/50"></span>
+      <span class="absolute top-[6%]  left-[70%] h-1.5 w-1.5 rounded-full bg-white/60"></span>
+      <span class="absolute top-[40%] left-[8%]  h-1   w-1   rounded-full bg-white/40"></span>
+      <span class="absolute top-[65%] left-[92%] h-1   w-1   rounded-full bg-white/50"></span>
+    </div>
+
+    <!-- ====================================================
+         NAVBAR
+         ==================================================== -->
+    <%- include('partials/navbar') %>
+
+    <!-- ====================================================
+         MAIN
+         ==================================================== -->
+    <main id="main-content" class="relative z-10 mx-auto max-w-[1536px] px-4 pb-20 sm:px-6 lg:px-8">
+
+      <!-- Page heading -->
+      <div class="mt-6 text-center">
+        <span class="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-white backdrop-blur-md">
+          <i class="fa-solid fa-circle-nodes text-amber-400"></i>
+          INTERACTIVE SOROBAN ABACUS
+        </span>
+        <h1 class="mt-3 font-display text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
+          Virtual <span class="bg-gradient-to-r from-amber-400 to-fuchsia-400 bg-clip-text text-transparent">Abacus</span>
+        </h1>
+        <p class="mt-1.5 text-sm text-indigo-200/60 sm:text-base">
+          Click beads to slide them &mdash; Heaven bead = <strong class="text-amber-400">5</strong>,
+          Earth beads = <strong class="text-cyan-400">1</strong> each.
+        </p>
+      </div>
+
+      <!-- ==========================================
+           TOOLBAR (glassmorphism panel)
+           ========================================== -->
+      <div class="toolbar-glass mx-auto mt-6 max-w-4xl px-5 py-4">
+        <div class="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+
+          <!-- MODE selector -->
+          <div>
+            <p class="toolbar-label">Mode</p>
+            <div class="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Learning mode">
+              <button class="mode-btn active" data-mode="junior"        id="modeJunior"  aria-pressed="true">
+                <i class="fa-solid fa-star"   style="font-size:0.55rem"></i>Junior
+              </button>
+              <button class="mode-btn"        data-mode="intermediate"  id="modeInter"   aria-pressed="false">
+                <i class="fa-solid fa-bolt"   style="font-size:0.55rem"></i>Soroban Red
+              </button>
+              <button class="mode-btn"        data-mode="master"        id="modeMaster"  aria-pressed="false">
+                <i class="fa-solid fa-crown"  style="font-size:0.55rem"></i>Walnut Pro
+              </button>
+            </div>
+          </div>
+
+          <!-- Vertical divider -->
+          <div class="hidden h-12 w-px bg-white/10 self-center sm:block" aria-hidden="true"></div>
+
+          <!-- ROD COUNT -->
+          <div>
+            <p class="toolbar-label">Rods</p>
+            <select id="rodCountSelect" class="select-pill" aria-label="Number of rods">
+              <option value="3">3 Rods</option>
+              <option value="5">5 Rods</option>
+              <option value="7">7 Rods</option>
+              <option value="10">10 Rods</option>
+              <option value="13" selected>13 Rods</option>
+              <option value="15">15 Rods</option>
+              <option value="17">17 Rods</option>
+            </select>
+          </div>
+
+          <!-- Vertical divider -->
+          <div class="hidden h-12 w-px bg-white/10 self-center sm:block" aria-hidden="true"></div>
+
+          <!-- ACTIONS -->
+          <div>
+            <p class="toolbar-label">Actions</p>
+            <div class="flex gap-2">
+              <button id="btnReset" class="icon-btn amber" aria-label="Reset abacus to zero">
+                <i class="fa-solid fa-rotate-left" style="font-size:0.7rem"></i> Reset
+              </button>
+              <button id="btnClear" class="icon-btn indigo" aria-label="Clear all beads">
+                <i class="fa-solid fa-eraser" style="font-size:0.7rem"></i> Clear
+              </button>
+            </div>
+          </div>
+
+          <!-- VALUE DISPLAY (right-aligned) -->
+          <div class="ml-auto self-center flex items-center gap-3">
+            <button id="btnToggleValue" class="icon-btn indigo" style="padding: 0.6rem; border-radius: 50%; width: 2.2rem; height: 2.2rem; justify-content: center;" aria-label="Toggle value visibility">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+            <div class="value-display" role="status" aria-live="polite" aria-label="Current abacus value">
+              <span class="value-label">Value</span>
+              <span id="valueNumber" class="value-number">0</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ==========================================
+           ABACUS BOARD
+           ========================================== -->
+      <div class="abacus-wrapper mt-8 pb-10" aria-label="Soroban abacus board">
+        <!-- Outer frame: CSS-only polished material -->
+        <div id="abacusContainer" class="abacus-frame-outer" style="min-width:180px">
+          <!-- Inner playing area -->
+          <div class="abacus-frame-inner" style="overflow:visible;position:relative">
+
+            <!-- Horizontal divider beam -->
+            <div id="abacusDivider" class="abacus-divider" role="separator" aria-hidden="true"></div>
+
+            <!-- Rods: populated by JS -->
+            <div id="rodsContainer" class="abacus-rods-container" role="group" aria-label="Abacus rods"></div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- Keyboard help -->
+      <p class="info-strip -mt-4">
+        <i class="fa-solid fa-keyboard mr-1 opacity-50"></i>
+        Tab to focus &bull; Space / Enter to toggle bead &bull; Arrow keys to navigate between beads
+      </p>
+
+    </main>
+
+    <script src="/js/abacus.js"></script>
+  </body>
+</html>
