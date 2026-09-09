@@ -33,10 +33,23 @@
   var $valueNum = null;
   var $rodSelect = null;
   var $resetBtn = null;
-  var $clearBtn = null;
+  var $rulesBtn = null;
   var $modeBtns = null;
   var $toggleValueBtn = null;
   var isValueHidden = false;
+
+  var $rulesAuthModal = null;
+  var $rulesAuthForm = null;
+  var $rulesPasscodeInput = null;
+  var $rulesPasscodeError = null;
+  var $btnRulesAuthClose = null;
+  var $btnRulesAuthCancel = null;
+
+  var $rulesContentModal = null;
+  var $btnRulesContentClose = null;
+  var $btnRulesContentGotIt = null;
+
+  var RULES_PASSCODE = '1234';
 
   /* ============================================================
      INIT
@@ -49,9 +62,20 @@
     $valueNum = document.getElementById('valueNumber');
     $rodSelect = document.getElementById('rodCountSelect');
     $resetBtn = document.getElementById('btnReset');
-    $clearBtn = document.getElementById('btnClear');
+    $rulesBtn = document.getElementById('btnRules');
     $modeBtns = document.querySelectorAll('.mode-btn');
     $toggleValueBtn = document.getElementById('btnToggleValue');
+
+    $rulesAuthModal = document.getElementById('rulesAuthModal');
+    $rulesAuthForm = document.getElementById('rulesAuthForm');
+    $rulesPasscodeInput = document.getElementById('rulesPasscodeInput');
+    $rulesPasscodeError = document.getElementById('rulesPasscodeError');
+    $btnRulesAuthClose = document.getElementById('btnRulesAuthClose');
+    $btnRulesAuthCancel = document.getElementById('btnRulesAuthCancel');
+
+    $rulesContentModal = document.getElementById('rulesContentModal');
+    $btnRulesContentClose = document.getElementById('btnRulesContentClose');
+    $btnRulesContentGotIt = document.getElementById('btnRulesContentGotIt');
 
     // Parse URL params or localStorage for initial rods and mode
     var urlParams = new URLSearchParams(window.location.search);
@@ -97,26 +121,126 @@
     $modeBtns.forEach(function (btn) {
       btn.addEventListener('click', function () {
         state.mode = btn.getAttribute('data-mode');
-        try { localStorage.setItem('abacus_mode', state.mode); } catch (e) {}
+        try { localStorage.setItem('abacus_mode', state.mode); } catch (e) { }
         applyMode();
       });
     });
     $rodSelect.addEventListener('change', function () {
       state.rodCount = parseInt($rodSelect.value, 10);
-      try { localStorage.setItem('abacus_rods', state.rodCount); } catch (e) {}
+      try { localStorage.setItem('abacus_rods', state.rodCount); } catch (e) { }
       state.beads = emptyBeads(state.rodCount);
       buildAbacus();
       render();
     });
     $resetBtn.addEventListener('click', function () { state.beads = emptyBeads(state.rodCount); render(); });
-    $clearBtn.addEventListener('click', function () { state.beads = emptyBeads(state.rodCount); render(); });
+    if ($rulesBtn) {
+      $rulesBtn.addEventListener('click', openRulesAuthModal);
+    }
+    if ($btnRulesAuthClose) {
+      $btnRulesAuthClose.addEventListener('click', closeRulesAuthModal);
+    }
+    if ($btnRulesAuthCancel) {
+      $btnRulesAuthCancel.addEventListener('click', closeRulesAuthModal);
+    }
+    if ($rulesAuthForm) {
+      $rulesAuthForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        verifyRulesPasscode();
+      });
+    }
+    if ($rulesAuthModal) {
+      $rulesAuthModal.addEventListener('click', function (e) {
+        if (e.target === $rulesAuthModal) {
+          closeRulesAuthModal();
+        }
+      });
+    }
+    if ($btnRulesContentClose) {
+      $btnRulesContentClose.addEventListener('click', closeRulesContentModal);
+    }
+    if ($btnRulesContentGotIt) {
+      $btnRulesContentGotIt.addEventListener('click', closeRulesContentModal);
+    }
+    if ($rulesContentModal) {
+      $rulesContentModal.addEventListener('click', function (e) {
+        if (e.target === $rulesContentModal) {
+          closeRulesContentModal();
+        }
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') {
+        if ($rulesAuthModal && !$rulesAuthModal.classList.contains('hidden')) {
+          closeRulesAuthModal();
+        }
+        if ($rulesContentModal && !$rulesContentModal.classList.contains('hidden')) {
+          closeRulesContentModal();
+        }
+      }
+    });
     if ($toggleValueBtn) {
       $toggleValueBtn.addEventListener('click', function () {
         isValueHidden = !isValueHidden;
         $toggleValueBtn.innerHTML = isValueHidden ? '<i class="fa-solid fa-eye-slash"></i>' : '<i class="fa-solid fa-eye"></i>';
-        renderValue();
       });
     }
+  }
+
+  /* ============================================================
+     RULES AUTH MODAL
+     ============================================================ */
+  function openRulesAuthModal() {
+    if (!$rulesAuthModal) return;
+    $rulesAuthModal.classList.remove('hidden');
+    if ($rulesPasscodeInput) {
+      $rulesPasscodeInput.value = '';
+    }
+    if ($rulesPasscodeError) {
+      $rulesPasscodeError.classList.add('hidden');
+    }
+    setTimeout(function () {
+      if ($rulesPasscodeInput) $rulesPasscodeInput.focus();
+    }, 50);
+  }
+
+  function closeRulesAuthModal() {
+    if (!$rulesAuthModal) return;
+    $rulesAuthModal.classList.add('hidden');
+    if ($rulesPasscodeInput) {
+      $rulesPasscodeInput.value = '';
+    }
+    if ($rulesPasscodeError) {
+      $rulesPasscodeError.classList.add('hidden');
+    }
+  }
+
+  function verifyRulesPasscode() {
+    if (!$rulesPasscodeInput) return;
+    var entered = $rulesPasscodeInput.value.trim();
+    if (entered === RULES_PASSCODE) {
+      closeRulesAuthModal();
+      onRulesAuthenticated();
+    } else {
+      if ($rulesPasscodeError) {
+        $rulesPasscodeError.classList.remove('hidden');
+      }
+      $rulesPasscodeInput.focus();
+      $rulesPasscodeInput.select();
+    }
+  }
+
+  function onRulesAuthenticated() {
+    openRulesContentModal();
+  }
+
+  function openRulesContentModal() {
+    if (!$rulesContentModal) return;
+    $rulesContentModal.classList.remove('hidden');
+  }
+
+  function closeRulesContentModal() {
+    if (!$rulesContentModal) return;
+    $rulesContentModal.classList.add('hidden');
   }
 
   function applyMode() {
@@ -144,14 +268,16 @@
           n <= 13 ? 36 :
             n <= 15 ? 31 : 27;
 
-    var gap = 4;   // gap between lower beads
     var colW = beadPx + 18;
-    var padding = 12;  // top/bottom inner padding
+    var padding = 4;   // compact top/bottom inner padding
 
-    // Heights — 30% taller than original for realistic soroban travel distance
-    var upperSlot = Math.round((beadPx + 10) * 1.3);   // heaven section
-    var divH = 18;                                       // divider bar
-    var lowerSlot = Math.round(((beadPx + gap) * 4 + 10) * 1.3); // earth section
+    // Heights — compact authentic soroban proportions
+    var upperTravel = Math.max(7, Math.round(beadPx * 0.25));    // small travel distance for upper bead
+    var upperSlot = beadPx + upperTravel;                         // heaven section
+    var divH = 18;                                                // divider bar
+    var lowerTravel = Math.max(9, Math.round(beadPx * 0.50));    // compact travel distance for earth beads
+    var bottomGap = -1;                                            // short clearance below lowest earth bead
+    var lowerSlot = lowerTravel + 4 * beadPx + bottomGap;         // earth section ending close to bead stack
     var boardH = padding + upperSlot + divH + lowerSlot + padding;
 
     // Frame width
@@ -161,6 +287,7 @@
 
     // Position divider
     $divider.style.top = (padding + upperSlot) + 'px';
+    $divider.style.width = (n * colW) + 'px';
 
     // Rods container
     $rodsWrap.style.height = boardH + 'px';
@@ -180,8 +307,8 @@
       col$.appendChild(shaft);
 
       // ---- UPPER (HEAVEN) BEAD ----
-      // Rest position: pinned to top of upper area (away from divider)
-      // Active position: slides down so bottom edge touches divider
+      // Rest position: resting at top of upper area with minimal gap
+      // Active position: slides down to touch divider beam
       var upperRestTop = padding;
       var upperActiveTop = padding + upperSlot - beadPx;
       var upperDeltaY = upperActiveTop - upperRestTop;
@@ -196,15 +323,15 @@
 
       // ---- LOWER (EARTH) BEADS ----
       // Index 0 = closest to divider, 3 = furthest from divider
-      // Rest: packed at the bottom of the earth section
-      // Active: packed just below the divider
+      // Rest: stacked at resting position with compact gap from divider, touching each other vertically
+      // Active: stacked touching each other just below divider
       var lowerBaseTop = padding + upperSlot + divH;
 
       for (var b = 0; b < 4; b++) {
-        // Rest position: stacked at bottom (bead 0 topmost, bead 3 bottommost)
-        var restTop = lowerBaseTop + lowerSlot - beadPx - (3 - b) * (beadPx + gap) - 10;
-        // Active position: stacked just below divider
-        var activeTop = lowerBaseTop + b * (beadPx + gap) + 2;
+        // Rest position: stacked at bottom touching each other (bead 0 topmost, bead 3 bottommost)
+        var restTop = lowerBaseTop + lowerTravel + b * beadPx;
+        // Active position: stacked just below divider touching each other
+        var activeTop = lowerBaseTop + b * beadPx;
         var deltaY = activeTop - restTop; // negative value (moving upward)
 
         var lb = createBead(col, 'lower', b, beadPx);
@@ -216,26 +343,23 @@
         col$.appendChild(lb);
       }
 
-      // ---- PLACE VALUE DOTS ----
-      var posFromRight = n - 1 - col;
+      // // ---- PLACE VALUE LABELS (BOTTOM) ----
+      // var posFromRight = n - 1 - col;
 
-      // Units rod (rightmost)
-      if (posFromRight === 0) {
-        addDot(col$, DOT_CLASSES[0], padding + upperSlot + divH / 2);
-        addLabel(col$, GROUP_NAMES[0], boardH);
-      }
-
-      // Every 3rd rod from right
-      if (posFromRight > 0 && posFromRight % 3 === 0) {
-        var gi = Math.floor(posFromRight / 3);
-        if (gi < GROUP_NAMES.length) {
-          addDot(col$, DOT_CLASSES[gi], padding + upperSlot + divH / 2);
-          addLabel(col$, GROUP_NAMES[gi], boardH);
-        }
-      }
+      // if (posFromRight === 0) {
+      //   addLabel(col$, GROUP_NAMES[0], boardH);
+      // } else if (posFromRight % 3 === 0) {
+      //   var gi = Math.floor(posFromRight / 3);
+      //   if (gi < GROUP_NAMES.length) {
+      //     addLabel(col$, GROUP_NAMES[gi], boardH);
+      //   }
+      // }
 
       $rodsWrap.appendChild(col$);
     }
+
+    // Build draggable beam marker dots on the horizontal divider
+    buildDividerDots(n, colW);
   }
 
   function createBead(col, type, idx, size) {
@@ -266,16 +390,127 @@
     return el;
   }
 
-  function addDot(parent, cls, topPx) {
-    var d = document.createElement('div');
-    d.className = 'rod-dot ' + cls;
-    d.style.position = 'absolute';
-    d.style.top = topPx + 'px';
-    d.style.left = '50%';
-    d.style.transform = 'translate(-50%, -50%)';
-    d.style.zIndex = '12';
-    d.setAttribute('aria-hidden', 'true');
-    parent.appendChild(d);
+  /* ============================================================
+     DIVIDER BEAM DOTS (Draggable Markers)
+     ============================================================ */
+  function buildDividerDots(n, colW) {
+    if (!$divider) return;
+    $divider.innerHTML = '';
+    $divider.removeAttribute('aria-hidden');
+
+    var centerCol = Math.floor(n / 2);
+    var dots = [];
+
+    // Red dot at exact center rod
+    dots.push({ col: centerCol, color: 'red' });
+
+    // White dots every 3 rods to the left of center
+    for (var lc = centerCol - 3; lc >= 0; lc -= 3) {
+      dots.push({ col: lc, color: 'white' });
+    }
+
+    // White dots every 3 rods to the right of center
+    for (var rc = centerCol + 3; rc < n; rc += 3) {
+      dots.push({ col: rc, color: 'white' });
+    }
+
+    dots.forEach(function (cfg) {
+      var dot = createBeamDot(cfg.col, cfg.color, n, colW);
+      $divider.appendChild(dot);
+    });
+  }
+
+  function createBeamDot(initialCol, color, n, colW) {
+    var dot = document.createElement('div');
+    var isRed = color === 'red';
+    dot.className = 'rod-dot ' + (isRed ? 'dot-red' : 'dot-white');
+
+    var initialLeft = (initialCol + 0.5) * colW;
+    dot.style.left = initialLeft + 'px';
+    dot.setAttribute('data-col', initialCol);
+    dot.setAttribute('tabindex', '0');
+    dot.setAttribute('role', 'slider');
+    dot.setAttribute('aria-label', (isRed ? 'Red unit marker dot' : 'White reckoning marker dot') + ' on rod ' + (initialCol + 1));
+    dot.setAttribute('aria-valuemin', '1');
+    dot.setAttribute('aria-valuemax', n.toString());
+    dot.setAttribute('aria-valuenow', (initialCol + 1).toString());
+
+    var isDragging = false;
+    var startX = 0;
+    var startLeft = 0;
+
+    function onPointerDown(e) {
+      if (e.button !== undefined && e.button !== 0) return;
+      e.preventDefault();
+      e.stopPropagation();
+      isDragging = true;
+      startX = e.clientX;
+      startLeft = parseFloat(dot.style.left) || ((parseInt(dot.getAttribute('data-col'), 10) + 0.5) * colW);
+      dot.classList.add('is-dragging');
+      dot.style.transition = 'none';
+      if (dot.setPointerCapture) {
+        try { dot.setPointerCapture(e.pointerId); } catch (err) { }
+      }
+    }
+
+    function onPointerMove(e) {
+      if (!isDragging) return;
+      e.preventDefault();
+      var dx = e.clientX - startX;
+      var curX = startLeft + dx;
+      var minX = 0.5 * colW;
+      var maxX = (n - 0.5) * colW;
+      if (curX < minX) curX = minX;
+      if (curX > maxX) curX = maxX;
+      dot.style.left = curX + 'px';
+    }
+
+    function onPointerUp(e) {
+      if (!isDragging) return;
+      isDragging = false;
+      dot.classList.remove('is-dragging');
+      if (dot.releasePointerCapture) {
+        try { dot.releasePointerCapture(e.pointerId); } catch (err) { }
+      }
+      var curX = parseFloat(dot.style.left);
+      var nearestCol = Math.round(curX / colW - 0.5);
+      if (nearestCol < 0) nearestCol = 0;
+      if (nearestCol >= n) nearestCol = n - 1;
+
+      var snapX = (nearestCol + 0.5) * colW;
+      dot.setAttribute('data-col', nearestCol);
+      dot.setAttribute('aria-valuenow', (nearestCol + 1).toString());
+      dot.setAttribute('aria-label', (isRed ? 'Red unit marker dot' : 'White reckoning marker dot') + ' on rod ' + (nearestCol + 1));
+      dot.style.transition = 'left 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.15s ease, box-shadow 0.15s ease';
+      dot.style.left = snapX + 'px';
+    }
+
+    dot.addEventListener('pointerdown', onPointerDown);
+    dot.addEventListener('pointermove', onPointerMove);
+    dot.addEventListener('pointerup', onPointerUp);
+    dot.addEventListener('pointercancel', onPointerUp);
+
+    // Keyboard navigation: ArrowLeft / ArrowRight moves dot rod-by-rod
+    dot.addEventListener('keydown', function (e) {
+      var currentCol = parseInt(dot.getAttribute('data-col'), 10);
+      var targetCol = currentCol;
+      if (e.key === 'ArrowLeft') {
+        if (currentCol > 0) targetCol = currentCol - 1;
+      } else if (e.key === 'ArrowRight') {
+        if (currentCol < n - 1) targetCol = currentCol + 1;
+      } else {
+        return;
+      }
+      e.preventDefault();
+      var snapX = (targetCol + 0.5) * colW;
+      dot.setAttribute('data-col', targetCol);
+      dot.setAttribute('aria-valuenow', (targetCol + 1).toString());
+      dot.setAttribute('aria-label', (isRed ? 'Red unit marker dot' : 'White reckoning marker dot') + ' on rod ' + (targetCol + 1));
+      dot.style.transition = 'left 150ms cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.15s ease, box-shadow 0.15s ease';
+      dot.style.left = snapX + 'px';
+    });
+
+    return dot;
   }
 
   function addLabel(parent, text, boardH) {
@@ -320,7 +555,6 @@
      ============================================================ */
   function render() {
     renderBeads();
-    renderValue();
   }
 
   function renderBeads() {
@@ -347,26 +581,7 @@
     });
   }
 
-  function renderValue() {
-    var total = 0;
-    var n = state.rodCount;
-    for (var col = 0; col < n; col++) {
-      var place = Math.pow(10, n - 1 - col);
-      var b = state.beads[col];
-      var v = 0;
-      for (var i = 0; i < 4; i++) { if (b.lower[i]) v++; }
-      if (b.upper) v += 5;
-      total += v * place;
-    }
-    $valueNum.textContent = isValueHidden ? '?' : total.toLocaleString();
-    if (isValueHidden) {
-      $valueNum.style.filter = 'blur(4px)';
-      $valueNum.style.opacity = '0.7';
-    } else {
-      $valueNum.style.filter = 'none';
-      $valueNum.style.opacity = '1';
-    }
-  }
+
 
   /* ============================================================
      KEYBOARD NAVIGATION

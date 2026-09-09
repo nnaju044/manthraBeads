@@ -1,75 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Virtual Abacus | ManthraBeads Abacus Academy</title>
-    <meta name="description" content="Interactive virtual soroban abacus for ManthraBeads Academy students. Practice arithmetic with Junior, Intermediate, Advanced and Master modes." />
 
-    <!-- Tailwind CSS (CDN) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
-              body:    ['"Poppins"', 'sans-serif'],
-            },
-            colors: {
-              night: { 950:'#070a1f', 900:'#0b0f2e', 800:'#12183f', 700:'#1a2150' },
-            },
-            boxShadow: {
-              glow:        '0 0 25px rgba(255,200,60,0.55)',
-              'glow-blue': '0 0 30px rgba(80,140,255,0.45)',
-              'glow-pink': '0 0 25px rgba(255,90,200,0.5)',
-            },
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Virtual Abacus | ManthraBeads Abacus Academy</title>
+  <meta name="description"
+    content="Interactive virtual soroban abacus for ManthraBeads Academy students. Practice arithmetic with Junior, Intermediate, Advanced and Master modes." />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+            body: ['"Poppins"', 'sans-serif'],
+          },
+          colors: {
+            night: { 950: '#070a1f', 900: '#0b0f2e', 800: '#12183f', 700: '#1a2150' },
+          },
+          boxShadow: {
+            glow: '0 0 25px rgba(255,200,60,0.55)',
+            'glow-blue': '0 0 30px rgba(80,140,255,0.45)',
+            'glow-pink': '0 0 25px rgba(255,90,200,0.5)',
           },
         },
-      };
-    </script>
+      },
+    };
+  </script>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Abacus CSS -->
-    <link rel="stylesheet" href="/css/abacus.css" />
+  <!-- Abacus CSS -->
+  <link rel="stylesheet" href="/css/abacus.css" />
 
-    <!-- Site-wide responsive CSS -->
-    <link rel="stylesheet" href="/css/site.css" />
+  <!-- Site-wide responsive CSS -->
+  <link rel="stylesheet" href="/css/site.css" />
 
-    <style>
-      /* Scroll overflow for page */
-      html, body { scroll-behavior: smooth; }
-    </style>
-  </head>
+  <style>
+    /* Scroll overflow for page */
+    html,
+    body {
+      scroll-behavior: smooth;
+    }
+  </style>
+</head>
 
-  <body id="abacusBody" class="abacus-page font-body mode-junior">
+<body id="abacusBody" class="abacus-page font-body mode-junior">
 
-    <!-- ====================================================
+  <!-- ====================================================
          AMBIENT BACKGROUND BLOBS (fixed behind everything)
          ==================================================== -->
-    <div class="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
-      <div class="ambient-blob blob-indigo"  style="width:600px;height:600px;top:-120px;left:10%"></div>
-      <div class="ambient-blob blob-fuchsia" style="width:500px;height:500px;top:30%;right:-80px"></div>
-      <div class="ambient-blob blob-cyan"    style="width:400px;height:400px;bottom:0;left:45%;transform:translateX(-50%)"></div>
-      <span class="absolute top-[8%]  left-[15%] h-1   w-1   rounded-full bg-white/70"></span>
-      <span class="absolute top-[18%] left-[45%] h-1   w-1   rounded-full bg-white/50"></span>
-      <span class="absolute top-[6%]  left-[70%] h-1.5 w-1.5 rounded-full bg-white/60"></span>
-      <span class="absolute top-[40%] left-[8%]  h-1   w-1   rounded-full bg-white/40"></span>
-      <span class="absolute top-[65%] left-[92%] h-1   w-1   rounded-full bg-white/50"></span>
+  <div class="pointer-events-none fixed inset-0 overflow-hidden z-0" aria-hidden="true">
+    <div class="ambient-blob blob-indigo" style="width:600px;height:600px;top:-120px;left:10%"></div>
+    <div class="ambient-blob blob-fuchsia" style="width:500px;height:500px;top:30%;right:-80px"></div>
+    <div class="ambient-blob blob-cyan" style="width:400px;height:400px;bottom:0;left:45%;transform:translateX(-50%)">
     </div>
+    <span class="absolute top-[8%]  left-[15%] h-1   w-1   rounded-full bg-white/70"></span>
+    <span class="absolute top-[18%] left-[45%] h-1   w-1   rounded-full bg-white/50"></span>
+    <span class="absolute top-[6%]  left-[70%] h-1.5 w-1.5 rounded-full bg-white/60"></span>
+    <span class="absolute top-[40%] left-[8%]  h-1   w-1   rounded-full bg-white/40"></span>
+    <span class="absolute top-[65%] left-[92%] h-1   w-1   rounded-full bg-white/50"></span>
+  </div>
 
-    <!-- ====================================================
+  <!-- ====================================================
          NAVBAR
          ==================================================== -->
-    <%- include('partials/navbar') %>
+  <%- include('partials/navbar') %>
 
     <!-- ====================================================
          MAIN
@@ -78,12 +86,14 @@
 
       <!-- Page heading -->
       <div class="mt-6 text-center">
-        <span class="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-white backdrop-blur-md">
+        <span
+          class="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide text-white backdrop-blur-md">
           <i class="fa-solid fa-circle-nodes text-amber-400"></i>
           INTERACTIVE SOROBAN ABACUS
         </span>
         <h1 class="mt-3 font-display text-3xl font-extrabold text-white sm:text-4xl lg:text-5xl">
-          Virtual <span class="bg-gradient-to-r from-amber-400 to-fuchsia-400 bg-clip-text text-transparent">Abacus</span>
+          Virtual <span
+            class="bg-gradient-to-r from-amber-400 to-fuchsia-400 bg-clip-text text-transparent">Abacus</span>
         </h1>
         <p class="mt-1.5 text-sm text-indigo-200/60 sm:text-base">
           Click beads to slide them &mdash; Heaven bead = <strong class="text-amber-400">5</strong>,
@@ -101,14 +111,14 @@
           <div>
             <p class="toolbar-label">Mode</p>
             <div class="flex flex-wrap gap-1.5" role="radiogroup" aria-label="Learning mode">
-              <button class="mode-btn active" data-mode="junior"        id="modeJunior"  aria-pressed="true">
-                <i class="fa-solid fa-star"   style="font-size:0.55rem"></i>Junior
+              <button class="mode-btn active" data-mode="junior" id="modeJunior" aria-pressed="true">
+                <i class="fa-solid fa-star" style="font-size:0.55rem"></i>Junior
               </button>
-              <button class="mode-btn"        data-mode="intermediate"  id="modeInter"   aria-pressed="false">
-                <i class="fa-solid fa-bolt"   style="font-size:0.55rem"></i>Soroban Red
+              <button class="mode-btn" data-mode="intermediate" id="modeInter" aria-pressed="false">
+                <i class="fa-solid fa-bolt" style="font-size:0.55rem"></i>Soroban Red
               </button>
-              <button class="mode-btn"        data-mode="master"        id="modeMaster"  aria-pressed="false">
-                <i class="fa-solid fa-crown"  style="font-size:0.55rem"></i>Walnut Pro
+              <button class="mode-btn" data-mode="master" id="modeMaster" aria-pressed="false">
+                <i class="fa-solid fa-crown" style="font-size:0.55rem"></i>Walnut Pro
               </button>
             </div>
           </div>
@@ -140,20 +150,9 @@
               <button id="btnReset" class="icon-btn amber" aria-label="Reset abacus to zero">
                 <i class="fa-solid fa-rotate-left" style="font-size:0.7rem"></i> Reset
               </button>
-              <button id="btnClear" class="icon-btn indigo" aria-label="Clear all beads">
-                <i class="fa-solid fa-eraser" style="font-size:0.7rem"></i> Clear
+              <button id="btnRules" class="icon-btn cyan" aria-label="View abacus rules">
+                <i class="fa-solid fa-book-open" style="font-size:0.7rem"></i> Rules
               </button>
-            </div>
-          </div>
-
-          <!-- VALUE DISPLAY (right-aligned) -->
-          <div class="ml-auto self-center flex items-center gap-3">
-            <button id="btnToggleValue" class="icon-btn indigo" style="padding: 0.6rem; border-radius: 50%; width: 2.2rem; height: 2.2rem; justify-content: center;" aria-label="Toggle value visibility">
-              <i class="fa-solid fa-eye"></i>
-            </button>
-            <div class="value-display" role="status" aria-live="polite" aria-label="Current abacus value">
-              <span class="value-label">Value</span>
-              <span id="valueNumber" class="value-number">0</span>
             </div>
           </div>
 
@@ -185,8 +184,124 @@
         Tab to focus &bull; Space / Enter to toggle bead &bull; Arrow keys to navigate between beads
       </p>
 
+      <!-- ==========================================
+           RULES PASSWORD MODAL
+           ========================================== -->
+      <div id="rulesAuthModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm hidden transition-opacity duration-200" aria-modal="true" role="dialog" aria-labelledby="rulesAuthTitle">
+        <div class="relative w-full max-w-md rounded-2xl border border-white/15 bg-slate-900/95 p-6 shadow-2xl backdrop-blur-xl">
+          <!-- Close button -->
+          <button type="button" id="btnRulesAuthClose" class="absolute top-4 right-4 flex h-8 w-8 items-center justify-center rounded-full text-indigo-200/60 hover:bg-white/10 hover:text-white transition-colors" aria-label="Close dialog">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+          
+          <!-- Header -->
+          <div class="flex items-center gap-3.5">
+            <div class="flex h-11 w-11 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400 border border-amber-400/20 shadow-inner">
+              <i class="fa-solid fa-lock text-lg"></i>
+            </div>
+            <div>
+              <h3 id="rulesAuthTitle" class="font-display text-lg font-bold text-white tracking-wide">Authentication Required</h3>
+              <p class="text-xs text-indigo-200/60">Enter passcode to access Rules</p>
+            </div>
+          </div>
+          
+          <!-- Form -->
+          <form id="rulesAuthForm" class="mt-5" onsubmit="return false;">
+            <div>
+              <label for="rulesPasscodeInput" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mb-1.5">Passcode</label>
+              <input type="password" id="rulesPasscodeInput" class="w-full rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm text-white placeholder-white/30 focus:border-amber-400 focus:outline-none focus:ring-2 focus:ring-amber-400/30 transition-all" placeholder="Enter passcode" autocomplete="off" />
+              <p id="rulesPasscodeError" class="mt-2 text-xs font-semibold text-rose-400 hidden flex items-center gap-1.5">
+                <i class="fa-solid fa-circle-exclamation"></i> Incorrect passcode. Please try again.
+              </p>
+            </div>
+            
+            <div class="mt-6 flex justify-end gap-2.5">
+              <button type="button" id="btnRulesAuthCancel" class="rounded-full border border-white/15 bg-white/5 px-4 py-2 text-xs font-semibold text-indigo-200/80 hover:bg-white/10 hover:text-white transition-all">
+                Cancel
+              </button>
+              <button type="submit" id="btnRulesAuthSubmit" class="rounded-full bg-gradient-to-r from-amber-400 to-amber-500 px-5 py-2 text-xs font-bold text-slate-950 shadow-lg shadow-amber-500/25 hover:brightness-110 active:scale-95 transition-all">
+                Authenticate
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- ==========================================
+           RULES CONTENT MODAL
+           ========================================== -->
+      <div id="rulesContentModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-md hidden transition-opacity duration-200" aria-modal="true" role="dialog" aria-labelledby="rulesModalTitle">
+        <div class="relative flex flex-col w-full max-w-2xl max-h-[85vh] rounded-2xl border border-white/15 bg-slate-900/95 shadow-2xl backdrop-blur-xl overflow-hidden">
+          
+          <!-- Sticky Header -->
+          <div class="flex items-center justify-between border-b border-white/10 px-6 py-4 bg-slate-900/80">
+            <div class="flex items-center gap-3">
+              <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-400/10 text-cyan-400 border border-cyan-400/20 shadow-inner">
+                <i class="fa-solid fa-book-open text-lg"></i>
+              </div>
+              <div>
+                <h3 id="rulesModalTitle" class="font-display text-lg font-bold text-white tracking-wide">Soroban Abacus Rules & Guide</h3>
+                <p class="text-xs text-indigo-200/60">Official Operating Principles</p>
+              </div>
+            </div>
+            <button type="button" id="btnRulesContentClose" class="flex h-8 w-8 items-center justify-center rounded-full text-indigo-200/60 hover:bg-white/10 hover:text-white transition-colors" aria-label="Close rules dialog">
+              <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+          </div>
+
+          <!-- Scrollable Body Content -->
+          <div class="flex-1 overflow-y-auto p-6 space-y-6 text-sm leading-relaxed text-indigo-100/90">
+            
+            <!-- Section 1 -->
+            <div class="rounded-xl border border-white/10 bg-white/5 p-4 space-y-2">
+              <h4 class="font-display font-semibold text-amber-400 flex items-center gap-2 text-base">
+                <i class="fa-solid fa-layer-group text-xs"></i> 1. Bead Values & Placement
+              </h4>
+              <ul class="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-indigo-200/80">
+                <li><strong class="text-white">Heaven Bead (Upper Deck):</strong> 1 bead per rod, value = <span class="text-amber-400 font-semibold">5</span> when moved down towards the beam.</li>
+                <li><strong class="text-white">Earth Beads (Lower Deck):</strong> 4 beads per rod, value = <span class="text-cyan-400 font-semibold">1</span> each when moved up towards the beam.</li>
+                <li><strong class="text-white">Active State:</strong> Beads only count toward value when touching or sliding towards the central divider beam.</li>
+              </ul>
+            </div>
+
+            <!-- Section 2 -->
+            <div class="rounded-xl border border-white/10 bg-white/5 p-4 space-y-2">
+              <h4 class="font-display font-semibold text-cyan-400 flex items-center gap-2 text-base">
+                <i class="fa-solid fa-sliders text-xs"></i> 2. Rods & Unit Dots
+              </h4>
+              <ul class="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-indigo-200/80">
+                <li><strong class="text-white">Center Red Dot:</strong> Placed at the central rod representing the primary <span class="text-rose-400 font-semibold">Units</span> place value.</li>
+                <li><strong class="text-white">White Unit Markers:</strong> Positioned every 3 rods to mark Thousands, Millions, etc.</li>
+                <li><strong class="text-white">Draggable Markers:</strong> Unit dots can be pressed and dragged to any rod center to customize place-value alignment.</li>
+              </ul>
+            </div>
+
+            <!-- Section 3 -->
+            <div class="rounded-xl border border-white/10 bg-white/5 p-4 space-y-2">
+              <h4 class="font-display font-semibold text-fuchsia-400 flex items-center gap-2 text-base">
+                <i class="fa-solid fa-keyboard text-xs"></i> 3. Controls & Shortcuts
+              </h4>
+              <ul class="list-disc list-inside space-y-1.5 text-xs sm:text-sm text-indigo-200/80">
+                <li><strong class="text-white">Reset & Clear:</strong> Resets all beads across all rods back to their zero position.</li>
+                <li><strong class="text-white">Keyboard Navigation:</strong> Use <kbd class="px-1.5 py-0.5 rounded bg-white/10 border border-white/20 font-mono text-[10px]">Tab</kbd> to focus beads, <kbd class="px-1.5 py-0.5 rounded bg-white/10 border border-white/20 font-mono text-[10px]">Space</kbd> or <kbd class="px-1.5 py-0.5 rounded bg-white/10 border border-white/20 font-mono text-[10px]">Enter</kbd> to toggle, and <kbd class="px-1.5 py-0.5 rounded bg-white/10 border border-white/20 font-mono text-[10px]">Arrow Keys</kbd> to navigate.</li>
+              </ul>
+            </div>
+
+          </div>
+
+          <!-- Sticky Footer -->
+          <div class="flex items-center justify-end border-t border-white/10 px-6 py-4 bg-slate-900/80">
+            <button type="button" id="btnRulesContentGotIt" class="rounded-full bg-gradient-to-r from-cyan-400 to-cyan-500 px-6 py-2 text-xs font-bold text-slate-950 shadow-lg shadow-cyan-500/25 hover:brightness-110 active:scale-95 transition-all">
+              Got it
+            </button>
+          </div>
+
+        </div>
+      </div>
+
     </main>
 
     <script src="/js/abacus.js"></script>
-  </body>
+</body>
+
 </html>
