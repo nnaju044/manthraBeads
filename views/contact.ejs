@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contact Us | Maths Manthra</title>
+    <meta name="description" content="Get in touch with Maths Manthra for Abacus, Vedic Maths, Online Tuition, Edupreneur workshops, and AI training programs." />
+
+    <!-- Tailwind CSS (CDN build w/ inline config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', "sans-serif"],
+              body: ['"Poppins"', "sans-serif"],
+            },
+            colors: {
+              night: {
+                950: "#070a1f",
+                900: "#0b0f2e",
+                800: "#12183f",
+                700: "#1a2150",
+              },
+            },
+            boxShadow: {
+              glow: "0 0 25px rgba(255, 200, 60, 0.55)",
+              "glow-blue": "0 0 30px rgba(80, 140, 255, 0.45)",
+              "glow-pink": "0 0 25px rgba(255, 90, 200, 0.5)",
+              "glow-insta": "0 0 30px rgba(225, 48, 108, 0.45)",
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Site-wide responsive CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+  </head>
+
+  <body class="font-body bg-night-950 text-indigo-100 antialiased overflow-x-hidden">
+    <section class="relative w-full overflow-x-hidden bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] min-h-screen pb-16 sm:pb-24">
+
+      <!-- Starfield / ambient glow background -->
+      <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/15 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
+        <div class="absolute bottom-0 left-1/2 h-60 w-60 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-80 sm:w-80"></div>
+        <span class="absolute top-[8%] left-[15%] h-1 w-1 rounded-full bg-white/70"></span>
+        <span class="absolute top-[18%] left-[45%] h-1 w-1 rounded-full bg-white/50"></span>
+        <span class="absolute top-[6%] left-[70%] h-1.5 w-1.5 rounded-full bg-white/60"></span>
+        <span class="absolute top-[40%] left-[8%] h-1 w-1 rounded-full bg-white/40"></span>
+        <span class="absolute top-[65%] left-[92%] h-1 w-1 rounded-full bg-white/50"></span>
+      </div>
+
+      <!-- NAVBAR -->
+      <%- include('partials/navbar') %>
+
+      <!-- PAGE CONTENT -->
+      <main id="main-content" class="relative z-10 mx-auto max-w-[1280px] px-4 pt-10 sm:px-8 sm:pt-12 lg:px-14">
+
+        <!-- Page header -->
+        <header class="text-center mb-8 sm:mb-12">
+          <span class="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wider text-indigo-200 backdrop-blur-md mb-4 uppercase">
+            <i class="fa-solid fa-comments text-cyan-400" aria-hidden="true"></i> We're Here To Help
+          </span>
+          <h1 class="font-display fluid-h1 font-extrabold tracking-tight text-white mt-2">
+            Get In <span class="bg-gradient-to-r from-fuchsia-400 via-pink-400 to-amber-300 bg-clip-text text-transparent">Touch</span>
+          </h1>
+          <p class="mt-3 fluid-body text-indigo-200/80 max-w-xl mx-auto">
+            Have questions about our Abacus courses, Vedic Math, workshops, or franchise programs? Connect with our team today!
+          </p>
+        </header>
+
+        <!-- QUICK CONTACT CARDS — 1 col → 3 col -->
+        <div class="grid grid-cols-1 gap-4 mb-10 sm:grid-cols-3 sm:gap-6 sm:mb-14">
+
+          <!-- 1. Instagram Card -->
+          <a
+            href="https://www.instagram.com/mathsmanthra_smija_k_s?utm_source=ig_web_button_share_sheet&igsi=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-card group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-pink-500/20 bg-gradient-to-b from-pink-950/25 to-[#0b0f2e]/60 p-5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-pink-500/50 hover:shadow-glow-insta sm:p-7"
+          >
+            <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-gradient-to-br from-purple-500/20 via-pink-500/20 to-yellow-500/20 blur-2xl group-hover:scale-125 transition-transform pointer-events-none" aria-hidden="true"></div>
+
+            <div>
+              <div class="flex items-center justify-between mb-4 sm:mb-5">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white text-xl shadow-lg shadow-pink-500/20 sm:h-14 sm:w-14 sm:text-2xl">
+                  <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+                </div>
+                <span class="insta-badge inline-flex items-center gap-1 rounded-full bg-pink-500/10 border border-pink-500/30 px-2.5 py-1 text-[11px] font-semibold text-pink-300 sm:px-3 sm:text-xs">
+                  @mathsmanthra <i class="fa-solid fa-arrow-up-right-from-square text-[9px] ml-0.5" aria-hidden="true"></i>
+                </span>
+              </div>
+              <h2 class="font-display fluid-h3 font-bold text-white mb-2">Follow on Instagram</h2>
+              <p class="text-sm text-indigo-200/70 leading-relaxed">
+                Watch daily student speed solving reels, competition updates, Vedic Math tips &amp; announcements!
+              </p>
+            </div>
+
+            <div class="mt-5 flex items-center gap-2 text-sm font-semibold text-pink-400 group-hover:text-pink-300">
+              <span>Visit Instagram Profile</span>
+              <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1" aria-hidden="true"></i>
+            </div>
+          </a>
+
+          <!-- 2. Email Card -->
+          <a
+            href="mailto:mathsmanthraacademy@gmail.com"
+            class="contact-card group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-cyan-500/20 bg-gradient-to-b from-cyan-950/25 to-[#0b0f2e]/60 p-5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-cyan-500/50 hover:shadow-glow-blue sm:p-7"
+          >
+            <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-cyan-500/20 blur-2xl group-hover:scale-125 transition-transform pointer-events-none" aria-hidden="true"></div>
+
+            <div>
+              <div class="flex items-center justify-between mb-4 sm:mb-5">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-cyan-600 to-blue-500 text-white text-xl shadow-lg shadow-cyan-500/20 sm:h-14 sm:w-14 sm:text-2xl">
+                  <i class="fa-solid fa-envelope" aria-hidden="true"></i>
+                </div>
+                <button
+                  type="button"
+                  onclick="event.preventDefault(); navigator.clipboard.writeText('mathsmanthra@gmail.com').then(function(){ var el = document.getElementById('copyFeedback'); el.style.display='block'; setTimeout(function(){ el.style.display='none'; }, 2000); });"
+                  class="inline-flex min-h-[36px] items-center gap-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 px-3 py-1 text-xs font-semibold text-cyan-300 hover:bg-cyan-500/20 transition"
+                  aria-label="Copy email address"
+                >
+                  <i class="fa-regular fa-copy" aria-hidden="true"></i> Copy
+                </button>
+              </div>
+              <h2 class="font-display fluid-h3 font-bold text-white mb-2">Email Us</h2>
+              <p class="text-sm text-indigo-200/70 leading-relaxed">
+                Reach out for institutional partnerships, curriculum inquiries, or custom tuition batch timings.
+              </p>
+            </div>
+
+            <div class="mt-5">
+              <span class="block text-xs uppercase tracking-wider text-indigo-300/60 font-medium mb-0.5">Direct Email</span>
+              <div class="flex flex-wrap items-center gap-2 text-sm font-semibold text-cyan-400 group-hover:text-cyan-300">
+                <span class="email-text break-all">mathsmanthraacademy@gmail.com</span>
+                <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1 shrink-0" aria-hidden="true"></i>
+              </div>
+              <span id="copyFeedback" style="display:none;" class="mt-1 block text-xs text-emerald-400">Copied!</span>
+            </div>
+          </a>
+
+          <!-- 3. WhatsApp Card -->
+          <a
+            href="https://wa.me/+918590008799"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="contact-card group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-emerald-500/20 bg-gradient-to-b from-emerald-950/25 to-[#0b0f2e]/60 p-5 backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-emerald-500/50 hover:shadow-[0_0_30px_rgba(16,185,129,0.35)] sm:p-7"
+          >
+            <div class="absolute -right-8 -top-8 h-32 w-32 rounded-full bg-emerald-500/20 blur-2xl group-hover:scale-125 transition-transform pointer-events-none" aria-hidden="true"></div>
+
+            <div>
+              <div class="flex items-center justify-between mb-4 sm:mb-5">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-tr from-emerald-600 to-teal-400 text-white text-xl shadow-lg shadow-emerald-500/20 sm:h-14 sm:w-14 sm:text-2xl">
+                  <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
+                </div>
+                <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 px-3 py-1 text-xs font-semibold text-emerald-300">
+                  <span class="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true"></span> Instant Chat
+                </span>
+              </div>
+              <h2 class="font-display fluid-h3 font-bold text-white mb-2">WhatsApp / Call</h2>
+              <p class="text-sm text-indigo-200/70 leading-relaxed">
+                Connect instantly with our academic counselor for fast responses and free demo slot bookings.
+              </p>
+            </div>
+
+            <div class="mt-5 flex items-center gap-2 text-sm font-semibold text-emerald-400 group-hover:text-emerald-300">
+              <span>Chat on WhatsApp</span>
+              <i class="fa-solid fa-arrow-right transition-transform group-hover:translate-x-1" aria-hidden="true"></i>
+            </div>
+          </a>
+
+        </div>
+
+        <!-- MAIN FORM & DETAILS SECTION — stacks on mobile, side-by-side on desktop -->
+        <div class="grid grid-cols-1 gap-6 items-start lg:grid-cols-12 lg:gap-8">
+
+          <!-- Contact Form (7/12 on desktop) -->
+          <div class="lg:col-span-7 rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl shadow-2xl sm:p-8 lg:p-10">
+            <div class="mb-6 sm:mb-8">
+              <h2 class="font-display fluid-h2 font-bold text-white">Send Us a Message</h2>
+              <p class="mt-1 text-sm text-indigo-200/70">Fill out this quick form and our team will get back to you within 24 hours.</p>
+            </div>
+
+            <form id="contactForm" onsubmit="event.preventDefault(); handleContactSubmit();" class="space-y-5" novalidate>
+
+              <!-- Row 1: Name + Phone -->
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+                <div>
+                  <label for="contactName" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/80 mb-2">Your Name <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-indigo-300/50 pointer-events-none" aria-hidden="true">
+                      <i class="fa-solid fa-user text-sm"></i>
+                    </span>
+                    <input
+                      type="text"
+                      id="contactName"
+                      name="name"
+                      required
+                      autocomplete="name"
+                      placeholder="e.g. Rahul Sharma"
+                      class="w-full rounded-xl border border-white/10 bg-[#0b0f2e]/80 py-3 pl-11 pr-4 text-white placeholder-indigo-300/30 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/20"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="contactPhone" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/80 mb-2">Phone / WhatsApp <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-indigo-300/50 pointer-events-none" aria-hidden="true">
+                      <i class="fa-solid fa-phone text-sm"></i>
+                    </span>
+                    <input
+                      type="tel"
+                      id="contactPhone"
+                      name="phone"
+                      required
+                      autocomplete="tel"
+                      placeholder="e.g. +91 98765 43210"
+                      class="w-full rounded-xl border border-white/10 bg-[#0b0f2e]/80 py-3 pl-11 pr-4 text-white placeholder-indigo-300/30 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/20"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- Row 2: Email + Program -->
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5">
+                <div>
+                  <label for="contactEmail" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/80 mb-2">Email Address <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-indigo-300/50 pointer-events-none" aria-hidden="true">
+                      <i class="fa-solid fa-envelope text-sm"></i>
+                    </span>
+                    <input
+                      type="email"
+                      id="contactEmail"
+                      name="email"
+                      required
+                      autocomplete="email"
+                      placeholder="rahul@example.com"
+                      class="w-full rounded-xl border border-white/10 bg-[#0b0f2e]/80 py-3 pl-11 pr-4 text-white placeholder-indigo-300/30 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/20"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label for="contactProgram" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/80 mb-2">Interested In <span aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                  <div class="relative">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-indigo-300/50 pointer-events-none" aria-hidden="true">
+                      <i class="fa-solid fa-graduation-cap text-sm"></i>
+                    </span>
+                    <select
+                      id="contactProgram"
+                      name="program"
+                      required
+                      class="w-full rounded-xl border border-white/10 bg-[#0b0f2e]/80 py-3 pl-11 pr-8 text-white focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/20"
+                    >
+                      <option value="" disabled selected>Select a Program</option>
+                      <option value="abacus">Abacus Training</option>
+                      <option value="vedic">Vedic Mathematics</option>
+                      <option value="tuition">Online Tuition Programs</option>
+                      <option value="edupreneur">Edupreneur Workshop</option>
+                      <option value="digital-marketing">Digital Marketing for Teachers</option>
+                      <option value="ai-workshop">One-Day AI Workshop</option>
+                      <option value="general">General Inquiry</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Message -->
+              <div>
+                <label for="contactMsg" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/80 mb-2">Your Message</label>
+                <textarea
+                  id="contactMsg"
+                  name="message"
+                  rows="4"
+                  placeholder="Tell us about the student's age or your query..."
+                  class="w-full rounded-xl border border-white/10 bg-[#0b0f2e]/80 p-4 text-white placeholder-indigo-300/30 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-400/20 resize-y"
+                ></textarea>
+              </div>
+
+              <!-- Submit Button -->
+              <button
+                type="submit"
+                id="submitBtn"
+                class="w-full inline-flex min-h-[48px] items-center justify-center gap-3 rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 px-8 py-3.5 text-sm font-semibold text-white shadow-glow-blue transition-all duration-300 hover:brightness-110 hover:shadow-lg active:scale-95 sm:w-auto"
+              >
+                <span>Send Message</span>
+                <i class="fa-solid fa-paper-plane text-xs" aria-hidden="true"></i>
+              </button>
+
+              <!-- Success Message -->
+              <div id="formSuccess" class="hidden rounded-2xl border border-emerald-500/30 bg-emerald-950/40 p-4 text-sm text-emerald-200" role="alert" aria-live="polite">
+                <div class="flex items-center gap-2 font-semibold">
+                  <i class="fa-solid fa-circle-check text-emerald-400" aria-hidden="true"></i> Thank you! Your message has been received.
+                </div>
+                <p class="mt-1 text-xs text-emerald-300/80">We will reach out to you shortly via phone/WhatsApp or email.</p>
+              </div>
+            </form>
+          </div>
+
+          <!-- Side Info Panel (5/12 on desktop) — stacks below form on mobile -->
+          <div class="lg:col-span-5 space-y-5 sm:space-y-6">
+
+            <!-- Working Hours -->
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:p-7">
+              <h3 class="font-display fluid-h3 font-bold text-white mb-4 flex items-center gap-2">
+                <i class="fa-regular fa-clock text-amber-400" aria-hidden="true"></i> Learning Format &amp; Hours
+              </h3>
+              <ul class="space-y-3 text-sm text-indigo-200/80 list-none">
+                <li class="flex items-start gap-3">
+                  <i class="fa-solid fa-check-circle text-cyan-400 mt-1 shrink-0" aria-hidden="true"></i>
+                  <span><strong>Online Classes:</strong> Flexible batch timings across IST, Gulf (GST), US, UK, and APAC timezones.</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <i class="fa-solid fa-check-circle text-cyan-400 mt-1 shrink-0" aria-hidden="true"></i>
+                  <span><strong>Support &amp; Counseling:</strong> Monday – Saturday (9:00 AM – 8:00 PM IST).</span>
+                </li>
+                <li class="flex items-start gap-3">
+                  <i class="fa-solid fa-check-circle text-cyan-400 mt-1 shrink-0" aria-hidden="true"></i>
+                  <span><strong>1-on-1 Free Demos:</strong> Available every weekend upon prior slot registration.</span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- Social Media Hub -->
+            <div class="rounded-3xl border border-white/10 bg-white/5 p-5 backdrop-blur-xl sm:p-7">
+              <h3 class="font-display fluid-h3 font-bold text-white mb-3 flex items-center gap-2">
+                <i class="fa-solid fa-share-nodes text-fuchsia-400" aria-hidden="true"></i> Connect on Social Media
+              </h3>
+              <p class="text-xs text-indigo-200/70 mb-4 leading-relaxed">
+                Stay updated with free masterclasses, student achievements, and Vedic math tricks across all platforms:
+              </p>
+
+              <!-- Wrap well on small screens -->
+              <div class="flex flex-wrap gap-2.5">
+                <a href="https://instagram.com/mathsmanthra" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-pink-500/30 bg-pink-500/10 px-4 py-2 text-xs font-semibold text-pink-300 hover:bg-pink-500/20 transition">
+                  <i class="fa-brands fa-instagram text-base" aria-hidden="true"></i> Instagram
+                </a>
+                <a href="mailto:mathsmanthra@gmail.com"
+                   class="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-cyan-500/30 bg-cyan-500/10 px-4 py-2 text-xs font-semibold text-cyan-300 hover:bg-cyan-500/20 transition">
+                  <i class="fa-solid fa-envelope text-base" aria-hidden="true"></i> Email
+                </a>
+                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition">
+                  <i class="fa-brands fa-whatsapp text-base" aria-hidden="true"></i> WhatsApp
+                </a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex min-h-[40px] items-center gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-xs font-semibold text-red-300 hover:bg-red-500/20 transition">
+                  <i class="fa-brands fa-youtube text-base" aria-hidden="true"></i> YouTube
+                </a>
+              </div>
+            </div>
+
+            <!-- Edupreneur Note -->
+            <div class="rounded-3xl border border-indigo-500/20 bg-gradient-to-r from-indigo-950/40 via-purple-950/30 to-[#0b0f2e]/50 p-5 backdrop-blur-xl sm:p-6">
+              <p class="text-xs font-semibold uppercase tracking-wider text-fuchsia-400 mb-1">Quick Note</p>
+              <p class="text-sm text-indigo-100 font-medium">Want to partner as an Edupreneur or start an Abacus center?</p>
+              <p class="text-xs text-indigo-300/70 mt-1">Mention "Edupreneur Partnership" in the message or write directly to us.</p>
+            </div>
+
+          </div>
+
+        </div>
+      </main>
+    </section>
+
+    <!-- Contact form JS -->
+    <script>
+      function handleContactSubmit() {
+        var btn      = document.getElementById('submitBtn');
+        var alertBox = document.getElementById('formSuccess');
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin" aria-hidden="true"></i> <span>Sending...</span>';
+
+        setTimeout(function () {
+          btn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i> <span>Sent Successfully</span>';
+          btn.classList.remove('from-indigo-500', 'via-purple-500', 'to-fuchsia-500');
+          btn.classList.add('bg-emerald-600');
+          alertBox.classList.remove('hidden');
+          document.getElementById('contactForm').reset();
+        }, 800);
+      }
+    </script>
+  </body>
+</html>
