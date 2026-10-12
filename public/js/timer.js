@@ -43,6 +43,14 @@
   var alarmTimeout = null;
   var alarmAudio   = null;
 
+  // Previous render values for change-detection (avoids redundant DOM writes)
+  var prevSwText   = '';
+  var prevCdText   = '';
+  var prevCdStroke  = '';
+  var prevCdColor   = '';
+  var prevMiniText  = '';
+  var prevMiniMs    = '';
+
   /* ============================================================
      DOM REFS
      ============================================================ */
@@ -531,24 +539,39 @@
 
   function renderSw() {
     if (!$swDisplay) return;
-    $swDisplay.textContent = formatMs(swElapsedMs(), true);
+    var text = formatMs(swElapsedMs(), true);
+    if (text !== prevSwText) {
+      $swDisplay.textContent = text;
+      prevSwText = text;
+    }
   }
 
   function renderCd() {
     if (!$cdDisplay) return;
     var rem = cdRemainingMs();
-    $cdDisplay.textContent = formatMs(rem, false);
+    var text = formatMs(rem, false);
+    if (text !== prevCdText) {
+      $cdDisplay.textContent = text;
+      prevCdText = text;
+    }
 
     if ($cdProgress) {
       var pct = cd.totalMs > 0 ? rem / cd.totalMs : 1;
       var circ = 2 * Math.PI * 54;
-      $cdProgress.style.strokeDashoffset = (circ * (1 - pct)).toFixed(2);
-      $cdProgress.style.stroke =
+      var strokeVal = (circ * (1 - pct)).toFixed(2);
+      if (strokeVal !== prevCdStroke) {
+        $cdProgress.style.strokeDashoffset = strokeVal;
+        prevCdStroke = strokeVal;
+      }
+      var color =
         pct > 0.5  ? '#34d399' :
         pct > 0.2  ? '#fbbf24' : '#f87171';
+      if (color !== prevCdColor) {
+        $cdProgress.style.stroke = color;
+        prevCdColor = color;
+      }
     }
-
-    updateCdButtons();
+    // Note: updateCdButtons() removed from render loop — called only on user actions
   }
 
   /* ============================================================
@@ -566,8 +589,10 @@
       var s = totalSec % 60;
       var hun = Math.floor((ms % 1000) / 10);
 
-      if ($miniDisplay) $miniDisplay.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
-      if ($miniMs) $miniMs.textContent = '.' + pad(hun);
+      var timeStr = pad(h) + ':' + pad(m) + ':' + pad(s);
+      var msStr = '.' + pad(hun);
+      if ($miniDisplay && timeStr !== prevMiniText) { $miniDisplay.textContent = timeStr; prevMiniText = timeStr; }
+      if ($miniMs && msStr !== prevMiniMs) { $miniMs.textContent = msStr; prevMiniMs = msStr; }
 
       if ($miniDot) {
         if (sw.running) {
@@ -606,8 +631,10 @@
       var s = totalSec % 60;
       var hun = Math.floor((rem % 1000) / 10);
 
-      if ($miniDisplay) $miniDisplay.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
-      if ($miniMs) $miniMs.textContent = cd.finished ? 'DONE' : ('.' + pad(hun));
+      var timeStr = pad(h) + ':' + pad(m) + ':' + pad(s);
+      var msStr = cd.finished ? 'DONE' : ('.' + pad(hun));
+      if ($miniDisplay && timeStr !== prevMiniText) { $miniDisplay.textContent = timeStr; prevMiniText = timeStr; }
+      if ($miniMs && msStr !== prevMiniMs) { $miniMs.textContent = msStr; prevMiniMs = msStr; }
 
       if ($miniDot) {
         if (cd.finished) {
@@ -650,8 +677,9 @@
       var ampm = ch >= 12 ? 'PM' : 'AM';
       var ch12 = ch % 12 || 12;
 
-      if ($miniDisplay) $miniDisplay.textContent = pad(ch12) + ':' + pad(cm) + ':' + pad(cs);
-      if ($miniMs) $miniMs.textContent = ampm;
+      var timeStr = pad(ch12) + ':' + pad(cm) + ':' + pad(cs);
+      if ($miniDisplay && timeStr !== prevMiniText) { $miniDisplay.textContent = timeStr; prevMiniText = timeStr; }
+      if ($miniMs && ampm !== prevMiniMs) { $miniMs.textContent = ampm; prevMiniMs = ampm; }
 
       if ($miniDot) {
         $miniDot.className = 'mini-live-dot dot-clock';

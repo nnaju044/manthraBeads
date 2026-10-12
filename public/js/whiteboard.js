@@ -143,14 +143,9 @@
     if (!surface || !$canvas) return;
 
     var rect = surface.getBoundingClientRect();
-    // Preserve existing drawing as image
-    var img = ctx.getImageData(0, 0, $canvas.width, $canvas.height);
     $canvas.width  = Math.floor(rect.width);
     $canvas.height = Math.floor(rect.height);
-    // Reapply base fill
-    ctx.fillStyle = '#1a1f4e';
-    ctx.fillRect(0, 0, $canvas.width, $canvas.height);
-    // Replay persisted strokes on the freshly sized canvas
+    // Replay persisted strokes on the freshly sized canvas (includes base fill)
     replayStrokes();
   }
 
