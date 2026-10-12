@@ -1,0 +1,385 @@
+/* ============================================================
+   whiteboard.css — Styles for ManthraBeads Excalidraw Whiteboard
+   ============================================================ */
+
+.mb-wb-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  background: #0b0f2e;
+  color: #e0e7ff;
+  font-family: "Poppins", sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ── Top Header Toolbar ── */
+.mb-wb-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 1rem;
+  background: rgba(15, 23, 64, 0.96);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  flex-shrink: 0;
+  z-index: 10;
+  flex-wrap: wrap;
+}
+
+.mb-wb-header-left,
+.mb-wb-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.mb-wb-title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: "Baloo 2", sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  color: #ffffff;
+  margin-right: 0.25rem;
+}
+
+.mb-wb-title-icon {
+  color: #818cf8;
+  font-size: 0.95rem;
+}
+
+/* ── Board Switcher Dropdown ── */
+.mb-wb-select-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 9999px;
+  padding: 0.25rem 0.65rem;
+  transition: all 0.2s ease;
+}
+
+.mb-wb-select-wrap:hover {
+  background: rgba(255, 255, 255, 0.11);
+  border-color: rgba(129, 140, 248, 0.4);
+}
+
+.mb-wb-board-select {
+  background: transparent;
+  border: none;
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  max-width: 160px;
+  text-overflow: ellipsis;
+}
+
+.mb-wb-board-select option {
+  background: #0f1740;
+  color: #ffffff;
+}
+
+/* ── Action Buttons ── */
+.mb-wb-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.08);
+  color: #e0e7ff;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.mb-wb-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+}
+
+.mb-wb-btn:active {
+  transform: scale(0.97);
+}
+
+.mb-wb-btn-primary {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border-color: rgba(129, 140, 248, 0.3);
+  color: #ffffff;
+  box-shadow: 0 0 12px rgba(99, 102, 241, 0.3);
+}
+
+.mb-wb-btn-primary:hover {
+  filter: brightness(1.12);
+}
+
+.mb-wb-btn-save {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.mb-wb-btn-save:hover {
+  background: rgba(16, 185, 129, 0.25);
+  color: #6ee7b7;
+}
+
+.mb-wb-btn-danger {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.35);
+  color: #f87171;
+}
+
+.mb-wb-btn-danger:hover {
+  background: rgba(239, 68, 68, 0.28);
+  color: #ffffff;
+}
+
+.mb-wb-btn-icon {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+
+/* ── Status Indicator Badge ── */
+.mb-wb-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 0.2rem 0.55rem;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.mb-wb-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+}
+
+.mb-wb-status-saved .mb-wb-status-dot {
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+}
+
+.mb-wb-status-saved {
+  color: #6ee7b7;
+}
+
+.mb-wb-status-saving .mb-wb-status-dot {
+  background: #f59e0b;
+  box-shadow: 0 0 8px #f59e0b;
+  animation: mb-pulse 1s infinite alternate;
+}
+
+.mb-wb-status-saving {
+  color: #fcd34d;
+}
+
+.mb-wb-status-error .mb-wb-status-dot {
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+}
+
+.mb-wb-status-error {
+  color: #fca5a5;
+}
+
+@keyframes mb-pulse {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+/* ── Canvas Wrapper for Excalidraw ── */
+.mb-wb-canvas-wrap {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  background: #0b0f2e;
+}
+
+/* Ensure Excalidraw fills entire wrapper */
+.mb-wb-canvas-wrap .excalidraw {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Dark mode tweaks for Excalidraw chrome to match starry night theme */
+.mb-wb-canvas-wrap .excalidraw.theme--dark {
+  --color-primary: #6366f1;
+}
+
+/* ── Modal Dialogs (Boards List, Delete Confirmation, New Board) ── */
+.mb-wb-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(3, 7, 24, 0.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+  animation: mb-fade-in 0.18s ease;
+}
+
+@keyframes mb-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.mb-wb-modal-dialog {
+  background: #0f1642;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 1.25rem;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), 0 0 35px rgba(99, 102, 241, 0.15);
+  width: 100%;
+  max-width: 480px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: mb-scale-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes mb-scale-in {
+  from { transform: scale(0.95); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.mb-wb-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.mb-wb-modal-title {
+  font-family: "Baloo 2", sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.mb-wb-modal-body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.mb-wb-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+/* Boards List Items */
+.mb-wb-boards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.mb-wb-board-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.15s ease;
+}
+
+.mb-wb-board-item.active-board {
+  border-color: rgba(99, 102, 241, 0.6);
+  background: rgba(99, 102, 241, 0.12);
+}
+
+.mb-wb-board-item:hover {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+.mb-wb-board-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.mb-wb-board-name {
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: #ffffff;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mb-wb-board-date {
+  font-size: 0.72rem;
+  color: rgba(224, 231, 255, 0.6);
+}
+
+.mb-wb-board-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-shrink: 0;
+}
+
+/* Input Fields */
+.mb-wb-input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.6rem;
+  padding: 0.55rem 0.85rem;
+  color: #ffffff;
+  font-size: 0.88rem;
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.mb-wb-input:focus {
+  border-color: #818cf8;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Fullscreen expansion modifier for #whiteboardPanel */
+#whiteboardPanel.wb-fullscreen {
+  max-width: 100vw !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  border: none !important;
+}
