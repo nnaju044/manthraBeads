@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 export default function BoardBar({
   boards,
@@ -11,11 +11,35 @@ export default function BoardBar({
   onCreateNewBoard,
   onOpenBoardsModal,
   onSaveBoard,
+  onOpenSaveAsModal,
   onToggleFullscreen,
   onClose,
 }) {
   const [isEditingName, setIsEditingName] = useState(false);
   const [nameVal, setNameVal] = useState(activeBoard?.name || '');
+  const [saveBtnState, setSaveBtnState] = useState('idle'); // 'idle' | 'saving' | 'saved'
+  const [isSaveMenuOpen, setIsSaveMenuOpen] = useState(false);
+  const saveMenuRef = useRef(null);
+
+  // Sync name input when activeBoard changes
+  useEffect(() => {
+    setNameVal(activeBoard?.name || '');
+  }, [activeBoard?.id, activeBoard?.name]);
+
+  // Close save dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (saveMenuRef.current && !saveMenuRef.current.contains(e.target)) {
+        setIsSaveMenuOpen(false);
+      }
+    };
+    if (isSaveMenuOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isSaveMenuOpen]);
 
   const startEditing = () => {
     setNameVal(activeBoard?.name || '');
@@ -32,6 +56,26 @@ export default function BoardBar({
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') saveName();
     if (e.key === 'Escape') setIsEditingName(false);
+  };
+
+  const handleSaveClick = async () => {
+    if (saveBtnState === 'saving') return;
+    setSaveBtnState('saving');
+
+    try {
+      const res = await onSaveBoard();
+      if (res && res.success !== false) {
+        setSaveBtnState('saved');
+        setTimeout(() => {
+          setSaveBtnState('idle');
+        }, 2500);
+      } else {
+        setSaveBtnState('idle');
+      }
+    } catch (err) {
+      console.error('[ManthraBeads Whiteboard] Save button error:', err);
+      setSaveBtnState('idle');
+    }
   };
 
   return (
@@ -66,7 +110,7 @@ export default function BoardBar({
             <input
               type="text"
               className="mb-wb-input"
-              style={{ width: '130px', padding: '0.2rem 0.5rem', fontSize: '0.78rem' }}
+              style={{ width: '140px', padding: '0.2rem 0.5rem', fontSize: '0.78rem' }}
               value={nameVal}
               onChange={(e) => setNameVal(e.target.value)}
               onKeyDown={handleKeyDown}
@@ -124,23 +168,82 @@ export default function BoardBar({
         >
           <span className="mb-wb-status-dot"></span>
           <span>
-            {saveStatus === 'saving'
-              ? 'Saving...'
-              : saveStatus === 'error'
-              ? 'Save Error'
-              : 'Saved'}
+            {statusMessage ||
+              (saveStatus === 'saving'
+                ? 'Saving...'
+                : saveStatus === 'error'
+                ? 'Save Error'
+                : 'Saved')}
           </span>
         </div>
 
-        {/* Save Board Button */}
-        <button
-          type="button"
-          className="mb-wb-btn mb-wb-btn-save"
-          onClick={onSaveBoard}
-          title="Save drawing immediately"
-        >
-          <i className="fa-solid fa-floppy-disk text-xs"></i> Save Board
-        </button>
+        {/* Save Board Button Group */}
+        <div className="mb-wb-save-group" ref={saveMenuRef}>
+          <button
+            type="button"
+            className={`mb-wb-btn mb-wb-btn-save ${
+              saveBtnState === 'saved' ? 'mb-wb-btn-save-success' : ''
+            }`}
+            onClick={handleSaveClick}
+            disabled={saveBtnState === 'saving'}
+            title="Save drawing immediately"
+          >
+            {saveBtnState === 'saving' ? (
+              <>
+                <i className="fa-solid fa-circle-notch fa-spin text-xs"></i>
+                <span>Saving...</span>
+              </>
+            ) : saveBtnState === 'saved' ? (
+              <>
+                <i className="fa-solid fa-check text-xs"></i>
+                <span>Saved! ✓</span>
+              </>
+            ) : (
+              <>
+                <i className="fa-solid fa-floppy-disk text-xs"></i>
+                <span>Save Board</span>
+              </>
+            )}
+          </button>
+
+          {/* Dropdown Options for Save */}
+          <button
+            type="button"
+            className="mb-wb-btn mb-wb-save-dropdown-trigger"
+            onClick={() => setIsSaveMenuOpen((prev) => !prev)}
+            title="Save options (Name, Save as New)"
+            aria-label="Save options"
+          >
+            <i className={`fa-solid fa-chevron-down text-xs transition-transform ${isSaveMenuOpen ? 'rotate-180' : ''}`}></i>
+          </button>
+
+          {isSaveMenuOpen && (
+            <div className="mb-wb-save-dropdown-menu">
+              <button
+                type="button"
+                className="mb-wb-save-dropdown-item"
+                onClick={() => {
+                  setIsSaveMenuOpen(false);
+                  if (onOpenSaveAsModal) onOpenSaveAsModal();
+                }}
+              >
+                <i className="fa-solid fa-pen-to-square text-xs text-indigo-400"></i>
+                <span>Save &amp; Name Board...</span>
+              </button>
+              <button
+                type="button"
+                className="mb-wb-save-dropdown-item"
+                onClick={() => {
+                  setIsSaveMenuOpen(false);
+                  if (onOpenSaveAsModal) onOpenSaveAsModal();
+                }}
+              >
+                <i className="fa-solid fa-copy text-xs text-emerald-400"></i>
+                <span>Save as New Board...</span>
+              </button>
+            </div>
+          )}
+        </div>
 
         {/* Fullscreen Toggle Button */}
         <button

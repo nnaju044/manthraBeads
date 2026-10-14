@@ -7,8 +7,8 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Static files — cache for 1 day in production, short cache in dev
-var staticMaxAge = process.env.NODE_ENV === 'production' ? 86400000 : 3600000;
+// Static files — cache for 1 day in production, 0 in dev
+var staticMaxAge = process.env.NODE_ENV === 'production' ? 86400000 : 0;
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: staticMaxAge }));
 
 const routes = require('./routes/index');

@@ -52,7 +52,7 @@
   <link rel="stylesheet" href="/css/site.css" />
 
   <!-- Excalidraw Whiteboard CSS -->
-  <link rel="stylesheet" href="/dist/excalidraw-app.css" />
+  <link rel="stylesheet" href="/dist/excalidraw-app.css?v=<%= Date.now() %>" />
 
   <style>
     /* Scroll overflow for page */
@@ -461,7 +461,7 @@
       </div>
 
     <script src="/js/abacus.js"></script>
-    <script type="module" src="/dist/excalidraw-app.js"></script>
+    <script type="module" src="/dist/excalidraw-app.js?v=<%= Date.now() %>"></script>
     <script src="/js/timer.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
