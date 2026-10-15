@@ -11,7 +11,7 @@ export default defineConfig({
   },
   build: {
     outDir: 'public/dist',
-    emptyOutDir: false,
+    emptyOutDir: true,
     lib: {
       entry: path.resolve(__dirname, 'src/whiteboard/index.jsx'),
       name: 'ManthraExcalidraw',

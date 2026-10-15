@@ -460,15 +460,50 @@
         </div>
       </div>
 
+    <script>
+      // Browser safety: define exports in case serverless bundlers inject CommonJS references
+      if (typeof exports === 'undefined') {
+        window.exports = {};
+      }
+      // Immediate fallback so WhiteboardModal is always defined immediately
+      window.WhiteboardModal = window.WhiteboardModal || {
+        init: function () {},
+        open: function () {
+          var m = document.getElementById('whiteboardModal');
+          if (m) {
+            m.classList.remove('wb-hidden');
+            requestAnimationFrame(function () { m.classList.add('wb-visible'); });
+          }
+        },
+        close: function () {
+          var m = document.getElementById('whiteboardModal');
+          if (m) {
+            m.classList.remove('wb-visible');
+            setTimeout(function () { m.classList.add('wb-hidden'); }, 250);
+          }
+        },
+        save: function () {},
+        getBoards: function () { return []; },
+        getActiveBoard: function () { return null; }
+      };
+    </script>
     <script src="/js/abacus.js"></script>
     <script type="module" src="/dist/excalidraw-app.js?v=<%= Date.now() %>"></script>
     <script src="/js/timer.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         // Whiteboard
-        WhiteboardModal.init();
+        if (window.WhiteboardModal && typeof window.WhiteboardModal.init === 'function') {
+          WhiteboardModal.init();
+        }
         var btnWb = document.getElementById('btnWhiteboard');
-        if (btnWb) btnWb.addEventListener('click', function () { WhiteboardModal.open(); });
+        if (btnWb) {
+          btnWb.addEventListener('click', function () {
+            if (window.WhiteboardModal && typeof window.WhiteboardModal.open === 'function') {
+              WhiteboardModal.open();
+            }
+          });
+        }
 
         // Timer Modal & Miniature Watch
         TimerModal.init();

@@ -39,4 +39,3 @@ if (document.readyState === 'loading') {
   mountWhiteboard();
 }
 
-export { mountWhiteboard };
