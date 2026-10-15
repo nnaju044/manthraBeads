@@ -1,0 +1,424 @@
+/* ============================================================
+   site.css  —  Maths Manthra Academy
+   Global responsive styles, fluid typography, sticky nav,
+   mobile utilities. Mobile-first approach.
+   ============================================================ */
+
+/* ── 1. BASE RESET & OVERFLOW CONTROL ── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100vh;
+  /* Ensure no page-level horizontal scroll on any device */
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ── 2. FLUID TYPOGRAPHY (clamp-based) ── */
+/* Usage: add class .fluid-h1, .fluid-h2, .fluid-h3, .fluid-body to elements */
+
+.fluid-h1 {
+  font-size: clamp(1.75rem, 5vw, 3.75rem);
+  line-height: 1.1;
+}
+
+.fluid-h2 {
+  font-size: clamp(1.35rem, 4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+.fluid-h3 {
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  line-height: 1.3;
+}
+
+.fluid-body {
+  font-size: clamp(0.9rem, 2vw, 1.05rem);
+  line-height: 1.6;
+}
+
+.fluid-small {
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+}
+
+/* ── 3. STICKY NAVIGATION ── */
+
+.site-header-wrap {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* Adds glass effect on scroll */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  /* Subtle bottom separator */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  /* Dark tinted background so content below doesn't show through when scrolled */
+  background: rgba(11, 15, 46, 0.80);
+  /* Smooth appearance transition */
+  transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+/* When scrolled, slightly darken further */
+.site-header-wrap.scrolled {
+  background: rgba(7, 10, 31, 0.95);
+  border-color: rgba(255, 255, 255, 0.10);
+}
+
+/* ── 4. MOBILE NAV DRAWER ANIMATION ── */
+
+#mobileMenu {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.25s ease,
+              transform 0.3s ease;
+  transform: translateY(-8px);
+  /* Remove display:hidden toggling — use max-height instead */
+  display: flex !important;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+#mobileMenu.open {
+  max-height: 420px; /* large enough for all links */
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ── 5. TOUCH TARGETS ── */
+
+/* All interactive elements get a minimum 44px touch target */
+a,
+button,
+select,
+input,
+textarea {
+  touch-action: manipulation;
+}
+
+.btn-touch-min {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── 6. RESPONSIVE IMAGES ── */
+
+.img-responsive {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+.img-contain {
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ── 7. HERO SECTION FIXES ── */
+
+/* Prevent the hero illustration container from overflowing */
+.hero-illustration-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden; /* Clip decorative items that go past edges */
+}
+
+/* ── 8. CARD GRID SYSTEM ── */
+
+/* 1 col mobile → 2 col tablet → 3 col desktop */
+.card-grid-3 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .card-grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .card-grid-3 {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+/* Cards get equal height within the grid */
+.card-grid-3 > * {
+  height: 100%;
+}
+
+/* ── 9. LEVEL BUTTON ROW (hero panel) ── */
+/* 4 character cards in a row — prevent overflow on 320px */
+.level-btn-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.level-btn-row .level-btn {
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .level-btn-row {
+    display: flex;
+    gap: 0.75rem;
+    width: auto;
+  }
+}
+
+/* Reduce character card size on very small screens */
+@media (max-width: 380px) {
+  .level-card-inner {
+    height: 60px !important;
+    width: 60px !important;
+  }
+}
+
+/* ── 10. STATS STRIP (hero) ── */
+
+.stats-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+}
+
+.stats-strip .stat-divider {
+  display: none;
+}
+
+@media (min-width: 480px) {
+  .stats-strip .stat-divider {
+    display: block;
+  }
+}
+
+/* ── 11. SECTION PADDING (responsive) ── */
+.section-px {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .section-px {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-px {
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+  }
+}
+
+/* ── 12. FORM RESPONSIVE ── */
+
+/* All form inputs: full width + touch-friendly height */
+.form-input {
+  width: 100%;
+  min-height: 48px;
+  font-size: 1rem; /* prevent iOS zoom */
+}
+
+/* Prevent iOS auto-zoom on input focus (font-size must be ≥ 16px) */
+input,
+select,
+textarea {
+  font-size: 16px !important;
+}
+
+@media (min-width: 640px) {
+  input,
+  select,
+  textarea {
+    font-size: 0.875rem !important;
+  }
+}
+
+/* ── 13. BOTTOM HERO GLASS PANEL ── */
+
+/* On very small screens, increase stacking gap */
+@media (max-width: 380px) {
+  .hero-bottom-panel {
+    padding: 1rem;
+    gap: 1rem;
+  }
+}
+
+/* ── 14. HERO DECORATIVE ELEMENTS ── */
+
+/* Clamp treasure / Daily Challenge pill within safe bounds */
+.deco-treasure {
+  right: 0 !important;
+  bottom: 0 !important;
+}
+
+.deco-challenge-pill {
+  right: 0 !important;
+  bottom: 2% !important;
+  max-width: calc(100% - 2rem);
+}
+
+/* On small screens, hide some floating math symbols to avoid clutter */
+@media (max-width: 480px) {
+  .deco-math-symbol {
+    display: none;
+  }
+}
+
+/* ── 15. ABOUT PAGE SPECIFIC ── */
+
+/* Fix quote card font sizing on mobile */
+@media (max-width: 640px) {
+  .about-quote {
+    font-size: clamp(0.95rem, 3.5vw, 1.25rem);
+    padding: 1.5rem;
+  }
+
+  .about-intro-card {
+    padding: 1.25rem;
+  }
+}
+
+/* ── 16. CONTACT PAGE SPECIFIC ── */
+
+@media (max-width: 640px) {
+  .contact-card {
+    padding: 1.25rem;
+  }
+
+  /* Shrink the @badge text so it doesn't overflow */
+  .insta-badge {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.5rem;
+  }
+
+  /* Ensure email doesn't overflow */
+  .email-text {
+    word-break: break-all;
+  }
+}
+
+/* ── 17. FOOTER (if added later) ── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 640px) {
+  .footer-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .footer-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* ── 18. ACCESSIBILITY ── */
+
+/* Visible focus ring for keyboard navigation */
+:focus-visible {
+  outline: 2px solid rgba(167, 139, 250, 0.8);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* Skip-to-content link (screen readers) */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: #6366f1;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 700;
+  z-index: 9999;
+  transition: top 0.2s;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ── 19. PERFORMANCE: REDUCE LAYOUT SHIFT ── */
+
+/* Reserve space for images before they load */
+.img-aspect-hero {
+  aspect-ratio: 3 / 2;
+}
+
+@media (min-width: 1024px) {
+  .img-aspect-hero {
+    aspect-ratio: 4 / 3;
+  }
+}
+
+/* ── 20. UTILITY: MAX-WIDTH CONTAINERS ── */
+.container-page {
+  width: 100%;
+  max-width: 1536px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-page {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-page {
+    padding-left: 3.5rem;
+    padding-right: 3.5rem;
+  }
+}
+
+/* ── 21. ABACUS TOOLBAR RESPONSIVE ── */
+@media (max-width: 640px) {
+  .toolbar-glass {
+    padding: 1rem !important;
+  }
+  .toolbar-glass > div {
+    gap: 1rem !important;
+  }
+}

@@ -43,6 +43,9 @@
   var beadSound = null;
   var soundEnabled = true;
 
+  // Cached bead DOM elements — avoids querySelectorAll on every render
+  var cachedBeadEls = [];
+
   var $rulesAuthModal = null;
   var $rulesAuthForm = null;
   var $rulesPasscodeInput = null;
@@ -325,6 +328,7 @@
      ============================================================ */
   function buildAbacus() {
     $rodsWrap.innerHTML = '';
+    cachedBeadEls = []; // Reset cached bead references
 
     var n = state.rodCount;
 
@@ -360,6 +364,9 @@
     $rodsWrap.style.height = boardH + 'px';
     $rodsWrap.style.width = (n * colW) + 'px';
 
+    // Build all rods in a document fragment for fewer reflows
+    var frag = document.createDocumentFragment();
+
     for (var col = 0; col < n; col++) {
       var col$ = document.createElement('div');
       col$.className = 'rod-column';
@@ -386,6 +393,8 @@
       upperBead.style.left = '50%';
       upperBead.style.transform = 'translateX(-50%) translateY(0px)';
       upperBead.dataset.deltaY = upperDeltaY;
+      // Cache the bead element with its metadata
+      cachedBeadEls.push({ el: upperBead, col: col, type: 'upper', idx: 0, deltaY: upperDeltaY });
       col$.appendChild(upperBead);
 
       // ---- LOWER (EARTH) BEADS ----
@@ -407,6 +416,8 @@
         lb.style.left = '50%';
         lb.style.transform = 'translateX(-50%) translateY(0px)';
         lb.dataset.deltaY = deltaY;
+        // Cache the bead element with its metadata
+        cachedBeadEls.push({ el: lb, col: col, type: 'lower', idx: b, deltaY: deltaY });
         col$.appendChild(lb);
       }
 
@@ -422,8 +433,10 @@
       //   }
       // }
 
-      $rodsWrap.appendChild(col$);
+      frag.appendChild(col$);
     }
+
+    $rodsWrap.appendChild(frag);
 
     // Build draggable beam marker dots on the horizontal divider
     buildDividerDots(n, colW);
@@ -626,27 +639,26 @@
   }
 
   function renderBeads() {
-    var beads = $rodsWrap.querySelectorAll('.bead');
-    beads.forEach(function (el) {
-      var col = parseInt(el.getAttribute('data-col'), 10);
-      var type = el.getAttribute('data-type');
-      var idx = parseInt(el.getAttribute('data-idx'), 10);
-      if (col >= state.beads.length) return;
+    // Use cached bead element references instead of querySelectorAll
+    for (var i = 0, len = cachedBeadEls.length; i < len; i++) {
+      var entry = cachedBeadEls[i];
+      var el = entry.el;
+      var col = entry.col;
+      if (col >= state.beads.length) continue;
 
       var b = state.beads[col];
-      var active = type === 'upper' ? b.upper : b.lower[idx];
-      var deltaY = parseFloat(el.dataset.deltaY);
+      var active = entry.type === 'upper' ? b.upper : b.lower[entry.idx];
 
       el.classList.toggle('active', active);
       el.setAttribute('aria-checked', active ? 'true' : 'false');
 
       // Animate via translateY — GPU-accelerated, smooth
       if (active) {
-        el.style.transform = 'translateX(-50%) translateY(' + deltaY + 'px)';
+        el.style.transform = 'translateX(-50%) translateY(' + entry.deltaY + 'px)';
       } else {
         el.style.transform = 'translateX(-50%) translateY(0px)';
       }
-    });
+    }
   }
 
 
