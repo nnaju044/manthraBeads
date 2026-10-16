@@ -549,3 +549,14 @@
   color: #ffffff;
 }
 
+/* ── Inline (non-modal) embedding context ── */
+/* When WhiteboardApp is mounted inside #excalidrawInline, make it fill its */
+/* fixed-height container rather than relying on viewport 100% height.      */
+#excalidrawInline .mb-wb-root {
+  height: 100%;
+  min-height: 0;
+}
+
+#excalidrawInline .mb-wb-canvas-wrap {
+  min-height: 0;
+}

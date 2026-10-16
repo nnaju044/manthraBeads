@@ -15,7 +15,7 @@ import BoardsModal from './BoardsModal';
 import SaveBoardModal from './SaveBoardModal';
 import ConfirmDeleteModal from './ConfirmDeleteModal';
 
-export default function WhiteboardApp() {
+export default function WhiteboardApp({ inline = false }) {
   const [data, setData] = useState(() => loadBoardsData());
   const [excalidrawAPI, setExcalidrawAPI] = useState(null);
   const [saveStatus, setSaveStatus] = useState('saved'); // 'saved' | 'saving' | 'error'
@@ -442,36 +442,43 @@ export default function WhiteboardApp() {
   }, [excalidrawAPI]);
 
   /**
-   * Close modal function
+   * Close — only operates on the modal overlay when NOT in inline mode.
    */
   const handleClose = useCallback(() => {
     flushPendingSave();
-    const modal = document.getElementById('whiteboardModal');
-    if (modal) {
-      modal.classList.remove('wb-visible');
-      setTimeout(() => {
-        modal.classList.add('wb-hidden');
-      }, 250);
+    if (!inline) {
+      const modal = document.getElementById('whiteboardModal');
+      if (modal) {
+        modal.classList.remove('wb-visible');
+        setTimeout(() => {
+          modal.classList.add('wb-hidden');
+        }, 250);
+      }
     }
-  }, [flushPendingSave]);
+  }, [flushPendingSave, inline]);
 
   /**
-   * Open modal helper (invoked externally via WhiteboardModal.open())
+   * Open helper — when inline the board is always visible, so just scroll to it.
+   * When modal mode, show the overlay as before.
    */
   const handleOpen = useCallback(() => {
-    const modal = document.getElementById('whiteboardModal');
-    if (modal) {
-      modal.classList.remove('wb-hidden');
-      requestAnimationFrame(() => {
-        modal.classList.add('wb-visible');
-        setTimeout(() => {
-          if (excalidrawAPI) {
-            excalidrawAPI.refresh();
-          }
-        }, 80);
-      });
+    if (inline) {
+      const section = document.getElementById('mathsWorkspaceSection');
+      if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => { if (excalidrawAPI) excalidrawAPI.refresh(); }, 80);
+    } else {
+      const modal = document.getElementById('whiteboardModal');
+      if (modal) {
+        modal.classList.remove('wb-hidden');
+        requestAnimationFrame(() => {
+          modal.classList.add('wb-visible');
+          setTimeout(() => {
+            if (excalidrawAPI) excalidrawAPI.refresh();
+          }, 80);
+        });
+      }
     }
-  }, [excalidrawAPI]);
+  }, [excalidrawAPI, inline]);
 
   // Bind global WhiteboardModal API for backwards compatibility with existing site buttons
   useEffect(() => {
@@ -491,37 +498,39 @@ export default function WhiteboardApp() {
     window.addEventListener('beforeunload', handleBeforeUnload);
     window.addEventListener('pagehide', handleBeforeUnload);
 
-    // Escape key closes modal
-    const handleKeyDown = (e) => {
-      if (e.key === 'Escape') {
-        const modal = document.getElementById('whiteboardModal');
-        if (modal && !modal.classList.contains('wb-hidden')) {
-          handleClose();
+    // Escape key closes modal (only relevant in modal mode)
+    let handleKeyDown = null;
+    if (!inline) {
+      handleKeyDown = (e) => {
+        if (e.key === 'Escape') {
+          const modal = document.getElementById('whiteboardModal');
+          if (modal && !modal.classList.contains('wb-hidden')) {
+            handleClose();
+          }
         }
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
+      };
+      document.addEventListener('keydown', handleKeyDown);
+    }
 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       window.removeEventListener('pagehide', handleBeforeUnload);
-      document.removeEventListener('keydown', handleKeyDown);
+      if (handleKeyDown) document.removeEventListener('keydown', handleKeyDown);
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     };
-  }, [handleClose, handleOpen, handleSaveBoard, flushPendingSave]);
+  }, [handleClose, handleOpen, handleSaveBoard, flushPendingSave, inline]);
 
-  // When modal is clicked outside panel, close
+  // When modal overlay is clicked outside panel, close (modal mode only)
   useEffect(() => {
+    if (inline) return;
     const modal = document.getElementById('whiteboardModal');
     if (!modal) return;
     const onModalClick = (e) => {
-      if (e.target === modal) {
-        handleClose();
-      }
+      if (e.target === modal) handleClose();
     };
     modal.addEventListener('click', onModalClick);
     return () => modal.removeEventListener('click', onModalClick);
-  }, [handleClose]);
+  }, [handleClose, inline]);
 
   // Initialize initial board elements into Excalidraw once API is ready
   useEffect(() => {
