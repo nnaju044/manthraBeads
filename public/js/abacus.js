@@ -41,6 +41,7 @@
   var $soundToggle = null;
   var $soundIconEmoji = null;
   var beadSound = null;
+  var resetSound = null;
   var soundEnabled = true;
 
   // Cached bead DOM elements — avoids querySelectorAll on every render
@@ -143,7 +144,13 @@
       buildAbacus();
       render();
     });
-    $resetBtn.addEventListener('click', function () { state.beads = emptyBeads(state.rodCount); render(); });
+    if ($resetBtn) {
+      $resetBtn.addEventListener('click', function () {
+        playResetSound();
+        state.beads = emptyBeads(state.rodCount);
+        render();
+      });
+    }
     if ($rulesBtn) {
       $rulesBtn.addEventListener('click', openRulesAuthModal);
     }
@@ -270,9 +277,12 @@
   function initSound() {
     loadSoundPreference();
 
-    // Create a single Audio instance — reused on every bead click
-    beadSound = new Audio('/sound/tunetank.com_button-wooden-click.wav');
+    // Create Audio instances — reused on bead click and reset
+    beadSound = new Audio('/sound/bead-click.mp3');
     beadSound.preload = 'auto';
+
+    resetSound = new Audio('/sound/Beads_reset.mp3');
+    resetSound.preload = 'auto';
 
     // Reveal and wire up the navbar sound toggle button
     if ($soundToggle) {
@@ -288,7 +298,13 @@
     if (!soundEnabled || !beadSound) return;
     // Reset playback position so rapid clicks re-trigger instantly
     beadSound.currentTime = 0;
-    beadSound.play().catch(function () {});
+    beadSound.play().catch(function () { });
+  }
+
+  function playResetSound() {
+    if (!soundEnabled || !resetSound) return;
+    resetSound.currentTime = 0;
+    resetSound.play().catch(function () { });
   }
 
   function toggleSound() {
@@ -343,7 +359,7 @@
     var padding = 4;   // compact top/bottom inner padding
 
     // Heights — compact authentic soroban proportions
-    var upperTravel = Math.max(7, Math.round(beadPx * 0.25));    // small travel distance for upper bead
+    var upperTravel = Math.max(12, Math.round(beadPx * 0.45));    // small travel distance for upper bead
     var upperSlot = beadPx + upperTravel;                         // heaven section
     var divH = 18;                                                // divider bar
     var lowerTravel = Math.max(9, Math.round(beadPx * 0.50));    // compact travel distance for earth beads

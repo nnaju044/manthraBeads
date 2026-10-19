@@ -60,6 +60,46 @@
     body {
       scroll-behavior: smooth;
     }
+
+    /* ── Inline Whiteboard Container ── */
+    #inlineWhiteboardContainer {
+      width: 100%;
+      height: 580px;
+      border-radius: 1.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(11, 15, 46, 0.97);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55), 0 0 0 1px rgba(255,255,255,0.04) inset;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #excalidrawInline {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Ensure the React root fills the container */
+    #excalidrawInline .mb-wb-root {
+      height: 100% !important;
+      min-height: 100% !important;
+    }
+
+    @media (max-width: 768px) {
+      #inlineWhiteboardContainer {
+        height: 420px;
+        border-radius: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #inlineWhiteboardContainer {
+        height: 360px;
+        border-radius: 0.75rem;
+      }
+    }
   </style>
 </head>
 
@@ -198,6 +238,32 @@
         <i class="fa-solid fa-keyboard mr-1 opacity-50"></i>
         Tab to focus &bull; Space / Enter to toggle bead &bull; Arrow keys to navigate between beads
       </p>
+
+      <!-- ==========================================
+           MATHS WORKSPACE (Inline Whiteboard)
+           ========================================== -->
+      <section id="mathsWorkspaceSection" class="mx-auto mt-6 max-w-[1200px] w-full" aria-label="Maths Workspace">
+
+        <!-- Section heading -->
+        <div class="mb-4 flex flex-col items-center gap-1 text-center">
+          <span class="inline-flex items-center gap-2 rounded-full border border-indigo-400/25 bg-indigo-500/10 px-4 py-1.5 text-xs font-semibold tracking-wide text-indigo-200 backdrop-blur-md">
+            <i class="fa-solid fa-pen-nib text-indigo-400" aria-hidden="true"></i>
+            MATHS WORKSPACE
+          </span>
+          <h2 class="mt-2 font-display text-2xl font-bold text-white sm:text-3xl">
+            Solve &amp; <span class="bg-gradient-to-r from-indigo-400 to-fuchsia-400 bg-clip-text text-transparent">Practise</span>
+          </h2>
+          <p class="text-sm text-indigo-200/60">Draw, write, and calculate directly below the abacus.</p>
+        </div>
+
+        <!-- Inline whiteboard container -->
+        <div id="inlineWhiteboardContainer">
+          <!-- React mounts WhiteboardApp here -->
+          <div id="excalidrawInline"></div>
+        </div>
+
+      </section>
+
     </main>
 
     <!-- ==========================================
@@ -460,15 +526,42 @@
         </div>
       </div>
 
+    <script>
+      // Browser safety: define exports in case serverless bundlers inject CommonJS references
+      if (typeof exports === 'undefined') {
+        window.exports = {};
+      }
+      // Immediate fallback so WhiteboardModal is always defined immediately.
+      // open() scrolls to the inline whiteboard — no modal overlay needed.
+      window.WhiteboardModal = window.WhiteboardModal || {
+        init: function () {},
+        open: function () {
+          var section = document.getElementById('mathsWorkspaceSection');
+          if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        },
+        close: function () {},
+        save: function () {},
+        getBoards: function () { return []; },
+        getActiveBoard: function () { return null; }
+      };
+    </script>
     <script src="/js/abacus.js"></script>
     <script type="module" src="/dist/excalidraw-app.js?v=<%= Date.now() %>"></script>
     <script src="/js/timer.js"></script>
     <script>
       document.addEventListener('DOMContentLoaded', function () {
         // Whiteboard
-        WhiteboardModal.init();
+        if (window.WhiteboardModal && typeof window.WhiteboardModal.init === 'function') {
+          WhiteboardModal.init();
+        }
         var btnWb = document.getElementById('btnWhiteboard');
-        if (btnWb) btnWb.addEventListener('click', function () { WhiteboardModal.open(); });
+        if (btnWb) {
+          btnWb.addEventListener('click', function () {
+            if (window.WhiteboardModal && typeof window.WhiteboardModal.open === 'function') {
+              WhiteboardModal.open();
+            }
+          });
+        }
 
         // Timer Modal & Miniature Watch
         TimerModal.init();
