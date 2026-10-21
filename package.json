@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test tests/stage1-auth.test.js tests/stage2-dashboard.test.js tests/stage3-student.test.js",
+    "test": "node --test tests/stage1-auth.test.js tests/stage2-dashboard.test.js tests/stage3-student.test.js tests/stage4-package.test.js tests/stage5-attendance.test.js",
     "build": "vite build",
     "build:whiteboard": "vite build",
     "seed:teacher": "node scripts/seedTeacher.js"
@@ -16,6 +16,7 @@
     "connect-mongo": "^6.0.0",
     "dotenv": "^18.0.8",
     "ejs": "^3.1.10",
+    "exceljs": "^4.4.0",
     "express": "^4.22.2",
     "express-rate-limit": "^8.7.1",
     "express-session": "^1.19.0",

@@ -1,9 +1,20 @@
 const mongoose = require('mongoose');
 const Student = require('../models/Student');
+const Package = require('../models/Package');
+const Payment = require('../models/Payment');
+const Attendance = require('../models/Attendance');
 
 /* ──────────────────────────────────────────────────────────
-   Student Controller — ManthraBeads Student Management (Stage 3)
+   Student Controller — ManthraBeads Student Management (Stage 3 & 4)
    ────────────────────────────────────────────────────────── */
+
+function formatRupees(paise) {
+  if (typeof paise !== 'number' || isNaN(paise)) return '₹0';
+  const rs = (paise / 100).toFixed(2);
+  return rs.endsWith('.00')
+    ? `₹${parseInt(rs, 10).toLocaleString('en-IN')}`
+    : `₹${parseFloat(rs).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
 
 const STANDARD_LEVELS = [
   'Level 1 — Foundation',
@@ -230,6 +241,32 @@ exports.showStudentProfile = async (req, res) => {
       return res.status(404).redirect('/teacher/students?error=not_found');
     }
 
+    // Query all packages for this student (with virtuals for remaining classes, dues, etc.)
+    const packages = await Package.find({ student: id }).sort({ createdAt: -1 });
+    const activePackage = packages.find((p) => p.status === 'active') || null;
+
+    // Query payment history for this student
+    const payments = await Payment.find({ student: id })
+      .populate('package', 'packageName')
+      .sort({ paymentDate: -1, createdAt: -1 })
+      .lean();
+
+    // Query attendance records for this student (Stage 5)
+    let attendanceRecords = [];
+    let attendedCount = 0;
+    let attendanceRate = null;
+    try {
+      attendanceRecords = await Attendance.find({ student: id })
+        .populate('session', 'sessionName startTime endTime topic')
+        .populate('package', 'packageName')
+        .sort({ date: -1, createdAt: -1 })
+        .lean();
+      attendedCount = attendanceRecords.filter((r) => ['present', 'late'].includes(r.status)).length;
+      attendanceRate = attendanceRecords.length > 0 ? Math.round((attendedCount / attendanceRecords.length) * 100) : null;
+    } catch (attErr) {
+      console.warn('Could not load attendance for student profile:', attErr.message);
+    }
+
     let alertMessage = null;
     if (req.query.created) {
       alertMessage = `Student ${student.name} (${student.studentId}) successfully registered!`;
@@ -244,7 +281,14 @@ exports.showStudentProfile = async (req, res) => {
       csrfToken: res.locals.csrfToken,
       activeSection: 'students',
       student,
+      packages,
+      activePackage,
+      payments,
+      attendanceRecords,
+      attendedCount,
+      attendanceRate,
       alertMessage,
+      formatRupees,
     });
   } catch (err) {
     console.error('Show student profile error:', err);

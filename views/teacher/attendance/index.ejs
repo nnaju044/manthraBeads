@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Attendance & Session Tracker | ManthraBeads Teacher</title>
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/images/apple-touch-icon.png" />
+    <meta name="description" content="ManthraBeads teacher attendance management, daily session rolls, package credit deduction, and Excel export." />
+
+    <!-- Tailwind CSS (CDN build w/ inline config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+              body: ['"Poppins"', 'sans-serif'],
+            },
+            colors: {
+              night: {
+                950: '#070a1f',
+                900: '#0b0f2e',
+                800: '#12183f',
+                700: '#1a2150',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Site & Teacher CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/teacher.css" />
+  </head>
+
+  <body class="font-body bg-night-950 overflow-x-hidden min-h-screen text-slate-100">
+    <section class="relative w-full min-h-screen bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] pb-24">
+
+      <!-- Ambient Glow Orbs -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-emerald-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
+        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
+      </div>
+
+      <!-- Navbar -->
+      <%- include('../../partials/navbar') %>
+
+      <!-- Main Container -->
+      <main id="main-content" class="relative z-10 mx-auto max-w-[1360px] px-4 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+
+        <!-- Top Header & Actions -->
+        <header class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex items-center gap-3">
+            <div class="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-emerald-500/15 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.25)]">
+              <i class="fa-solid fa-clipboard-user text-xl"></i>
+            </div>
+            <div>
+              <h1 class="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl">
+                Attendance & Session Rolls
+              </h1>
+              <p class="mt-0.5 text-xs text-indigo-200/60 sm:text-sm">
+                Record daily participation &bull; Automatic package credit deduction &bull; Excel ledger export
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2.5">
+            <!-- New Session Trigger -->
+            <button
+              type="button"
+              id="btn-open-session-modal"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2.5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] transition hover:brightness-110"
+            >
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>New Session</span>
+            </button>
+
+            <!-- Export Excel Button -->
+            <a
+              href="/teacher/attendance/export.xlsx?date=<%= selectedDate %>"
+              id="btn-export-excel"
+              class="inline-flex items-center gap-2 rounded-full border border-emerald-400/40 bg-emerald-500/10 px-4 py-2.5 text-xs font-semibold text-emerald-200 transition hover:bg-emerald-500/20 hover:text-white"
+              title="Download Excel spreadsheet of attendance"
+            >
+              <i class="fa-solid fa-file-excel text-sm text-emerald-400"></i>
+              <span>Export .xlsx</span>
+            </a>
+          </div>
+        </header>
+
+        <!-- Alerts -->
+        <% if (locals.alertMessage) { %>
+        <div class="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-emerald-200">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-circle-check text-emerald-400"></i>
+            <span class="text-xs sm:text-sm font-medium"><%= alertMessage %></span>
+          </div>
+          <button type="button" onclick="this.parentElement.remove()" class="text-emerald-400 hover:text-white text-xs">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <% } %>
+
+        <% if (locals.error) { %>
+        <div class="mb-6 flex items-center justify-between gap-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 p-4 text-rose-200">
+          <div class="flex items-center gap-2.5">
+            <i class="fa-solid fa-triangle-exclamation text-rose-400"></i>
+            <span class="text-xs sm:text-sm font-medium"><%= error %></span>
+          </div>
+          <button type="button" onclick="this.parentElement.remove()" class="text-rose-400 hover:text-white text-xs">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <% } %>
+
+        <!-- Navigation Tabs -->
+        <nav
+          class="mb-8 flex overflow-x-auto gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 backdrop-blur-md no-scrollbar"
+          aria-label="Teacher Dashboard Navigation"
+        >
+          <a href="/teacher/dashboard" class="teacher-tab">
+            <i class="fa-solid fa-gauge-high text-sm"></i>
+            <span>Dashboard</span>
+          </a>
+          <a href="/teacher/students" class="teacher-tab">
+            <i class="fa-solid fa-user-graduate text-sm"></i>
+            <span>Students</span>
+          </a>
+          <a href="/teacher/attendance" class="teacher-tab active" aria-current="page">
+            <i class="fa-solid fa-clipboard-check text-sm"></i>
+            <span>Attendance</span>
+          </a>
+          <a href="/teacher/packages" class="teacher-tab">
+            <i class="fa-solid fa-credit-card text-sm"></i>
+            <span>Packages & Payments</span>
+          </a>
+          <a href="/teacher/reports" class="teacher-tab">
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span>Reports</span>
+          </a>
+        </nav>
+
+        <!-- 4 Summary Stat Cards for Today -->
+        <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+          
+          <!-- 1. Today's Sessions -->
+          <div class="stat-card">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                  Today's Sessions
+                </p>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="font-display text-3xl font-bold text-white tracking-tight">
+                    <%= todayStats.todaySessionsCount %>
+                  </span>
+                  <span class="text-xs text-indigo-200/50">classes</span>
+                </div>
+              </div>
+              <div class="stat-icon-wrap bg-violet-500/15 text-violet-300">
+                <i class="fa-solid fa-chalkboard text-lg"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
+              <span><%= selectedDate %></span>
+              <span class="text-indigo-300 font-semibold">Active Day</span>
+            </div>
+          </div>
+
+          <!-- 2. Today's Attendance Turnout -->
+          <div class="stat-card">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                  Attendance Turnout
+                </p>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="font-display text-3xl font-bold text-emerald-400 tracking-tight">
+                    <%= todayStats.todayAttendancePct !== null ? todayStats.todayAttendancePct + '%' : '—' %>
+                  </span>
+                  <span class="text-xs text-indigo-200/50">turnout</span>
+                </div>
+              </div>
+              <div class="stat-icon-wrap bg-emerald-500/15 text-emerald-300">
+                <i class="fa-solid fa-user-check text-lg"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
+              <span><%= todayStats.attendedCount %> attended</span>
+              <span class="text-emerald-300 font-semibold">Present / Late</span>
+            </div>
+          </div>
+
+          <!-- 3. Total Recorded Today -->
+          <div class="stat-card">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                  Total Roll Marked
+                </p>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="font-display text-3xl font-bold text-cyan-300 tracking-tight">
+                    <%= todayStats.totalMarked %>
+                  </span>
+                  <span class="text-xs text-indigo-200/50">students</span>
+                </div>
+              </div>
+              <div class="stat-icon-wrap bg-cyan-500/15 text-cyan-300">
+                <i class="fa-solid fa-users text-lg"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
+              <span>All sessions today</span>
+              <span class="text-cyan-300">Participation</span>
+            </div>
+          </div>
+
+          <!-- 4. Session Breakdown (if active session) -->
+          <div class="stat-card">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                  Current Session Roster
+                </p>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="font-display text-3xl font-bold text-indigo-200 tracking-tight">
+                    <%= sessionAttendanceCounts.present + sessionAttendanceCounts.late %>
+                  </span>
+                  <span class="text-xs text-indigo-200/50">/ <%= studentRoster.length %> here</span>
+                </div>
+              </div>
+              <div class="stat-icon-wrap bg-amber-500/15 text-amber-300">
+                <i class="fa-solid fa-list-check text-lg"></i>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
+              <span><%= sessionAttendanceCounts.absent %> absent &bull; <%= sessionAttendanceCounts.late %> late</span>
+              <span class="text-amber-300 font-semibold">Live Roll</span>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- Date & Session Selector Toolbar -->
+        <div class="glass-card mb-8 border border-white/10 p-4 sm:p-5">
+          <form action="/teacher/attendance" method="GET" class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            
+            <!-- Left: Date picker with Prev/Today/Next -->
+            <div class="flex flex-wrap items-center gap-2">
+              <label for="date-picker" class="text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mr-1">
+                Date:
+              </label>
+              
+              <div class="relative">
+                <input
+                  type="date"
+                  id="date-picker"
+                  name="date"
+                  value="<%= selectedDate %>"
+                  onchange="this.form.submit()"
+                  class="rounded-xl border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-white focus:border-indigo-400 focus:outline-none"
+                />
+              </div>
+
+              <!-- Quick Date Buttons -->
+              <button
+                type="button"
+                id="btn-prev-day"
+                class="rounded-lg border border-white/10 bg-white/5 p-1.5 text-xs text-indigo-200 hover:bg-white/10 hover:text-white transition"
+                title="Previous Day"
+              >
+                <i class="fa-solid fa-chevron-left text-[10px]"></i>
+              </button>
+              
+              <button
+                type="button"
+                id="btn-today"
+                class="rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-white/10 hover:text-white transition"
+              >
+                Today
+              </button>
+
+              <button
+                type="button"
+                id="btn-next-day"
+                class="rounded-lg border border-white/10 bg-white/5 p-1.5 text-xs text-indigo-200 hover:bg-white/10 hover:text-white transition"
+                title="Next Day"
+              >
+                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </button>
+            </div>
+
+            <!-- Middle: Session Selector -->
+            <div class="flex flex-wrap items-center gap-3">
+              <label for="session-picker" class="text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                Session:
+              </label>
+
+              <% if (dateSessions && dateSessions.length > 0) { %>
+              <select
+                id="session-picker"
+                name="sessionId"
+                onchange="this.form.submit()"
+                class="rounded-xl border border-white/10 bg-[#12183f] px-3.5 py-2 text-xs font-medium text-white focus:border-indigo-400 focus:outline-none"
+              >
+                <% dateSessions.forEach(function(s) { %>
+                <option value="<%= s._id %>" <%= activeSession && String(activeSession._id) === String(s._id) ? 'selected' : '' %>>
+                  <%= s.sessionName %> (<%= s.startTime %> - <%= s.endTime %>)
+                </option>
+                <% }); %>
+              </select>
+              <% } else { %>
+              <span class="rounded-xl border border-amber-400/30 bg-amber-500/10 px-3 py-1.5 text-xs text-amber-200">
+                No session on this date
+              </span>
+              <% } %>
+            </div>
+
+            <!-- Right: Level Filter -->
+            <div class="flex items-center gap-2">
+              <label for="level-filter" class="text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                Level:
+              </label>
+              <select
+                id="level-filter"
+                name="level"
+                onchange="this.form.submit()"
+                class="rounded-xl border border-white/10 bg-[#12183f] px-3 py-1.5 text-xs text-white focus:border-indigo-400 focus:outline-none"
+              >
+                <option value="all" <%= levelFilter === 'all' ? 'selected' : '' %>>All Levels</option>
+                <option value="Level 1" <%= levelFilter === 'Level 1' ? 'selected' : '' %>>Level 1</option>
+                <option value="Level 2" <%= levelFilter === 'Level 2' ? 'selected' : '' %>>Level 2</option>
+                <option value="Level 3" <%= levelFilter === 'Level 3' ? 'selected' : '' %>>Level 3</option>
+                <option value="Level 4" <%= levelFilter === 'Level 4' ? 'selected' : '' %>>Level 4</option>
+                <option value="Level 5" <%= levelFilter === 'Level 5' ? 'selected' : '' %>>Level 5</option>
+                <option value="Level 6" <%= levelFilter === 'Level 6' ? 'selected' : '' %>>Level 6</option>
+                <option value="Grand Master" <%= levelFilter === 'Grand Master' ? 'selected' : '' %>>Grand Master</option>
+              </select>
+            </div>
+
+          </form>
+        </div>
+
+        <!-- ── ATTENDANCE ROSTER SECTION ── -->
+        <% if (activeSession) { %>
+        <section class="glass-card mb-12 border border-white/10 p-6 sm:p-8">
+          
+          <!-- Session Header & Quick Actions -->
+          <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-white/10 pb-5">
+            <div>
+              <div class="flex items-center gap-2.5">
+                <h2 class="font-display text-xl font-bold text-white sm:text-2xl">
+                  <%= activeSession.sessionName %>
+                </h2>
+                <span class="rounded-md border border-indigo-400/30 bg-indigo-500/10 px-2 py-0.5 text-xs text-indigo-200 font-mono">
+                  <%= activeSession.startTime %> &ndash; <%= activeSession.endTime %>
+                </span>
+                <% if (activeSession.topic) { %>
+                <span class="rounded-md border border-violet-400/30 bg-violet-500/10 px-2 py-0.5 text-xs text-violet-200">
+                  <%= activeSession.topic %>
+                </span>
+                <% } %>
+              </div>
+              <p class="mt-1 text-xs text-indigo-200/60">
+                Date: <strong class="text-white"><%= typeof formatDateDisplay === 'function' ? formatDateDisplay(activeSession.date, { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' }) : '—' %></strong> &bull; Level: <%= activeSession.level %>
+              </p>
+            </div>
+
+            <!-- Quick Batch Helper -->
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                id="btn-mark-all-present"
+                class="rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-3.5 py-1.5 text-xs font-semibold text-emerald-300 hover:bg-emerald-500/20 transition flex items-center gap-1.5"
+              >
+                <i class="fa-solid fa-check-double text-[11px]"></i>
+                <span>Mark All Present</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Attendance Form -->
+          <form action="/teacher/attendance" method="POST" id="attendance-roster-form">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <input type="hidden" name="sessionId" value="<%= activeSession._id %>" />
+            <input type="hidden" name="date" value="<%= selectedDate %>" />
+
+            <% if (studentRoster && studentRoster.length > 0) { %>
+            <div class="overflow-x-auto -mx-4 sm:mx-0">
+              <table class="w-full text-left text-xs sm:text-sm">
+                <thead class="border-b border-white/10 text-[11px] font-semibold uppercase tracking-wider text-indigo-200/50">
+                  <tr>
+                    <th class="py-3 px-3">Student</th>
+                    <th class="py-3 px-3">Abacus Level</th>
+                    <th class="py-3 px-3">Package Balance</th>
+                    <th class="py-3 px-3 text-center">Attendance Status</th>
+                    <th class="py-3 px-3">Credit Ledger Policy</th>
+                    <th class="py-3 px-3">Remarks / Notes</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                  <% studentRoster.forEach(function(item, idx) { %>
+                  <tr class="hover:bg-white/[0.02] transition">
+                    
+                    <!-- Student Info -->
+                    <td class="py-3 px-3">
+                      <div class="flex items-center gap-2.5">
+                        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-indigo-600/30 font-display text-xs font-bold text-white">
+                          <%= item.student.name.charAt(0).toUpperCase() %>
+                        </div>
+                        <div>
+                          <a href="/teacher/students/<%= item.student._id %>" class="font-semibold text-white hover:text-indigo-300 transition">
+                            <%= item.student.name %>
+                          </a>
+                          <span class="block text-[10px] font-mono text-indigo-200/50"><%= item.student.studentId %></span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <!-- Level -->
+                    <td class="py-3 px-3 text-indigo-200/80 font-medium">
+                      <%= item.student.level %>
+                    </td>
+
+                    <!-- Package Status -->
+                    <td class="py-3 px-3">
+                      <% if (item.activePackage) { %>
+                        <div class="flex flex-col">
+                          <span class="text-xs font-semibold text-white truncate max-w-[130px]">
+                            <%= item.activePackage.packageName %>
+                          </span>
+                          <span class="text-[11px] font-bold <%= item.activePackage.remainingClasses > 1 ? 'text-emerald-400' : 'text-amber-400' %>">
+                            <%= item.activePackage.remainingClasses %> of <%= item.activePackage.totalClasses %> remaining
+                          </span>
+                        </div>
+                      <% } else { %>
+                        <span class="inline-flex items-center gap-1 text-[11px] text-amber-300/90 font-medium">
+                          <i class="fa-solid fa-triangle-exclamation text-[10px]"></i>
+                          No active pack
+                        </span>
+                      <% } %>
+                    </td>
+
+                    <!-- Attendance Status Selector -->
+                    <td class="py-3 px-3">
+                      <div class="flex items-center justify-center gap-1.5">
+                        
+                        <!-- Present -->
+                        <label class="status-pill cursor-pointer rounded-lg px-2.5 py-1 text-xs font-semibold border transition has-[:checked]:bg-emerald-500/25 has-[:checked]:border-emerald-400 has-[:checked]:text-emerald-200 border-white/10 bg-white/5 text-slate-300 hover:bg-white/10">
+                          <input
+                            type="radio"
+                            name="attendance[<%= item.student._id %>]"
+                            value="present"
+                            class="sr-only status-radio"
+                            data-student-id="<%= item.student._id %>"
+                            data-has-pack="<%= Boolean(item.activePackage) %>"
+                            <%= item.status === 'present' ? 'checked' : '' %>
+                          />
+                          <span>Present</span>
+                        </label>
+
+                        <!-- Late -->
+                        <label class="status-pill cursor-pointer rounded-lg px-2.5 py-1 text-xs font-semibold border transition has-[:checked]:bg-amber-500/25 has-[:checked]:border-amber-400 has-[:checked]:text-amber-200 border-white/10 bg-white/5 text-slate-300 hover:bg-white/10">
+                          <input
+                            type="radio"
+                            name="attendance[<%= item.student._id %>]"
+                            value="late"
+                            class="sr-only status-radio"
+                            data-student-id="<%= item.student._id %>"
+                            data-has-pack="<%= Boolean(item.activePackage) %>"
+                            <%= item.status === 'late' ? 'checked' : '' %>
+                          />
+                          <span>Late</span>
+                        </label>
+
+                        <!-- Absent -->
+                        <label class="status-pill cursor-pointer rounded-lg px-2.5 py-1 text-xs font-semibold border transition has-[:checked]:bg-rose-500/25 has-[:checked]:border-rose-400 has-[:checked]:text-rose-200 border-white/10 bg-white/5 text-slate-300 hover:bg-white/10">
+                          <input
+                            type="radio"
+                            name="attendance[<%= item.student._id %>]"
+                            value="absent"
+                            class="sr-only status-radio"
+                            data-student-id="<%= item.student._id %>"
+                            data-has-pack="<%= Boolean(item.activePackage) %>"
+                            <%= item.status === 'absent' ? 'checked' : '' %>
+                          />
+                          <span>Absent</span>
+                        </label>
+
+                        <!-- Excused -->
+                        <label class="status-pill cursor-pointer rounded-lg px-2.5 py-1 text-xs font-semibold border transition has-[:checked]:bg-blue-500/25 has-[:checked]:border-blue-400 has-[:checked]:text-blue-200 border-white/10 bg-white/5 text-slate-300 hover:bg-white/10">
+                          <input
+                            type="radio"
+                            name="attendance[<%= item.student._id %>]"
+                            value="excused"
+                            class="sr-only status-radio"
+                            data-student-id="<%= item.student._id %>"
+                            data-has-pack="<%= Boolean(item.activePackage) %>"
+                            <%= item.status === 'excused' ? 'checked' : '' %>
+                          />
+                          <span>Excused</span>
+                        </label>
+
+                      </div>
+                    </td>
+
+                    <!-- Credit Ledger Status -->
+                    <td class="py-3 px-3" id="credit-status-<%= item.student._id %>">
+                      <% if (item.creditConsumed) { %>
+                        <span class="inline-flex items-center gap-1 rounded-md border border-emerald-400/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
+                          <i class="fa-solid fa-check text-[10px]"></i> 1 Credit Deducted
+                        </span>
+                      <% } else if (item.status === 'present' || item.status === 'late') { %>
+                        <% if (item.activePackage) { %>
+                          <span class="inline-flex items-center gap-1 rounded-md border border-indigo-400/30 bg-indigo-500/10 px-2 py-0.5 text-[11px] text-indigo-300 font-medium">
+                            <i class="fa-solid fa-clock text-[10px]"></i> Will deduct 1 credit
+                          </span>
+                        <% } else { %>
+                          <span class="inline-flex items-center gap-1 rounded-md border border-amber-400/30 bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-300 font-medium">
+                            <i class="fa-solid fa-info text-[10px]"></i> Attendance logged (No pack)
+                          </span>
+                        <% } %>
+                      <% } else { %>
+                        <span class="text-[11px] text-indigo-200/50">
+                          No credit deduction
+                        </span>
+                      <% } %>
+                    </td>
+
+                    <!-- Notes -->
+                    <td class="py-3 px-3">
+                      <input
+                        type="text"
+                        name="attendanceNotes[<%= item.student._id %>]"
+                        placeholder="Optional remarks..."
+                        value="<%= item.notes || '' %>"
+                        maxlength="200"
+                        class="w-full rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-xs text-white placeholder-slate-500 focus:border-indigo-400 focus:outline-none"
+                      />
+                    </td>
+
+                  </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Save Toolbar -->
+            <div class="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10 pt-5">
+              <div class="text-xs text-indigo-200/60 flex items-center gap-1.5">
+                <i class="fa-solid fa-shield-halved text-indigo-400"></i>
+                <span>Credit policy: Present & Late consume 1 credit. Absent & Excused do not. Repeated saves are idempotent.</span>
+              </div>
+
+              <button
+                type="submit"
+                class="inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-8 py-3 text-sm font-semibold text-white shadow-[0_0_25px_rgba(16,185,129,0.35)] transition hover:brightness-110 w-full sm:w-auto"
+              >
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span>Save Attendance Sheet</span>
+              </button>
+            </div>
+
+            <% } else { %>
+            <div class="p-8 text-center text-xs text-indigo-200/60">
+              No students enrolled under <%= levelFilter %> level yet.
+            </div>
+            <% } %>
+
+          </form>
+
+        </section>
+        <% } else { %>
+        <!-- Empty State When No Session on this Date -->
+        <section class="glass-card mb-12 p-10 text-center border border-white/10">
+          <div class="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-emerald-500/10 text-emerald-300">
+            <i class="fa-solid fa-calendar-plus text-2xl"></i>
+          </div>
+          <h2 class="font-display text-lg font-bold text-white sm:text-xl">
+            No class session recorded for <%= typeof formatDateDisplay === 'function' ? formatDateDisplay(selectedDate, { weekday: 'long', day: '2-digit', month: 'short', year: 'numeric' }) : selectedDate %>
+          </h2>
+          <p class="mt-1 max-w-md mx-auto text-xs text-indigo-200/60 leading-relaxed">
+            Create a session to start marking student rolls and automatically updating class credits for this date.
+          </p>
+          <button
+            type="button"
+            id="btn-create-first-session"
+            class="mt-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-2.5 text-xs font-semibold text-white shadow-[0_0_20px_rgba(16,185,129,0.3)] transition hover:brightness-110"
+          >
+            <i class="fa-solid fa-plus text-xs"></i>
+            <span>Create Session for <%= selectedDate %></span>
+          </button>
+        </section>
+        <% } %>
+
+        <!-- ── RECENT SESSIONS HISTORY LEDGER ── -->
+        <section class="glass-card border border-white/10 p-6 sm:p-8">
+          <div class="mb-5 flex items-center justify-between">
+            <div class="flex items-center gap-2.5">
+              <div class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-violet-500/15 text-violet-300">
+                <i class="fa-solid fa-history text-sm"></i>
+              </div>
+              <div>
+                <h3 class="font-display text-base font-bold text-white">Recent Sessions History</h3>
+                <p class="text-xs text-indigo-200/60">Class records & participation overview</p>
+              </div>
+            </div>
+
+            <a
+              href="/teacher/attendance/export.xlsx"
+              class="text-xs font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1"
+            >
+              <i class="fa-solid fa-download text-[11px]"></i>
+              <span>Export Full Ledger (.xlsx)</span>
+            </a>
+          </div>
+
+          <% if (recentSessions && recentSessions.length > 0) { %>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="border-b border-white/10 text-[10px] uppercase text-indigo-200/50">
+                <tr>
+                  <th class="py-2.5 px-3">Date</th>
+                  <th class="py-2.5 px-3">Session Name</th>
+                  <th class="py-2.5 px-3">Timing</th>
+                  <th class="py-2.5 px-3">Level / Topic</th>
+                  <th class="py-2.5 px-3">Status</th>
+                  <th class="py-2.5 px-3 text-right">Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                <% recentSessions.forEach(function(sess) { %>
+                <tr class="hover:bg-white/[0.02]">
+                  <td class="py-2.5 px-3 font-semibold text-white">
+                    <%= typeof formatDateDisplay === 'function' ? formatDateDisplay(sess.date) : '—' %>
+                  </td>
+                  <td class="py-2.5 px-3 text-indigo-100 font-medium">
+                    <%= sess.sessionName %>
+                  </td>
+                  <td class="py-2.5 px-3 font-mono text-indigo-200/70 text-[11px]">
+                    <%= sess.startTime %> - <%= sess.endTime %>
+                  </td>
+                  <td class="py-2.5 px-3 text-indigo-200/70">
+                    <span class="rounded bg-white/5 px-2 py-0.5 text-[11px]"><%= sess.level %></span>
+                    <% if (sess.topic) { %>
+                    <span class="ml-1 text-slate-400 text-[11px]">&bull; <%= sess.topic %></span>
+                    <% } %>
+                  </td>
+                  <td class="py-2.5 px-3">
+                    <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                      <%= sess.status %>
+                    </span>
+                  </td>
+                  <td class="py-2.5 px-3 text-right">
+                    <a
+                      href="/teacher/attendance?date=<%= typeof formatDateISO === 'function' ? formatDateISO(sess.date) : (sess && sess.date ? new Date(sess.date).toISOString().split('T')[0] : '') %>&sessionId=<%= sess._id %>"
+                      class="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-medium text-indigo-300 hover:bg-white/10 hover:text-white transition"
+                    >
+                      <span>Open Roll</span>
+                      <i class="fa-solid fa-chevron-right text-[9px]"></i>
+                    </a>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <% } else { %>
+          <div class="empty-state-box p-6">
+            <p class="text-xs text-indigo-200/60">No past sessions recorded yet.</p>
+          </div>
+          <% } %>
+        </section>
+
+      </main>
+    </section>
+
+    <!-- ── CREATE SESSION MODAL ── -->
+    <div
+      id="session-modal"
+      class="fixed inset-0 z-50 hidden overflow-y-auto bg-black/70 backdrop-blur-sm p-4 sm:p-6 flex items-center justify-center"
+      aria-labelledby="modal-title"
+      role="dialog"
+      aria-modal="true"
+    >
+      <div class="glass-card relative w-full max-w-lg border border-white/15 p-6 sm:p-8 bg-[#0e1438] shadow-2xl">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4 mb-5">
+          <div class="flex items-center gap-2.5">
+            <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-300">
+              <i class="fa-solid fa-calendar-plus text-sm"></i>
+            </div>
+            <h3 id="modal-title" class="font-display text-lg font-bold text-white">Create Class Session</h3>
+          </div>
+          <button
+            type="button"
+            id="btn-close-modal"
+            class="text-slate-400 hover:text-white transition text-sm p-1"
+          >
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+
+        <form action="/teacher/attendance/sessions" method="POST" class="space-y-4">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+          <div>
+            <label for="m-sessionName" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mb-1">
+              Session / Batch Name <span class="text-rose-400">*</span>
+            </label>
+            <input
+              type="text"
+              id="m-sessionName"
+              name="sessionName"
+              required
+              value="Regular Abacus Class"
+              placeholder="e.g. Morning Batch A (Level 1 & 2)"
+              class="w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-400 focus:outline-none"
+            />
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="m-date" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mb-1">
+                Session Date <span class="text-rose-400">*</span>
+              </label>
+              <input
+                type="date"
+                id="m-date"
+                name="date"
+                required
+                value="<%= selectedDate %>"
+                class="w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-sm text-white focus:border-indigo-400 focus:outline-none"
+              />
+            </div>
+
+            <div>
+              <label for="m-level" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mb-1">
+                Target Level
+              </label>
+              <select
+                id="m-level"
+                name="level"
+                class="w-full rounded-xl border border-white/10 bg-[#12183f] px-3.5 py-2.5 text-sm text-white focus:border-indigo-400 focus:outline-none"
+              >
+                <option value="All Levels">All Levels</option>
+                <option value="Level 1">Level 1</option>
+                <option value="Level 2">Level 2</option>
+                <option value="Level 3">Level 3</option>
+                <option value="Level 4">Level 4</option>
+                <option value="Level 5">Level 5</option>
+                <option value="Level 6">Level 6</option>
+                <option value="Grand Master">Grand Master</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="m-startTime" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mb-1">
+                Start Time
+              </label>
+              <input
+                type="text"
+                id="m-startTime"
+                name="startTime"
+                value="10:00 AM"
+                placeholder="10:00 AM"
+                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white focus:border-indigo-400 focus:outline-none"
+              />
+            </div>
+            <div>
+              <label for="m-endTime" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mb-1">
+                End Time
+              </label>
+              <input
+                type="text"
+                id="m-endTime"
+                name="endTime"
+                value="11:00 AM"
+                placeholder="11:00 AM"
+                class="w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-xs text-white focus:border-indigo-400 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="m-topic" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mb-1">
+              Class Topic / Exercises <span class="text-indigo-200/50 font-normal">(Optional)</span>
+            </label>
+            <input
+              type="text"
+              id="m-topic"
+              name="topic"
+              placeholder="e.g. Complements of 5 Addition / Mental Math Drill"
+              class="w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2.5 text-xs text-white placeholder-slate-500 focus:border-indigo-400 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label for="m-notes" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/70 mb-1">
+              Teacher Notes <span class="text-indigo-200/50 font-normal">(Optional)</span>
+            </label>
+            <textarea
+              id="m-notes"
+              name="notes"
+              rows="2"
+              placeholder="Preparation notes, homework assigned..."
+              class="w-full rounded-xl border border-white/10 bg-white/5 px-3.5 py-2 text-xs text-white placeholder-slate-500 focus:border-indigo-400 focus:outline-none"
+            ></textarea>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-3 border-t border-white/10">
+            <button
+              type="button"
+              id="btn-cancel-modal"
+              class="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-medium text-slate-300 hover:bg-white/10 hover:text-white transition"
+            >
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-2 text-xs font-semibold text-white shadow-sm transition hover:brightness-110"
+            >
+              Create & Open Roster
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Client-side Interactive Script -->
+    <script>
+      (function() {
+        // Modal Controls
+        const modal = document.getElementById('session-modal');
+        const openBtn = document.getElementById('btn-open-session-modal');
+        const openFirstBtn = document.getElementById('btn-create-first-session');
+        const closeBtn = document.getElementById('btn-close-modal');
+        const cancelBtn = document.getElementById('btn-cancel-modal');
+
+        function openModal() {
+          if (modal) modal.classList.remove('hidden');
+        }
+        function closeModal() {
+          if (modal) modal.classList.add('hidden');
+        }
+
+        if (openBtn) openBtn.addEventListener('click', openModal);
+        if (openFirstBtn) openFirstBtn.addEventListener('click', openModal);
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (cancelBtn) cancelBtn.addEventListener('click', closeModal);
+
+        // Date Controls: Prev, Today, Next
+        const dateInput = document.getElementById('date-picker');
+        const prevDayBtn = document.getElementById('btn-prev-day');
+        const todayBtn = document.getElementById('btn-today');
+        const nextDayBtn = document.getElementById('btn-next-day');
+
+        function shiftDay(days) {
+          if (!dateInput) return;
+          const cur = new Date(dateInput.value);
+          if (isNaN(cur.getTime())) return;
+          cur.setDate(cur.getDate() + days);
+          dateInput.value = cur.toISOString().split('T')[0];
+          dateInput.form.submit();
+        }
+
+        if (prevDayBtn) prevDayBtn.addEventListener('click', () => shiftDay(-1));
+        if (nextDayBtn) nextDayBtn.addEventListener('click', () => shiftDay(1));
+        if (todayBtn) todayBtn.addEventListener('click', () => {
+          if (!dateInput) return;
+          dateInput.value = new Date().toISOString().split('T')[0];
+          dateInput.form.submit();
+        });
+
+        // Mark All Present Batch Helper
+        const markAllPresentBtn = document.getElementById('btn-mark-all-present');
+        if (markAllPresentBtn) {
+          markAllPresentBtn.addEventListener('click', function() {
+            document.querySelectorAll('input.status-radio[value="present"]').forEach(r => {
+              r.checked = true;
+              r.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+          });
+        }
+
+        // Dynamic Credit Status Preview updates on radio change
+        document.querySelectorAll('.status-radio').forEach(radio => {
+          radio.addEventListener('change', function() {
+            const studentId = this.dataset.studentId;
+            const hasPack = this.dataset.hasPack === 'true';
+            const cell = document.getElementById('credit-status-' + studentId);
+            if (!cell) return;
+
+            if (this.value === 'present' || this.value === 'late') {
+              if (hasPack) {
+                cell.innerHTML = '<span class="inline-flex items-center gap-1 rounded-md border border-indigo-400/30 bg-indigo-500/10 px-2 py-0.5 text-[11px] text-indigo-300 font-medium"><i class="fa-solid fa-clock text-[10px]"></i> Will deduct 1 credit</span>';
+              } else {
+                cell.innerHTML = '<span class="inline-flex items-center gap-1 rounded-md border border-amber-400/30 bg-amber-500/10 px-2 py-0.5 text-[11px] text-amber-300 font-medium"><i class="fa-solid fa-info text-[10px]"></i> Attendance logged (No pack)</span>';
+              }
+            } else {
+              cell.innerHTML = '<span class="text-[11px] text-indigo-200/50">No credit deduction</span>';
+            }
+          });
+        });
+
+      })();
+    </script>
+  </body>
+</html>

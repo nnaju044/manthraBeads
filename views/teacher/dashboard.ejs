@@ -145,7 +145,6 @@
           >
             <i class="fa-solid fa-clipboard-check text-sm"></i>
             <span>Attendance</span>
-            <span class="tab-badge">Stage 5</span>
           </a>
           <a
             href="/teacher/packages"
@@ -153,7 +152,6 @@
           >
             <i class="fa-solid fa-credit-card text-sm"></i>
             <span>Packages & Payments</span>
-            <span class="tab-badge">Stage 4</span>
           </a>
           <a
             href="/teacher/reports"
@@ -161,7 +159,7 @@
           >
             <i class="fa-solid fa-chart-pie text-sm"></i>
             <span>Reports</span>
-            <span class="tab-badge">Stage 5</span>
+            <span class="tab-badge">Stage 6</span>
           </a>
         </nav>
 
@@ -304,6 +302,36 @@
                 </a>
               </div>
 
+              <% if (locals.todayClasses && todayClasses.length > 0) { %>
+              <div class="space-y-3">
+                <% todayClasses.forEach(function(sess) { %>
+                <div class="flex items-center justify-between p-3.5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition">
+                  <div class="flex items-center gap-3">
+                    <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-300 font-mono text-xs font-bold">
+                      <i class="fa-solid fa-chalkboard"></i>
+                    </div>
+                    <div>
+                      <h4 class="font-semibold text-sm text-white"><%= sess.sessionName %></h4>
+                      <p class="text-xs text-indigo-200/60 font-mono"><%= sess.startTime %> &ndash; <%= sess.endTime %> &bull; <span class="text-slate-400 font-sans"><%= sess.level %></span></p>
+                    </div>
+                  </div>
+                  <%
+                    let sDate = '';
+                    try {
+                      const dt = new Date(sess.date);
+                      sDate = isNaN(dt.getTime()) ? '' : dt.toISOString().split('T')[0];
+                    } catch (e) { sDate = ''; }
+                  %>
+                  <a
+                    href="/teacher/attendance?date=<%= sDate %>&sessionId=<%= sess._id %>"
+                    class="rounded-lg border border-indigo-400/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-200 hover:bg-indigo-500/20 hover:text-white transition"
+                  >
+                    Take Roll
+                  </a>
+                </div>
+                <% }); %>
+              </div>
+              <% } else { %>
               <!-- Genuine empty state -->
               <div class="empty-state-box">
                 <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-indigo-200/40">
@@ -311,16 +339,17 @@
                 </div>
                 <h3 class="font-display text-base font-semibold text-white">No classes scheduled for today</h3>
                 <p class="mt-1 max-w-sm text-xs text-indigo-200/60 leading-relaxed">
-                  When students are enrolled and assigned to batches in Stages 3 & 4, your upcoming sessions will automatically display here.
+                  Start by creating a class session to track attendance and automated package deductions for your students.
                 </p>
                 <a
-                  href="/teacher/students/new"
+                  href="/teacher/attendance"
                   class="mt-4 inline-flex items-center gap-2 rounded-xl border border-indigo-400/30 bg-indigo-500/10 px-4 py-2 text-xs font-semibold text-indigo-200 transition hover:bg-indigo-500/20 hover:text-white"
                 >
-                  <i class="fa-solid fa-user-plus text-[10px]"></i>
-                  <span>Enroll First Student</span>
+                  <i class="fa-solid fa-plus text-[10px]"></i>
+                  <span>Create Class Session</span>
                 </a>
               </div>
+              <% } %>
             </section>
 
             <!-- Card: Recent Attendance Activity -->
@@ -341,6 +370,54 @@
                 </a>
               </div>
 
+              <% if (locals.recentAttendance && recentAttendance.length > 0) { %>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                  <thead class="border-b border-white/10 text-[10px] uppercase text-indigo-200/50">
+                    <tr>
+                      <th class="py-2.5 px-3">Student</th>
+                      <th class="py-2.5 px-3">Session</th>
+                      <th class="py-2.5 px-3">Status</th>
+                      <th class="py-2.5 px-3">Credit</th>
+                      <th class="py-2.5 px-3 text-right">Time</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-white/5">
+                    <% recentAttendance.forEach(function(att) { %>
+                    <tr class="hover:bg-white/[0.02]">
+                      <td class="py-2.5 px-3 font-semibold text-white">
+                        <%= att.student ? att.student.name : 'Student' %>
+                      </td>
+                      <td class="py-2.5 px-3 text-indigo-200/70">
+                        <%= att.session ? att.session.sessionName : 'Session' %>
+                      </td>
+                      <td class="py-2.5 px-3">
+                        <% if (att.status === 'present') { %>
+                        <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Present</span>
+                        <% } else if (att.status === 'late') { %>
+                        <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-amber-500/20 text-amber-300 border border-amber-400/30">Late</span>
+                        <% } else if (att.status === 'absent') { %>
+                        <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-rose-500/20 text-rose-300 border border-rose-400/30">Absent</span>
+                        <% } else { %>
+                        <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-blue-500/20 text-blue-300 border border-blue-400/30">Excused</span>
+                        <% } %>
+                      </td>
+                      <td class="py-2.5 px-3">
+                        <% if (att.creditConsumed) { %>
+                        <span class="text-emerald-300 font-semibold text-[10px]">1 Deducted</span>
+                        <% } else { %>
+                        <span class="text-slate-500 text-[10px]">None</span>
+                        <% } %>
+                      </td>
+                      <td class="py-2.5 px-3 text-right text-indigo-200/50">
+                        <%= new Date(att.createdAt || att.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) %>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+              <% } else { %>
               <!-- Genuine empty state -->
               <div class="empty-state-box">
                 <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-indigo-200/40">
@@ -348,9 +425,10 @@
                 </div>
                 <h3 class="font-display text-base font-semibold text-white">No recent attendance records</h3>
                 <p class="mt-1 max-w-sm text-xs text-indigo-200/60 leading-relaxed">
-                  Attendance history, present/absent counts, and class completion stamps will populate here once daily sessions are marked in Stage 5.
+                  Attendance logs, present/absent counts, and automated package credit deductions will display here once daily sessions are marked.
                 </p>
               </div>
+              <% } %>
             </section>
 
           </div>

@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= pkg.packageName %> | ManthraBeads Teacher</title>
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/images/apple-touch-icon.png" />
+    <meta name="description" content="ManthraBeads Package Details & Ledger" />
+
+    <!-- Tailwind CSS (CDN build w/ inline config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+              body: ['"Poppins"', 'sans-serif'],
+            },
+            colors: {
+              night: {
+                950: '#070a1f',
+                900: '#0b0f2e',
+                800: '#12183f',
+                700: '#1a2150',
+              },
+            },
+            boxShadow: {
+              glow: '0 0 25px rgba(255, 200, 60, 0.55)',
+              'glow-blue': '0 0 30px rgba(80, 140, 255, 0.45)',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Site & Teacher CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/teacher.css" />
+  </head>
+
+  <body class="font-body bg-night-950 overflow-x-hidden min-h-screen text-slate-100">
+    <section class="relative w-full min-h-screen bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] pb-20">
+
+      <!-- Ambient Glow Orbs -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-amber-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
+        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
+      </div>
+
+      <!-- Navbar -->
+      <%- include('../../partials/navbar') %>
+
+      <!-- Main Container -->
+      <main id="main-content" class="relative z-10 mx-auto max-w-[1240px] px-4 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+
+        <!-- Top Header & Actions -->
+        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex items-center gap-3">
+            <a
+              href="/teacher/packages"
+              class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-indigo-200 transition hover:bg-white/10 hover:text-white"
+              title="Back to Packages Overview"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <div>
+              <div class="flex flex-wrap items-center gap-2.5">
+                <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">
+                  <%= pkg.packageName %>
+                </h1>
+                <span class="inline-block rounded-md px-2.5 py-0.5 text-xs font-semibold uppercase <%= pkg.status === 'active' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' : (pkg.status === 'exhausted' ? 'bg-slate-500/20 text-slate-300' : 'bg-rose-500/20 text-rose-300') %>">
+                  <%= pkg.status %>
+                </span>
+              </div>
+              <p class="mt-0.5 text-xs text-indigo-200/60 sm:text-sm">
+                Assigned to <a href="/teacher/students/<%= student._id %>" class="font-semibold text-white underline hover:text-indigo-300"><%= student.name %></a> (<%= student.studentId %>) &bull; <%= new Date(pkg.purchaseDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+              </p>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2.5">
+            <a
+              href="/teacher/students/<%= student._id %>"
+              class="btn-ghost"
+              title="View Student Profile"
+            >
+              <i class="fa-solid fa-user-graduate text-xs"></i>
+              <span>Student Profile</span>
+            </a>
+
+            <a
+              href="/teacher/packages/<%= pkg._id %>/payments/new"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 text-xs font-semibold text-white shadow-sm transition hover:brightness-110"
+            >
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>Record Payment</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Alert Notification -->
+        <% if (locals.alertMessage) { %>
+        <div class="teacher-alert success mb-6">
+          <i class="fa-solid fa-circle-check shrink-0"></i>
+          <span><%= alertMessage %></span>
+        </div>
+        <% } %>
+
+        <!-- Progress & Class Credit Strip -->
+        <section class="glass-card p-6 mb-6">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-3">
+            <div>
+              <span class="text-xs font-semibold uppercase tracking-wider text-indigo-300">
+                Class Credits Ledger
+              </span>
+              <p class="text-base font-bold text-white mt-0.5">
+                <span class="text-emerald-300"><%= pkg.remainingClasses %> remaining</span> of <%= pkg.totalClasses %> classes
+              </p>
+            </div>
+            <div class="text-xs text-indigo-200/70 sm:text-right">
+              <span class="block">Price per class: <strong class="text-white"><%= formatRupees(pkg.pricePerClassPaise) %></strong></span>
+              <span class="block text-[11px] text-indigo-200/50"><%= pkg.consumedClasses %> sessions completed</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-white/10 rounded-full h-3 overflow-hidden">
+            <% const pct = pkg.totalClasses > 0 ? Math.min(100, Math.round((pkg.consumedClasses / pkg.totalClasses) * 100)) : 0; %>
+            <div class="bg-gradient-to-r from-indigo-500 to-emerald-400 h-3 rounded-full transition-all duration-300" style="width: <%= pct %>%;"></div>
+          </div>
+        </section>
+
+        <!-- 5 Distinct Financial Metrics -->
+        <section class="grid grid-cols-2 sm:grid-cols-5 gap-3.5 mb-8">
+          
+          <div class="stat-card">
+            <span class="text-[11px] font-semibold uppercase text-indigo-200/60 block">Package Price</span>
+            <span class="font-display text-xl font-bold text-white block mt-1"><%= formatRupees(pkg.totalPricePaise) %></span>
+            <span class="text-[10px] text-indigo-200/50">Total agreed fee</span>
+          </div>
+
+          <div class="stat-card">
+            <span class="text-[11px] font-semibold uppercase text-indigo-200/60 block">Amount Received</span>
+            <span class="font-display text-xl font-bold text-emerald-300 block mt-1"><%= formatRupees(pkg.amountPaidPaise) %></span>
+            <span class="text-[10px] text-indigo-200/50">Valid payments</span>
+          </div>
+
+          <div class="stat-card">
+            <span class="text-[11px] font-semibold uppercase text-indigo-200/60 block">Outstanding Dues</span>
+            <span class="font-display text-xl font-bold <%= pkg.outstandingDuesPaise > 0 ? 'text-amber-300' : 'text-slate-400' %> block mt-1">
+              <%= formatRupees(pkg.outstandingDuesPaise) %>
+            </span>
+            <span class="text-[10px] text-indigo-200/50">Fee unpaid</span>
+          </div>
+
+          <div class="stat-card">
+            <span class="text-[11px] font-semibold uppercase text-indigo-200/60 block">Consumed Value</span>
+            <span class="font-display text-xl font-bold text-indigo-200 block mt-1"><%= formatRupees(pkg.consumedValuePaise) %></span>
+            <span class="text-[10px] text-indigo-200/50">Completed classes</span>
+          </div>
+
+          <div class="stat-card">
+            <span class="text-[11px] font-semibold uppercase text-indigo-200/60 block">Unused Prepaid</span>
+            <span class="font-display text-xl font-bold text-cyan-300 block mt-1"><%= formatRupees(pkg.unusedPrepaidBalancePaise) %></span>
+            <span class="text-[10px] text-indigo-200/50">Unused fee balance</span>
+          </div>
+
+        </section>
+
+        <!-- Payment Transactions Table Card -->
+        <section class="glass-card overflow-hidden">
+          <div class="p-5 border-b border-white/10 flex items-center justify-between">
+            <div>
+              <h2 class="font-display text-base font-bold text-white flex items-center gap-2">
+                <i class="fa-solid fa-receipt text-amber-400 text-xs"></i>
+                Payment Transaction History
+              </h2>
+              <p class="text-xs text-indigo-200/60">Immutable financial ledger records</p>
+            </div>
+
+            <a
+              href="/teacher/packages/<%= pkg._id %>/payments/new"
+              class="btn-ghost py-1 px-3 text-xs"
+            >
+              <i class="fa-solid fa-plus text-[10px]"></i> Add Payment
+            </a>
+          </div>
+
+          <% if (payments && payments.length > 0) { %>
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="border-b border-white/5 bg-white/[0.02] text-[10px] uppercase tracking-wider text-indigo-200/60">
+                <tr>
+                  <th class="py-3 pl-5 pr-2">Date</th>
+                  <th class="px-2 py-3">Type</th>
+                  <th class="px-2 py-3">Method</th>
+                  <th class="px-2 py-3">Ref / UTR</th>
+                  <th class="px-2 py-3">Notes</th>
+                  <th class="px-2 py-3 text-right">Amount</th>
+                  <th class="py-3 pl-2 pr-5 text-right">Status / Action</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                <% payments.forEach(function(pay) { %>
+                <tr class="transition hover:bg-white/[0.03] <%= pay.status === 'cancelled' ? 'opacity-40 line-through' : '' %>">
+                  <!-- Date -->
+                  <td class="py-3 pl-5 pr-2 text-indigo-200/70">
+                    <%= new Date(pay.paymentDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                  </td>
+
+                  <!-- Type -->
+                  <td class="px-2 py-3 font-medium text-white capitalize">
+                    <%= pay.type %>
+                  </td>
+
+                  <!-- Method -->
+                  <td class="px-2 py-3 font-mono text-xs uppercase text-indigo-200">
+                    <%= pay.paymentMethod %>
+                  </td>
+
+                  <!-- Ref -->
+                  <td class="px-2 py-3 font-mono text-xs text-indigo-200/70">
+                    <%= pay.referenceNumber || '—' %>
+                  </td>
+
+                  <!-- Notes -->
+                  <td class="px-2 py-3 text-xs text-indigo-200/60 max-w-[180px] truncate">
+                    <%= pay.notes || '—' %>
+                  </td>
+
+                  <!-- Amount -->
+                  <td class="px-2 py-3 text-right font-semibold <%= pay.amountPaise >= 0 ? 'text-emerald-300' : 'text-rose-300' %>">
+                    <%= formatRupees(pay.amountPaise) %>
+                  </td>
+
+                  <!-- Status / Action -->
+                  <td class="py-3 pl-2 pr-5 text-right">
+                    <% if (pay.status === 'valid') { %>
+                    <form
+                      action="/teacher/payments/<%= pay._id %>/cancel"
+                      method="POST"
+                      class="inline"
+                      onsubmit="return confirm('Reverse this payment of <%= formatRupees(pay.amountPaise) %>? This will deduct the amount from the package ledger.');"
+                    >
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                      <input type="hidden" name="cancelReason" value="Reversed by teacher via dashboard" />
+                      <button
+                        type="submit"
+                        class="text-[11px] text-rose-300 hover:text-rose-200 hover:underline"
+                        title="Cancel/Reverse Transaction"
+                      >
+                        Reverse
+                      </button>
+                    </form>
+                    <% } else { %>
+                    <span class="text-[11px] text-rose-400 font-semibold">Cancelled</span>
+                    <% } %>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+          <% } else { %>
+          <div class="empty-state-box p-8">
+            <p class="text-xs text-indigo-200/60">No payments recorded yet for this package.</p>
+            <a
+              href="/teacher/packages/<%= pkg._id %>/payments/new"
+              class="mt-3 inline-flex items-center gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-3 py-1.5 text-xs font-semibold text-emerald-200 hover:bg-emerald-500/20"
+            >
+              <i class="fa-solid fa-plus text-[10px]"></i> Record First Payment
+            </a>
+          </div>
+          <% } %>
+        </section>
+
+      </main>
+    </section>
+  </body>
+</html>

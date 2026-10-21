@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Packages & Payments Ledger | ManthraBeads Teacher</title>
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/images/apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="ManthraBeads Class Packages & Financial Ledger — Track prepaid class packs, outstanding dues, and payment transactions."
+    />
+
+    <!-- Tailwind CSS (CDN build w/ inline config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+              body: ['"Poppins"', 'sans-serif'],
+            },
+            colors: {
+              night: {
+                950: '#070a1f',
+                900: '#0b0f2e',
+                800: '#12183f',
+                700: '#1a2150',
+              },
+            },
+            boxShadow: {
+              glow: '0 0 25px rgba(255, 200, 60, 0.55)',
+              'glow-blue': '0 0 30px rgba(80, 140, 255, 0.45)',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Site & Teacher CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/teacher.css" />
+  </head>
+
+  <body class="font-body bg-night-950 overflow-x-hidden min-h-screen text-slate-100">
+    <section class="relative w-full min-h-screen bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] pb-20">
+
+      <!-- Ambient Glow Orbs -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-amber-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
+        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
+      </div>
+
+      <!-- Navbar -->
+      <%- include('../../partials/navbar') %>
+
+      <!-- Main Container -->
+      <main id="main-content" class="relative z-10 mx-auto max-w-[1340px] px-4 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+
+        <!-- Top Header & Actions -->
+        <header class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div class="flex items-center gap-3">
+              <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">
+                Packages & Payments
+              </h1>
+              <span class="rounded-full border border-amber-400/30 bg-amber-500/15 px-2.5 py-0.5 text-xs font-semibold text-amber-300">
+                Financial Ledger
+              </span>
+            </div>
+            <p class="mt-1 text-xs text-indigo-200/60 sm:text-sm">
+              Track prepaid class bundles, payment transactions, and student balances
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <a
+              href="/teacher/students"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] transition hover:brightness-110"
+            >
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>Assign to Student</span>
+            </a>
+          </div>
+        </header>
+
+        <!-- Horizontal Navigation Tabs -->
+        <nav
+          class="mb-8 flex overflow-x-auto gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 backdrop-blur-md no-scrollbar"
+          aria-label="Teacher Dashboard Navigation"
+        >
+          <a
+            href="/teacher/dashboard"
+            class="teacher-tab"
+          >
+            <i class="fa-solid fa-gauge-high text-sm"></i>
+            <span>Dashboard</span>
+          </a>
+          <a
+            href="/teacher/students"
+            class="teacher-tab"
+          >
+            <i class="fa-solid fa-user-graduate text-sm"></i>
+            <span>Students</span>
+          </a>
+          <a
+            href="/teacher/attendance"
+            class="teacher-tab"
+          >
+            <i class="fa-solid fa-clipboard-check text-sm"></i>
+            <span>Attendance</span>
+          </a>
+          <a
+            href="/teacher/packages"
+            class="teacher-tab active"
+            aria-current="page"
+          >
+            <i class="fa-solid fa-credit-card text-sm"></i>
+            <span>Packages & Payments</span>
+          </a>
+          <a
+            href="/teacher/reports"
+            class="teacher-tab"
+          >
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span>Reports</span>
+            <span class="tab-badge">Stage 6</span>
+          </a>
+        </nav>
+
+        <!-- 4 Summary Metrics Cards -->
+        <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+          
+          <!-- 1. Total Revenue Collected -->
+          <div class="stat-card">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                  Total Fees Collected
+                </p>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="font-display text-3xl font-bold text-emerald-300 tracking-tight">
+                    <%= stats.totalRevenue %>
+                  </span>
+                </div>
+              </div>
+              <div class="stat-icon-wrap bg-emerald-500/15 text-emerald-300">
+                <i class="fa-solid fa-vault text-lg"></i>
+              </div>
+            </div>
+            <p class="mt-2 text-[11px] text-indigo-200/50">All lifetime valid payments</p>
+          </div>
+
+          <!-- 2. Total Outstanding Dues -->
+          <div class="stat-card">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                  Outstanding Dues
+                </p>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="font-display text-3xl font-bold text-amber-300 tracking-tight">
+                    <%= stats.totalDues %>
+                  </span>
+                </div>
+              </div>
+              <div class="stat-icon-wrap bg-amber-500/15 text-amber-300">
+                <i class="fa-solid fa-hand-holding-dollar text-lg"></i>
+              </div>
+            </div>
+            <p class="mt-2 text-[11px] text-indigo-200/50">Unpaid balance on active packs</p>
+          </div>
+
+          <!-- 3. Active Packages -->
+          <div class="stat-card">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                  Active Packages
+                </p>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="font-display text-3xl font-bold text-white tracking-tight">
+                    <%= stats.activeCount %>
+                  </span>
+                  <span class="text-xs text-indigo-200/50">packs</span>
+                </div>
+              </div>
+              <div class="stat-icon-wrap bg-indigo-500/15 text-indigo-300">
+                <i class="fa-solid fa-boxes-stacked text-lg"></i>
+              </div>
+            </div>
+            <p class="mt-2 text-[11px] text-indigo-200/50">Currently in progress</p>
+          </div>
+
+          <!-- 4. Remaining Class Credits -->
+          <div class="stat-card">
+            <div class="flex items-start justify-between">
+              <div>
+                <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                  Remaining Credits
+                </p>
+                <div class="mt-2 flex items-baseline gap-2">
+                  <span class="font-display text-3xl font-bold text-cyan-300 tracking-tight">
+                    <%= stats.remainingClasses %>
+                  </span>
+                  <span class="text-xs text-indigo-200/50">classes</span>
+                </div>
+              </div>
+              <div class="stat-icon-wrap bg-cyan-500/15 text-cyan-300">
+                <i class="fa-solid fa-calendar-check text-lg"></i>
+              </div>
+            </div>
+            <p class="mt-2 text-[11px] text-indigo-200/50">Prepaid classes yet to be held</p>
+          </div>
+
+        </section>
+
+        <!-- Main 2-Column Ledger Grid -->
+        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+
+          <!-- Left Column (2 Cols): Packages List -->
+          <div class="flex flex-col gap-6 lg:col-span-2">
+
+            <section class="glass-card overflow-hidden">
+              <!-- Filter header -->
+              <div class="p-5 border-b border-white/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                  <h2 class="font-display text-lg font-bold text-white">Student Packages</h2>
+                  <p class="text-xs text-indigo-200/60">Active & historical class bundles</p>
+                </div>
+
+                <!-- Status Filter Tabs -->
+                <div class="flex rounded-xl border border-white/10 bg-white/[0.04] p-1 self-start sm:self-auto">
+                  <a
+                    href="/teacher/packages?status=all"
+                    class="rounded-lg px-3 py-1 text-xs font-semibold transition <%= currentStatus === 'all' ? 'bg-indigo-600 text-white' : 'text-indigo-200/60 hover:text-white' %>"
+                  >
+                    All
+                  </a>
+                  <a
+                    href="/teacher/packages?status=active"
+                    class="rounded-lg px-3 py-1 text-xs font-semibold transition <%= currentStatus === 'active' ? 'bg-emerald-600 text-white' : 'text-indigo-200/60 hover:text-white' %>"
+                  >
+                    Active
+                  </a>
+                  <a
+                    href="/teacher/packages?status=exhausted"
+                    class="rounded-lg px-3 py-1 text-xs font-semibold transition <%= currentStatus === 'exhausted' ? 'bg-slate-600 text-white' : 'text-indigo-200/60 hover:text-white' %>"
+                  >
+                    Exhausted
+                  </a>
+                </div>
+              </div>
+
+              <!-- Packages Table -->
+              <% if (packages && packages.length > 0) { %>
+              <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs sm:text-sm">
+                  <thead class="border-b border-white/5 bg-white/[0.02] text-[10px] uppercase tracking-wider text-indigo-200/60">
+                    <tr>
+                      <th class="py-3 pl-5 pr-2">Student</th>
+                      <th class="px-2 py-3">Package</th>
+                      <th class="px-2 py-3">Classes</th>
+                      <th class="px-2 py-3">Price</th>
+                      <th class="px-2 py-3">Paid / Due</th>
+                      <th class="px-2 py-3">Status</th>
+                      <th class="py-3 pl-2 pr-5 text-right">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-white/5">
+                    <% packages.forEach(function(pkg) { %>
+                    <tr class="transition hover:bg-white/[0.03]">
+                      <!-- Student -->
+                      <td class="py-3.5 pl-5 pr-2">
+                        <% if (pkg.student) { %>
+                        <div class="font-medium text-white">
+                          <a href="/teacher/students/<%= pkg.student._id %>" class="hover:text-indigo-300">
+                            <%= pkg.student.name %>
+                          </a>
+                        </div>
+                        <div class="font-mono text-[10px] text-indigo-200/50">
+                          <%= pkg.student.studentId %>
+                        </div>
+                        <% } else { %>
+                        <span class="text-slate-400">Unknown Student</span>
+                        <% } %>
+                      </td>
+
+                      <!-- Package Name -->
+                      <td class="px-2 py-3.5">
+                        <a href="/teacher/packages/<%= pkg._id %>" class="font-medium text-indigo-200 hover:text-white">
+                          <%= pkg.packageName %>
+                        </a>
+                      </td>
+
+                      <!-- Classes remaining -->
+                      <td class="px-2 py-3.5">
+                        <div class="font-medium text-white">
+                          <%= Math.max(0, pkg.totalClasses - pkg.consumedClasses) %> / <%= pkg.totalClasses %> left
+                        </div>
+                        <div class="text-[10px] text-indigo-200/50">
+                          <%= pkg.consumedClasses %> taken
+                        </div>
+                      </td>
+
+                      <!-- Price -->
+                      <td class="px-2 py-3.5 font-medium text-white">
+                        <%= formatRupees(pkg.totalPricePaise) %>
+                      </td>
+
+                      <!-- Paid vs Dues -->
+                      <td class="px-2 py-3.5">
+                        <div class="text-emerald-300 font-medium">
+                          <%= formatRupees(pkg.amountPaidPaise) %>
+                        </div>
+                        <% const dues = Math.max(0, pkg.totalPricePaise - pkg.amountPaidPaise); %>
+                        <% if (dues > 0) { %>
+                        <div class="text-amber-300 text-[11px] font-semibold">
+                          Due: <%= formatRupees(dues) %>
+                        </div>
+                        <% } else { %>
+                        <div class="text-slate-400 text-[10px]">Fully Paid</div>
+                        <% } %>
+                      </td>
+
+                      <!-- Status -->
+                      <td class="px-2 py-3.5">
+                        <span class="inline-block rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase <%= pkg.status === 'active' ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-400/30' : (pkg.status === 'exhausted' ? 'bg-slate-500/20 text-slate-300' : 'bg-rose-500/20 text-rose-300') %>">
+                          <%= pkg.status %>
+                        </span>
+                      </td>
+
+                      <!-- Action -->
+                      <td class="py-3.5 pl-2 pr-5 text-right">
+                        <div class="flex items-center justify-end gap-1.5">
+                          <a
+                            href="/teacher/packages/<%= pkg._id %>"
+                            class="inline-flex h-7 px-2.5 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-xs text-indigo-200 transition hover:bg-white/10 hover:text-white"
+                          >
+                            Details
+                          </a>
+                        </div>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
+              <% } else { %>
+              <div class="empty-state-box p-10">
+                <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-indigo-300/40">
+                  <i class="fa-solid fa-box-open text-xl"></i>
+                </div>
+                <h3 class="font-display text-base font-bold text-white">No packages found</h3>
+                <p class="mt-1 text-xs text-indigo-200/60 max-w-sm">
+                  No packages match the selected status filter. Select a student from the directory to assign a class package.
+                </p>
+                <a
+                  href="/teacher/students"
+                  class="mt-4 inline-flex items-center gap-1.5 rounded-xl border border-indigo-400/30 bg-indigo-500/10 px-3.5 py-1.5 text-xs font-semibold text-indigo-200 hover:bg-indigo-500/20"
+                >
+                  <i class="fa-solid fa-user-graduate text-[10px]"></i> Open Student Directory
+                </a>
+              </div>
+              <% } %>
+            </section>
+
+          </div>
+
+          <!-- Right Column (1 Col): Recent Payment Transactions -->
+          <div class="flex flex-col gap-6">
+
+            <section class="glass-card p-5">
+              <div class="mb-4 flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
+                    <i class="fa-solid fa-receipt text-xs"></i>
+                  </div>
+                  <div>
+                    <h3 class="font-display text-sm font-bold text-white">Recent Transactions</h3>
+                    <p class="text-[11px] text-indigo-200/50">Auditable payment ledger</p>
+                  </div>
+                </div>
+              </div>
+
+              <% if (recentPayments && recentPayments.length > 0) { %>
+              <div class="divide-y divide-white/5">
+                <% recentPayments.forEach(function(pay) { %>
+                <div class="py-2.5 flex items-center justify-between text-xs">
+                  <div>
+                    <p class="font-medium text-white truncate max-w-[130px]">
+                      <%= pay.student ? pay.student.name : 'Student' %>
+                    </p>
+                    <p class="text-[10px] text-indigo-200/50 flex items-center gap-1">
+                      <span><%= new Date(pay.paymentDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) %></span>
+                      &bull;
+                      <span class="uppercase font-mono"><%= pay.paymentMethod %></span>
+                    </p>
+                  </div>
+                  <div class="text-right">
+                    <span class="font-semibold text-emerald-300 block">
+                      <%= formatRupees(pay.amountPaise) %>
+                    </span>
+                    <% if (pay.referenceNumber) { %>
+                    <span class="font-mono text-[9px] text-indigo-200/40 truncate max-w-[90px] block">
+                      <%= pay.referenceNumber %>
+                    </span>
+                    <% } %>
+                  </div>
+                </div>
+                <% }); %>
+              </div>
+              <% } else { %>
+              <div class="empty-state-box p-6">
+                <p class="text-xs text-indigo-200/60">No payment transactions recorded yet.</p>
+              </div>
+              <% } %>
+            </section>
+
+          </div>
+
+        </div>
+
+      </main>
+    </section>
+  </body>
+</html>

@@ -1,28 +1,92 @@
 const mongoose = require('mongoose');
 const Student = require('../models/Student');
+const Package = require('../models/Package');
+const Session = require('../models/Session');
+const Attendance = require('../models/Attendance');
 
 /* ──────────────────────────────────────────────────────────
    Teacher Dashboard Controller
    Serves authenticated dashboard overview and placeholder
-   endpoints for upcoming stages (Payments, Attendance, Reports)
+   endpoints for upcoming stages (Reports)
    ────────────────────────────────────────────────────────── */
 
 exports.showDashboard = async (req, res) => {
   try {
-    const hasAttendanceModel = Boolean(mongoose.models.Attendance);
-    const hasPaymentModel = Boolean(mongoose.models.Payment);
-
     let activeStudentsCount = 0;
     let studentsLoaded = false;
+    let pendingDuesPaise = 0;
+    let packagesLoaded = false;
+    let todayClassesCount = 0;
+    let todayClassesLoaded = false;
+    let todayAttendancePct = null;
+    let attendanceLoaded = false;
+    let todayClassesList = [];
+    let recentAttendanceList = [];
 
-    try {
-      if (mongoose.connection.readyState === 1) {
+    if (mongoose.connection.readyState === 1) {
+      try {
         activeStudentsCount = await Student.countDocuments({ status: 'active' });
         studentsLoaded = true;
+      } catch (err) {
+        console.warn('Could not query Student count:', err.message);
       }
-    } catch (err) {
-      console.warn('Could not query Student count:', err.message);
+
+      try {
+        const activePackages = await Package.find(
+          { status: 'active' },
+          { totalPricePaise: 1, amountPaidPaise: 1 }
+        ).lean();
+
+        for (const pkg of activePackages) {
+          const price = pkg.totalPricePaise || 0;
+          const paid = pkg.amountPaidPaise || 0;
+          pendingDuesPaise += Math.max(0, price - paid);
+        }
+        packagesLoaded = true;
+      } catch (err) {
+        console.warn('Could not query Package dues:', err.message);
+      }
+
+      try {
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const todayEnd = new Date();
+        todayEnd.setHours(23, 59, 59, 999);
+
+        todayClassesCount = await Session.countDocuments({
+          date: { $gte: todayStart, $lte: todayEnd },
+        });
+        todayClassesList = await Session.find({
+          date: { $gte: todayStart, $lte: todayEnd },
+        })
+          .sort({ startTime: 1 })
+          .lean();
+        todayClassesLoaded = true;
+
+        const todayAttendance = await Attendance.find({
+          date: { $gte: todayStart, $lte: todayEnd },
+        }).lean();
+
+        if (todayAttendance.length > 0) {
+          const attended = todayAttendance.filter((r) => ['present', 'late'].includes(r.status)).length;
+          todayAttendancePct = Math.round((attended / todayAttendance.length) * 100);
+        }
+        attendanceLoaded = true;
+
+        recentAttendanceList = await Attendance.find()
+          .populate('student', 'name studentId level')
+          .populate('session', 'sessionName startTime')
+          .sort({ createdAt: -1 })
+          .limit(6)
+          .lean();
+      } catch (err) {
+        console.warn('Could not query Attendance/Session data:', err.message);
+      }
     }
+
+    const duesFormatted = (pendingDuesPaise / 100).toLocaleString('en-IN', {
+      maximumFractionDigits: 0,
+    });
 
     const stats = {
       activeStudents: {
@@ -30,27 +94,28 @@ exports.showDashboard = async (req, res) => {
         isReady: studentsLoaded,
         stage: 3,
         label: 'Active Students',
-        emptyMessage: 'No students enrolled yet (Stage 3)',
+        emptyMessage: 'No students enrolled yet',
       },
       todayClasses: {
-        value: 0,
-        isReady: hasAttendanceModel,
+        value: todayClassesCount,
+        isReady: todayClassesLoaded,
         stage: 5,
         label: "Today's Classes",
         emptyMessage: 'No sessions scheduled today',
       },
       todayAttendancePct: {
-        value: null,
-        isReady: hasAttendanceModel,
+        value: todayAttendancePct,
+        isReady: attendanceLoaded,
         stage: 5,
         label: "Today's Attendance",
         emptyMessage: 'No attendance marked today',
       },
       pendingPayments: {
-        value: 0,
-        isReady: hasPaymentModel,
+        value: pendingDuesPaise > 0 ? duesFormatted : 0,
+        rawPaise: pendingDuesPaise,
+        isReady: packagesLoaded,
         stage: 4,
-        label: 'Pending Payments',
+        label: 'Outstanding Dues',
         emptyMessage: 'No outstanding dues',
       },
     };
@@ -60,9 +125,13 @@ exports.showDashboard = async (req, res) => {
       csrfToken: res.locals.csrfToken,
       activeSection: 'dashboard',
       stats,
-      todayClasses: [],
-      recentAttendance: [],
+      todayClasses: todayClassesList,
+      recentAttendance: recentAttendanceList,
       dbConnected: mongoose.connection.readyState === 1,
+      duesSummary: {
+        totalDuesPaise: pendingDuesPaise,
+        duesCount: pendingDuesPaise > 0 ? 1 : 0,
+      },
     });
   } catch (err) {
     console.error('Teacher dashboard render error:', err);
@@ -74,6 +143,7 @@ exports.showDashboard = async (req, res) => {
       todayClasses: [],
       recentAttendance: [],
       dbConnected: false,
+      duesSummary: { totalDuesPaise: 0, duesCount: 0 },
       error: 'Unable to load dashboard data. Please try again.',
     });
   }
