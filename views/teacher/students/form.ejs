@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= isEdit ? 'Edit Student' : 'Add New Student' %> | ManthraBeads Teacher</title>
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/images/apple-touch-icon.png" />
+    <meta name="description" content="ManthraBeads Teacher Panel — <%= isEdit ? 'Edit student profile' : 'Add a new student profile' %>" />
+
+    <!-- Tailwind CSS (CDN build w/ inline config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+              body: ['"Poppins"', 'sans-serif'],
+            },
+            colors: {
+              night: {
+                950: '#070a1f',
+                900: '#0b0f2e',
+                800: '#12183f',
+                700: '#1a2150',
+              },
+            },
+            boxShadow: {
+              glow: '0 0 25px rgba(255, 200, 60, 0.55)',
+              'glow-blue': '0 0 30px rgba(80, 140, 255, 0.45)',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Site & Teacher CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/teacher.css" />
+  </head>
+
+  <body class="font-body bg-night-950 overflow-x-hidden min-h-screen text-slate-100">
+    <section class="relative w-full min-h-screen bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] pb-20">
+
+      <!-- Ambient Glow Orbs -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
+        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
+      </div>
+
+      <!-- Navbar -->
+      <%- include('../../partials/navbar') %>
+
+      <!-- Main Container -->
+      <main id="main-content" class="relative z-10 mx-auto max-w-[960px] px-4 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+
+        <!-- Header -->
+        <div class="mb-6 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <a
+              href="/teacher/students"
+              class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-indigo-200 transition hover:bg-white/10 hover:text-white"
+              title="Back to Students Directory"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <div>
+              <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">
+                <%= isEdit ? 'Edit Student Profile' : 'Enroll New Student' %>
+              </h1>
+              <p class="mt-0.5 text-xs text-indigo-200/60 sm:text-sm">
+                <%= isEdit ? 'Update information for ' + student.name : 'Create a persistent student record with contact details & level' %>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- General Error Alert -->
+        <% if (locals.errors && errors.general) { %>
+        <div class="teacher-alert error mb-6">
+          <i class="fa-solid fa-triangle-exclamation shrink-0"></i>
+          <span><%= errors.general %></span>
+        </div>
+        <% } %>
+
+        <!-- Form Card -->
+        <div class="glass-card p-6 sm:p-10">
+          <form action="<%= formAction %>" method="POST" class="space-y-6" novalidate>
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+
+            <!-- Row 1: Student Name & Generated ID -->
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+              <div class="sm:col-span-2">
+                <label for="name" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Full Name <span class="text-rose-400">*</span>
+                </label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  required
+                  placeholder="e.g. Aarav Sharma"
+                  value="<%= student.name || '' %>"
+                  class="teacher-input <%= locals.errors && errors.name ? 'border-rose-400/80 focus:border-rose-400' : '' %>"
+                />
+                <% if (locals.errors && errors.name) { %>
+                <p class="mt-1 text-xs text-rose-300 flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> <%= errors.name %>
+                </p>
+                <% } %>
+              </div>
+
+              <div>
+                <label class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/50">
+                  Student ID <span class="text-[10px] text-indigo-300/60">(System)</span>
+                </label>
+                <input
+                  type="text"
+                  disabled
+                  value="<%= student.studentId || 'Auto-generated' %>"
+                  class="teacher-input bg-white/[0.03] text-indigo-300 font-mono font-semibold cursor-not-allowed opacity-80"
+                />
+              </div>
+            </div>
+
+            <!-- Row 2: Level & Enrollment Date -->
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <label for="level" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Abacus Course / Level <span class="text-rose-400">*</span>
+                </label>
+                <select
+                  id="level"
+                  name="level"
+                  required
+                  class="teacher-input bg-[#0e1438] text-white"
+                >
+                  <% levels.forEach(function(lvl) { %>
+                  <option value="<%= lvl %>" <%= (student.level === lvl) ? 'selected' : '' %>>
+                    <%= lvl %>
+                  </option>
+                  <% }); %>
+                </select>
+                <% if (locals.errors && errors.level) { %>
+                <p class="mt-1 text-xs text-rose-300"><%= errors.level %></p>
+                <% } %>
+              </div>
+
+              <div>
+                <label for="enrollmentDate" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Enrollment Date <span class="text-rose-400">*</span>
+                </label>
+                <input
+                  type="date"
+                  id="enrollmentDate"
+                  name="enrollmentDate"
+                  required
+                  value="<%= student.enrollmentDate ? student.enrollmentDate : new Date().toISOString().split('T')[0] %>"
+                  class="teacher-input text-white"
+                />
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="border-t border-white/10 pt-4">
+              <h3 class="text-sm font-semibold uppercase tracking-wider text-indigo-300 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-address-book text-xs text-indigo-400"></i> Contact & Guardian Information
+              </h3>
+            </div>
+
+            <!-- Row 3: Phone & Parent Name -->
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <label for="phone" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Primary Phone Number <span class="text-rose-400">*</span>
+                </label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  required
+                  placeholder="e.g. +91 98765 43210"
+                  value="<%= student.phone || '' %>"
+                  class="teacher-input <%= locals.errors && errors.phone ? 'border-rose-400/80 focus:border-rose-400' : '' %>"
+                />
+                <% if (locals.errors && errors.phone) { %>
+                <p class="mt-1 text-xs text-rose-300 flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> <%= errors.phone %>
+                </p>
+                <% } %>
+              </div>
+
+              <div>
+                <label for="parentName" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Parent / Guardian Name
+                </label>
+                <input
+                  type="text"
+                  id="parentName"
+                  name="parentName"
+                  placeholder="e.g. Rajesh Sharma"
+                  value="<%= student.parentName || '' %>"
+                  class="teacher-input"
+                />
+              </div>
+            </div>
+
+            <!-- Row 4: Parent Email & Student Email -->
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <div>
+                <label for="parentEmail" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Parent Email <span class="text-[10px] text-indigo-300/60">(For Reports)</span>
+                </label>
+                <input
+                  type="email"
+                  id="parentEmail"
+                  name="parentEmail"
+                  placeholder="parent@example.com"
+                  value="<%= student.parentEmail || '' %>"
+                  class="teacher-input <%= locals.errors && errors.parentEmail ? 'border-rose-400/80 focus:border-rose-400' : '' %>"
+                />
+                <% if (locals.errors && errors.parentEmail) { %>
+                <p class="mt-1 text-xs text-rose-300 flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> <%= errors.parentEmail %>
+                </p>
+                <% } %>
+              </div>
+
+              <div>
+                <label for="studentEmail" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Student Email <span class="text-[10px] text-indigo-300/60">(Optional)</span>
+                </label>
+                <input
+                  type="email"
+                  id="studentEmail"
+                  name="studentEmail"
+                  placeholder="student@example.com"
+                  value="<%= student.studentEmail || '' %>"
+                  class="teacher-input <%= locals.errors && errors.studentEmail ? 'border-rose-400/80 focus:border-rose-400' : '' %>"
+                />
+                <% if (locals.errors && errors.studentEmail) { %>
+                <p class="mt-1 text-xs text-rose-300 flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> <%= errors.studentEmail %>
+                </p>
+                <% } %>
+              </div>
+            </div>
+
+            <!-- Divider -->
+            <div class="border-t border-white/10 pt-4">
+              <h3 class="text-sm font-semibold uppercase tracking-wider text-indigo-300 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-sliders text-xs text-indigo-400"></i> Status & Academic Notes
+              </h3>
+            </div>
+
+            <!-- Row 5: Status & Notes -->
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-3">
+              <div>
+                <label for="status" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Enrollment Status
+                </label>
+                <select id="status" name="status" class="teacher-input bg-[#0e1438] text-white">
+                  <option value="active" <%= (student.status !== 'inactive') ? 'selected' : '' %>>
+                    Active
+                  </option>
+                  <option value="inactive" <%= (student.status === 'inactive') ? 'selected' : '' %>>
+                    Inactive (Deactivated)
+                  </option>
+                </select>
+              </div>
+
+              <div class="sm:col-span-2">
+                <label for="notes" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/70">
+                  Notes & Observations <span class="text-[10px] text-indigo-300/60">(Optional)</span>
+                </label>
+                <textarea
+                  id="notes"
+                  name="notes"
+                  rows="3"
+                  placeholder="Learning pace, special attention topics, schedule preferences..."
+                  class="teacher-input py-2.5 resize-none"
+                ><%= student.notes || '' %></textarea>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col-reverse sm:flex-row items-center justify-end gap-3 pt-6 border-t border-white/10">
+              <a
+                href="/teacher/students"
+                class="btn-ghost w-full sm:w-auto justify-center px-6"
+              >
+                Cancel
+              </a>
+              <button
+                type="submit"
+                class="btn-primary w-full sm:w-auto px-8"
+              >
+                <i class="fa-solid <%= isEdit ? 'fa-floppy-disk' : 'fa-check' %>"></i>
+                <span><%= isEdit ? 'Save Changes' : 'Create Student Record' %></span>
+              </button>
+            </div>
+
+          </form>
+        </div>
+
+      </main>
+    </section>
+  </body>
+</html>

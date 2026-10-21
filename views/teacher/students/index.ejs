@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Directory | ManthraBeads Teacher</title>
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/images/apple-touch-icon.png" />
+    <meta
+      name="description"
+      content="ManthraBeads Student Management Directory — View, search, filter and manage registered academy students."
+    />
+
+    <!-- Tailwind CSS (CDN build w/ inline config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+              body: ['"Poppins"', 'sans-serif'],
+            },
+            colors: {
+              night: {
+                950: '#070a1f',
+                900: '#0b0f2e',
+                800: '#12183f',
+                700: '#1a2150',
+              },
+            },
+            boxShadow: {
+              glow: '0 0 25px rgba(255, 200, 60, 0.55)',
+              'glow-blue': '0 0 30px rgba(80, 140, 255, 0.45)',
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Site & Teacher CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/teacher.css" />
+  </head>
+
+  <body class="font-body bg-night-950 overflow-x-hidden min-h-screen text-slate-100">
+    <section class="relative w-full min-h-screen bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] pb-20">
+
+      <!-- Ambient Glow Orbs -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
+        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
+      </div>
+
+      <!-- Navbar -->
+      <%- include('../../partials/navbar') %>
+
+      <!-- Main Container -->
+      <main id="main-content" class="relative z-10 mx-auto max-w-[1340px] px-4 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+
+        <!-- Top Header & Actions -->
+        <header class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <div class="flex items-center gap-3">
+              <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">
+                Student Directory
+              </h1>
+              <span class="rounded-full border border-indigo-400/30 bg-indigo-500/15 px-2.5 py-0.5 text-xs font-semibold text-indigo-300">
+                <%= pagination.totalStudents %> Total
+              </span>
+            </div>
+            <p class="mt-1 text-xs text-indigo-200/60 sm:text-sm">
+              Manage enrollments, abacus levels, and student profiles
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <a
+              href="/teacher/students/new"
+              class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] transition hover:brightness-110"
+            >
+              <i class="fa-solid fa-user-plus text-xs"></i>
+              <span>Add Student</span>
+            </a>
+          </div>
+        </header>
+
+        <!-- Horizontal Navigation Tabs -->
+        <nav
+          class="mb-8 flex overflow-x-auto gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 backdrop-blur-md no-scrollbar"
+          aria-label="Teacher Dashboard Navigation"
+        >
+          <a
+            href="/teacher/dashboard"
+            class="teacher-tab <%= (locals.activeSection || '') === 'dashboard' ? 'active' : '' %>"
+          >
+            <i class="fa-solid fa-gauge-high text-sm"></i>
+            <span>Dashboard</span>
+          </a>
+          <a
+            href="/teacher/students"
+            class="teacher-tab active"
+            aria-current="page"
+          >
+            <i class="fa-solid fa-user-graduate text-sm"></i>
+            <span>Students</span>
+          </a>
+          <a
+            href="/teacher/attendance"
+            class="teacher-tab"
+          >
+            <i class="fa-solid fa-clipboard-check text-sm"></i>
+            <span>Attendance</span>
+            <span class="tab-badge">Stage 5</span>
+          </a>
+          <a
+            href="/teacher/packages"
+            class="teacher-tab"
+          >
+            <i class="fa-solid fa-credit-card text-sm"></i>
+            <span>Packages & Payments</span>
+            <span class="tab-badge">Stage 4</span>
+          </a>
+          <a
+            href="/teacher/reports"
+            class="teacher-tab"
+          >
+            <i class="fa-solid fa-chart-pie text-sm"></i>
+            <span>Reports</span>
+            <span class="tab-badge">Stage 5</span>
+          </a>
+        </nav>
+
+        <!-- Alerts -->
+        <% if (locals.alertMessage) { %>
+        <div class="teacher-alert <%= locals.alertType === 'error' ? 'error' : 'success' %> mb-6">
+          <i class="fa-solid <%= locals.alertType === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check' %> shrink-0"></i>
+          <span><%= alertMessage %></span>
+        </div>
+        <% } %>
+
+        <!-- Filter & Search Bar Card -->
+        <section class="glass-card p-4 sm:p-5 mb-6">
+          <form method="GET" action="/teacher/students" class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <!-- Search Input -->
+            <div class="relative flex-1 max-w-md">
+              <span class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-indigo-200/40">
+                <i class="fa-solid fa-magnifying-glass text-xs"></i>
+              </span>
+              <input
+                type="text"
+                name="q"
+                value="<%= query.q %>"
+                placeholder="Search by name, student ID, or phone..."
+                class="teacher-input pl-9 text-xs sm:text-sm"
+              />
+            </div>
+
+            <!-- Status Tabs / Select & Submit -->
+            <div class="flex items-center gap-2">
+              <div class="flex rounded-xl border border-white/10 bg-white/[0.04] p-1">
+                <a
+                  href="/teacher/students?q=<%= encodeURIComponent(query.q) %>&status=all"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold transition <%= query.status === 'all' ? 'bg-indigo-600 text-white shadow-sm' : 'text-indigo-200/60 hover:text-white' %>"
+                >
+                  All
+                </a>
+                <a
+                  href="/teacher/students?q=<%= encodeURIComponent(query.q) %>&status=active"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold transition <%= query.status === 'active' ? 'bg-emerald-600 text-white shadow-sm' : 'text-indigo-200/60 hover:text-white' %>"
+                >
+                  Active
+                </a>
+                <a
+                  href="/teacher/students?q=<%= encodeURIComponent(query.q) %>&status=inactive"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold transition <%= query.status === 'inactive' ? 'bg-rose-600 text-white shadow-sm' : 'text-indigo-200/60 hover:text-white' %>"
+                >
+                  Inactive
+                </a>
+              </div>
+
+              <button
+                type="submit"
+                class="btn-ghost py-2 text-xs"
+                title="Apply search"
+              >
+                <span>Filter</span>
+              </button>
+
+              <% if (query.q || query.status !== 'all') { %>
+              <a
+                href="/teacher/students"
+                class="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-indigo-200/60 transition hover:bg-white/10 hover:text-white"
+                title="Clear filters"
+              >
+                <i class="fa-solid fa-xmark text-xs"></i>
+              </a>
+              <% } %>
+            </div>
+          </form>
+        </section>
+
+        <!-- Students Table Card -->
+        <section class="glass-card overflow-hidden">
+          <% if (students && students.length > 0) { %>
+
+          <!-- Desktop Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="border-b border-white/10 bg-white/[0.02] text-[11px] uppercase tracking-wider text-indigo-200/60">
+                <tr>
+                  <th scope="col" class="py-3.5 pl-6 pr-3">Student ID</th>
+                  <th scope="col" class="px-3 py-3.5">Student Name</th>
+                  <th scope="col" class="px-3 py-3.5">Level</th>
+                  <th scope="col" class="px-3 py-3.5">Contact</th>
+                  <th scope="col" class="px-3 py-3.5">Enrolled</th>
+                  <th scope="col" class="px-3 py-3.5">Status</th>
+                  <th scope="col" class="py-3.5 pl-3 pr-6 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-white/5">
+                <% students.forEach(function(student) { %>
+                <tr class="transition hover:bg-white/[0.03]">
+                  <!-- ID -->
+                  <td class="py-4 pl-6 pr-3 font-mono font-semibold text-indigo-300">
+                    <a href="/teacher/students/<%= student._id %>" class="hover:underline">
+                      <%= student.studentId %>
+                    </a>
+                  </td>
+
+                  <!-- Name -->
+                  <td class="px-3 py-4">
+                    <div class="font-medium text-white">
+                      <a href="/teacher/students/<%= student._id %>" class="hover:text-indigo-300 transition">
+                        <%= student.name %>
+                      </a>
+                    </div>
+                    <% if (student.parentName) { %>
+                    <div class="text-[11px] text-indigo-200/50">
+                      Guardian: <%= student.parentName %>
+                    </div>
+                    <% } %>
+                  </td>
+
+                  <!-- Level -->
+                  <td class="px-3 py-4">
+                    <span class="inline-block rounded-lg border border-indigo-400/20 bg-indigo-500/10 px-2 py-0.5 text-xs text-indigo-200">
+                      <%= student.level %>
+                    </span>
+                  </td>
+
+                  <!-- Contact -->
+                  <td class="px-3 py-4">
+                    <div class="text-white flex items-center gap-1.5">
+                      <i class="fa-solid fa-phone text-[10px] text-indigo-300/70"></i>
+                      <span><%= student.phone %></span>
+                    </div>
+                    <% if (student.studentEmail || student.parentEmail) { %>
+                    <div class="text-[11px] text-indigo-200/50 truncate max-w-[180px]">
+                      <%= student.studentEmail || student.parentEmail %>
+                    </div>
+                    <% } %>
+                  </td>
+
+                  <!-- Enrolled Date -->
+                  <td class="px-3 py-4 text-indigo-200/60 text-xs">
+                    <%= new Date(student.enrollmentDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+                  </td>
+
+                  <!-- Status -->
+                  <td class="px-3 py-4">
+                    <% if (student.status === 'active') { %>
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">
+                      <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Active
+                    </span>
+                    <% } else { %>
+                    <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-400/30 bg-rose-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-rose-300">
+                      <span class="h-1.5 w-1.5 rounded-full bg-rose-400"></span> Inactive
+                    </span>
+                    <% } %>
+                  </td>
+
+                  <!-- Actions -->
+                  <td class="py-4 pl-3 pr-6 text-right">
+                    <div class="flex items-center justify-end gap-1.5">
+                      <a
+                        href="/teacher/students/<%= student._id %>"
+                        class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-indigo-200 transition hover:bg-white/10 hover:text-white"
+                        title="View Profile"
+                      >
+                        <i class="fa-solid fa-eye text-xs"></i>
+                      </a>
+                      <a
+                        href="/teacher/students/<%= student._id %>/edit"
+                        class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-indigo-200 transition hover:bg-white/10 hover:text-white"
+                        title="Edit Information"
+                      >
+                        <i class="fa-solid fa-pen text-xs"></i>
+                      </a>
+                      <form
+                        action="/teacher/students/<%= student._id %>/status"
+                        method="POST"
+                        class="inline"
+                        onsubmit="return confirm('Are you sure you want to <%= student.status === 'active' ? 'deactivate' : 'reactivate' %> <%= student.name %>?');"
+                      >
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                        <button
+                          type="submit"
+                          class="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 <%= student.status === 'active' ? 'text-amber-300 hover:bg-amber-500/20' : 'text-emerald-300 hover:bg-emerald-500/20' %> transition"
+                          title="<%= student.status === 'active' ? 'Deactivate' : 'Reactivate' %>"
+                        >
+                          <i class="fa-solid <%= student.status === 'active' ? 'fa-user-slash' : 'fa-user-check' %> text-xs"></i>
+                        </button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Bar -->
+          <% if (pagination.totalPages > 1) { %>
+          <div class="flex items-center justify-between border-t border-white/10 px-6 py-4 text-xs text-indigo-200/70">
+            <div>
+              Showing page <span class="font-semibold text-white"><%= pagination.page %></span> of <span class="font-semibold text-white"><%= pagination.totalPages %></span> (<%= pagination.totalStudents %> students)
+            </div>
+            <div class="flex items-center gap-2">
+              <% if (pagination.hasPrev) { %>
+              <a
+                href="/teacher/students?q=<%= encodeURIComponent(query.q) %>&status=<%= query.status %>&page=<%= pagination.page - 1 %>"
+                class="btn-ghost py-1.5 px-3 text-xs"
+              >
+                <i class="fa-solid fa-chevron-left text-[10px]"></i> Previous
+              </a>
+              <% } %>
+
+              <% if (pagination.hasNext) { %>
+              <a
+                href="/teacher/students?q=<%= encodeURIComponent(query.q) %>&status=<%= query.status %>&page=<%= pagination.page + 1 %>"
+                class="btn-ghost py-1.5 px-3 text-xs"
+              >
+                Next <i class="fa-solid fa-chevron-right text-[10px]"></i>
+              </a>
+              <% } %>
+            </div>
+          </div>
+          <% } %>
+
+          <% } else { %>
+          <!-- Empty State -->
+          <div class="empty-state-box p-12">
+            <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.03] text-indigo-300/40">
+              <i class="fa-solid fa-user-graduate text-3xl"></i>
+            </div>
+            <h3 class="font-display text-lg font-bold text-white">No students found</h3>
+            <p class="mt-1 max-w-sm text-xs text-indigo-200/60 leading-relaxed">
+              <% if (query.q || query.status !== 'all') { %>
+              No student records matched your current search or filter query. Try resetting your filters.
+              <% } else { %>
+              Your student directory is currently empty. Register your first student to begin managing classes and tracking progress.
+              <% } %>
+            </p>
+            <div class="mt-5 flex items-center gap-3">
+              <% if (query.q || query.status !== 'all') { %>
+              <a href="/teacher/students" class="btn-ghost text-xs">
+                Clear Filters
+              </a>
+              <% } %>
+              <a
+                href="/teacher/students/new"
+                class="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2 text-xs font-semibold text-white shadow-md transition hover:brightness-110"
+              >
+                <i class="fa-solid fa-user-plus text-[10px]"></i>
+                <span>Add First Student</span>
+              </a>
+            </div>
+          </div>
+          <% } %>
+        </section>
+
+      </main>
+    </section>
+  </body>
+</html>

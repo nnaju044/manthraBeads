@@ -39,10 +39,16 @@
       <span id="soundIconEmoji" class="text-base leading-none">🔊</span>
     </button>
 
-    <!-- ── Desktop CTA ── -->
-    <a href="/contact" class="hidden shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_30px_rgba(80,140,255,0.45)] transition hover:brightness-110 lg:flex" aria-label="Book a free demo">
-      Book a Free Demo <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+    <!-- ── Desktop Teacher CTA ── -->
+    <% if (typeof teacher !== 'undefined' && teacher) { %>
+    <a href="/teacher/dashboard" id="navTeacherBtn" class="hidden shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_30px_rgba(80,140,255,0.45)] transition hover:brightness-110 lg:flex" aria-label="Teacher Dashboard">
+      Teacher Dashboard <i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i>
     </a>
+    <% } else { %>
+    <a href="/teacher/login" id="navTeacherBtn" class="hidden shrink-0 items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-5 py-2.5 text-sm font-semibold text-white shadow-[0_0_30px_rgba(80,140,255,0.45)] transition hover:brightness-110 lg:flex" aria-label="Teacher Login">
+      Teacher Login <i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i>
+    </a>
+    <% } %>
 
     <!-- ── Mobile hamburger ── -->
     <button
@@ -69,9 +75,15 @@
       <a href="/abacus-interactive" class="mobile-nav-link flex min-h-[44px] items-center rounded-xl px-4 py-2.5 text-sm font-medium text-indigo-100/80 transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400">Abacus</a>
       <a href="/about"              id="mobileNavAbout"   class="mobile-nav-link flex min-h-[44px] items-center rounded-xl px-4 py-2.5 text-sm font-medium text-indigo-100/80 transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400">About</a>
       <a href="/contact"            id="mobileNavContact" class="mobile-nav-link flex min-h-[44px] items-center rounded-xl px-4 py-2.5 text-sm font-medium text-indigo-100/80 transition hover:bg-white/5 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-indigo-400">Contact</a>
-      <a href="/contact" class="mt-2 flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110">
-        Book a Free Demo <i class="fa-regular fa-calendar" aria-hidden="true"></i>
+      <% if (typeof teacher !== 'undefined' && teacher) { %>
+      <a href="/teacher/dashboard" class="mt-2 flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110">
+        Teacher Dashboard <i class="fa-solid fa-chalkboard-user" aria-hidden="true"></i>
       </a>
+      <% } else { %>
+      <a href="/teacher/login" class="mt-2 flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:brightness-110">
+        Teacher Login <i class="fa-solid fa-arrow-right-to-bracket" aria-hidden="true"></i>
+      </a>
+      <% } %>
     </nav>
   </div>
 </div>

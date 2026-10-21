@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= student.name %> (<%= student.studentId %>) | ManthraBeads Teacher</title>
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+    <link rel="shortcut icon" href="/images/apple-touch-icon.png" />
+    <meta name="description" content="ManthraBeads Student Profile — <%= student.name %>" />
+
+    <!-- Tailwind CSS (CDN build w/ inline config) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+              body: ['"Poppins"', 'sans-serif'],
+            },
+            colors: {
+              night: {
+                950: '#070a1f',
+                900: '#0b0f2e',
+                800: '#12183f',
+                700: '#1a2150',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <!-- Site & Teacher CSS -->
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/teacher.css" />
+  </head>
+
+  <body class="font-body bg-night-950 overflow-x-hidden min-h-screen text-slate-100">
+    <section class="relative w-full min-h-screen bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] pb-20">
+
+      <!-- Ambient Glow Orbs -->
+      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
+        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
+      </div>
+
+      <!-- Navbar -->
+      <%- include('../../partials/navbar') %>
+
+      <!-- Main Container -->
+      <main id="main-content" class="relative z-10 mx-auto max-w-[1240px] px-4 pt-6 sm:px-8 sm:pt-8 lg:px-12">
+
+        <!-- Top Header & Breadcrumbs -->
+        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div class="flex items-center gap-3">
+            <a
+              href="/teacher/students"
+              class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-indigo-200 transition hover:bg-white/10 hover:text-white"
+              title="Back to Students Directory"
+            >
+              <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            <div>
+              <div class="flex flex-wrap items-center gap-2.5">
+                <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">
+                  <%= student.name %>
+                </h1>
+                <span class="rounded-lg border border-indigo-400/30 bg-indigo-500/15 px-2.5 py-0.5 font-mono text-xs font-semibold text-indigo-300">
+                  <%= student.studentId %>
+                </span>
+                <% if (student.status === 'active') { %>
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-300">
+                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Active
+                </span>
+                <% } else { %>
+                <span class="inline-flex items-center gap-1.5 rounded-full border border-rose-400/30 bg-rose-500/15 px-2.5 py-0.5 text-xs font-semibold text-rose-300">
+                  <span class="h-1.5 w-1.5 rounded-full bg-rose-400"></span> Inactive
+                </span>
+                <% } %>
+              </div>
+              <p class="mt-0.5 text-xs text-indigo-200/60 sm:text-sm">
+                <%= student.level %> &bull; Enrolled <%= new Date(student.enrollmentDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) %>
+              </p>
+            </div>
+          </div>
+
+          <!-- Actions: Edit & Status Toggle -->
+          <div class="flex items-center gap-2.5">
+            <a
+              href="/teacher/students/<%= student._id %>/edit"
+              class="btn-ghost"
+              title="Edit Student Information"
+            >
+              <i class="fa-solid fa-pen text-xs"></i>
+              <span>Edit Profile</span>
+            </a>
+
+            <form
+              action="/teacher/students/<%= student._id %>/status"
+              method="POST"
+              class="inline"
+              onsubmit="return confirm('Are you sure you want to <%= student.status === 'active' ? 'deactivate' : 'reactivate' %> <%= student.name %>? Historical records will be preserved.');"
+            >
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button
+                type="submit"
+                class="btn-ghost <%= student.status === 'active' ? 'hover:border-rose-400/50 hover:text-rose-300' : 'hover:border-emerald-400/50 hover:text-emerald-300' %>"
+              >
+                <i class="fa-solid <%= student.status === 'active' ? 'fa-user-slash' : 'fa-user-check' %> text-xs"></i>
+                <span><%= student.status === 'active' ? 'Deactivate' : 'Reactivate' %></span>
+              </button>
+            </form>
+          </div>
+        </div>
+
+        <!-- Alert Notification -->
+        <% if (locals.alertMessage) { %>
+        <div class="teacher-alert success mb-6">
+          <i class="fa-solid fa-circle-check shrink-0"></i>
+          <span><%= alertMessage %></span>
+        </div>
+        <% } %>
+
+        <!-- Grid Layout: Info Cards & Upcoming Placeholders -->
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
+
+          <!-- ── Left Column (Profile Details) ── -->
+          <div class="flex flex-col gap-6 lg:col-span-1">
+
+            <!-- Card 1: Contact Details -->
+            <section class="glass-card p-6">
+              <h2 class="text-xs font-semibold uppercase tracking-wider text-indigo-300 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-address-card text-indigo-400"></i> Contact Details
+              </h2>
+
+              <dl class="space-y-3.5 text-xs">
+                <div>
+                  <dt class="text-indigo-200/50">Primary Phone</dt>
+                  <dd class="mt-0.5 font-medium text-white flex items-center gap-2">
+                    <i class="fa-solid fa-phone text-[10px] text-indigo-300"></i>
+                    <a href="tel:<%= student.phone %>" class="hover:underline"><%= student.phone %></a>
+                  </dd>
+                </div>
+
+                <div>
+                  <dt class="text-indigo-200/50">Parent / Guardian Name</dt>
+                  <dd class="mt-0.5 font-medium text-white">
+                    <%= student.parentName || '—' %>
+                  </dd>
+                </div>
+
+                <div>
+                  <dt class="text-indigo-200/50">Parent Email</dt>
+                  <dd class="mt-0.5 font-medium text-white break-all">
+                    <% if (student.parentEmail) { %>
+                    <a href="mailto:<%= student.parentEmail %>" class="hover:underline text-indigo-200">
+                      <%= student.parentEmail %>
+                    </a>
+                    <% } else { %>
+                    <span class="text-indigo-200/40">Not provided</span>
+                    <% } %>
+                  </dd>
+                </div>
+
+                <div>
+                  <dt class="text-indigo-200/50">Student Email</dt>
+                  <dd class="mt-0.5 font-medium text-white break-all">
+                    <% if (student.studentEmail) { %>
+                    <a href="mailto:<%= student.studentEmail %>" class="hover:underline text-indigo-200">
+                      <%= student.studentEmail %>
+                    </a>
+                    <% } else { %>
+                    <span class="text-indigo-200/40">Not provided</span>
+                    <% } %>
+                  </dd>
+                </div>
+              </dl>
+            </section>
+
+            <!-- Card 2: Academic & Notes -->
+            <section class="glass-card p-6">
+              <h2 class="text-xs font-semibold uppercase tracking-wider text-indigo-300 mb-4 flex items-center gap-2">
+                <i class="fa-solid fa-graduation-cap text-indigo-400"></i> Academic Info
+              </h2>
+
+              <dl class="space-y-3.5 text-xs">
+                <div>
+                  <dt class="text-indigo-200/50">Current Level</dt>
+                  <dd class="mt-0.5">
+                    <span class="inline-block rounded-lg border border-indigo-400/20 bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-200">
+                      <%= student.level %>
+                    </span>
+                  </dd>
+                </div>
+
+                <div>
+                  <dt class="text-indigo-200/50">Enrollment Date</dt>
+                  <dd class="mt-0.5 font-medium text-white">
+                    <%= new Date(student.enrollmentDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' }) %>
+                  </dd>
+                </div>
+
+                <div>
+                  <dt class="text-indigo-200/50">Notes & Observations</dt>
+                  <dd class="mt-0.5 text-indigo-200/80 leading-relaxed bg-white/[0.02] p-2.5 rounded-lg border border-white/5">
+                    <%= student.notes || 'No academic notes recorded for this student.' %>
+                  </dd>
+                </div>
+              </dl>
+            </section>
+
+          </div>
+
+          <!-- ── Right Column (Future Modules Placeholders) ── -->
+          <div class="flex flex-col gap-6 lg:col-span-2">
+
+            <!-- Card 3: Class Packages & Payment Ledger (Stage 4) -->
+            <section class="glass-card p-6 sm:p-7">
+              <div class="mb-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-amber-500/15 text-amber-300">
+                    <i class="fa-solid fa-credit-card text-sm"></i>
+                  </div>
+                  <div>
+                    <h2 class="font-display text-base font-bold text-white">Prepaid Class Packages & Ledger</h2>
+                    <p class="text-xs text-indigo-200/60">Class balance, fees received, and payment records</p>
+                  </div>
+                </div>
+                <span class="tab-badge">Stage 4 Feature</span>
+              </div>
+
+              <div class="empty-state-box p-8">
+                <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-amber-500/10 text-amber-300/60">
+                  <i class="fa-solid fa-receipt text-xl"></i>
+                </div>
+                <h3 class="font-display text-sm font-semibold text-white">Package ledger not initialized</h3>
+                <p class="mt-1 max-w-md text-xs text-indigo-200/60 leading-relaxed">
+                  The prepaid class package system will be implemented in Stage 4. You will be able to assign class packs (e.g. ₹1,000 for 4 classes), record payments, and monitor remaining class credits for <%= student.name %>.
+                </p>
+              </div>
+            </section>
+
+            <!-- Card 4: Attendance History (Stage 5) -->
+            <section class="glass-card p-6 sm:p-7">
+              <div class="mb-4 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                  <div class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-emerald-500/15 text-emerald-300">
+                    <i class="fa-solid fa-clipboard-check text-sm"></i>
+                  </div>
+                  <div>
+                    <h2 class="font-display text-base font-bold text-white">Attendance & Session History</h2>
+                    <p class="text-xs text-indigo-200/60">Class roll logs and completion history</p>
+                  </div>
+                </div>
+                <span class="tab-badge">Stage 5 Feature</span>
+              </div>
+
+              <div class="empty-state-box p-8">
+                <div class="mb-3 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-emerald-500/10 text-emerald-300/60">
+                  <i class="fa-solid fa-calendar-check text-xl"></i>
+                </div>
+                <h3 class="font-display text-sm font-semibold text-white">Attendance tracking inactive</h3>
+                <p class="mt-1 max-w-md text-xs text-indigo-200/60 leading-relaxed">
+                  Attendance logs will be connected in Stage 5. Each time you mark <%= student.name %> present in a class session, attendance timestamps and automatic package deduction will be recorded here.
+                </p>
+              </div>
+            </section>
+
+          </div>
+
+        </div>
+
+      </main>
+    </section>
+  </body>
+</html>
