@@ -1,12 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const { requireAuth, csrfProtection } = require('../middleware/auth');
-const { loginLimiter } = require('../middleware/rateLimiter');
+const {
+  loginLimiter,
+  otpRequestLimiter,
+  otpVerifyLimiter,
+  passwordResetLimiter,
+} = require('../middleware/rateLimiter');
 const authController = require('../controllers/authController');
 const dashboardController = require('../controllers/dashboardController');
 const studentController = require('../controllers/studentController');
 const packageController = require('../controllers/packageController');
 const attendanceController = require('../controllers/attendanceController');
+const notificationController = require('../controllers/notificationController');
 
 // ── CSRF protection on all teacher routes ──
 router.use(csrfProtection);
@@ -22,6 +28,15 @@ router.get('/', (req, res) => {
 router.get('/login', authController.showLogin);
 router.post('/login', loginLimiter, authController.login);
 router.post('/logout', requireAuth, authController.logout);
+
+// ── Password Reset (Email OTP) ──
+router.get('/forgot-password', authController.showForgotPassword);
+router.post('/forgot-password', otpRequestLimiter, authController.sendResetOtp);
+router.get('/verify-otp', authController.showVerifyOtp);
+router.post('/verify-otp', otpVerifyLimiter, authController.verifyOtp);
+router.post('/resend-otp', otpRequestLimiter, authController.resendOtp);
+router.get('/reset-password', authController.showResetPassword);
+router.post('/reset-password', passwordResetLimiter, authController.resetPassword);
 
 // ── Teacher Dashboard (Stage 2) ──
 router.get('/dashboard', requireAuth, dashboardController.showDashboard);
@@ -50,7 +65,13 @@ router.post('/attendance/sessions', requireAuth, attendanceController.createSess
 router.post('/attendance', requireAuth, attendanceController.saveAttendance);
 router.get('/attendance/export.xlsx', requireAuth, attendanceController.exportAttendanceExcel);
 
-// ── Upcoming Section Placeholders (Stage 6) ──
+// ── Automated Email Notifications (Stage 6) ──
+router.get('/notifications', requireAuth, notificationController.listNotifications);
+router.post('/notifications/:id/retry', requireAuth, notificationController.retryNotification);
+router.post('/notifications/retry-failed', requireAuth, notificationController.retryAllFailed);
+router.post('/notifications/resend-attendance/:attendanceId', requireAuth, notificationController.resendAttendanceNotification);
+
+// ── Upcoming Section Placeholders (Stage 7) ──
 router.get('/reports', requireAuth, dashboardController.showSectionPlaceholder('reports'));
 
 module.exports = router;

@@ -1,9 +1,24 @@
 require('dotenv').config();
- const express = require('express');
+const express = require('express');
 const path = require('path');
 const methodOverride = require('method-override');
 
 const app = express();
+
+// Trust reverse proxy (Vercel / AWS / Nginx) for secure cookies and client IP rate limiting
+app.set('trust proxy', 1);
+
+// Security Headers Middleware
+app.use((req, res, next) => {
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+  res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+  res.setHeader('X-XSS-Protection', '0');
+  if (process.env.NODE_ENV === 'production') {
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  }
+  next();
+});
 
 // View engine
 app.set('view engine', 'ejs');
@@ -19,6 +34,14 @@ app.use(methodOverride('_method'));
 // Static files — cache for 1 day in production, 0 in dev
 var staticMaxAge = process.env.NODE_ENV === 'production' ? 86400000 : 0;
 app.use(express.static(path.join(__dirname, 'public'), { maxAge: staticMaxAge }));
+
+// Private cache control for teacher portal — prevents browser disk caching on shared machines
+app.use('/teacher', (req, res, next) => {
+  res.setHeader('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
+  next();
+});
 
 // ── SESSION & DATABASE (when MONGODB_URI is configured) ──
 if (process.env.MONGODB_URI) {
@@ -80,6 +103,25 @@ if (process.env.MONGODB_URI) {
 // ── PUBLIC ROUTES ──
 const routes = require('./routes/index');
 app.use('/', routes);
+
+// ── 404 NOT FOUND HANDLER ──
+app.use((req, res) => {
+  res.status(404).render('404', {
+    url: req.originalUrl,
+  });
+});
+
+// ── 500 INTERNAL SERVER ERROR HANDLER ──
+// Suppresses internal stack traces and secrets in production
+app.use((err, req, res, next) => {
+  console.error('Unhandled Server Error:', err.message);
+  if (res.headersSent) {
+    return next(err);
+  }
+  res.status(err.status || 500).render('500', {
+    error: process.env.NODE_ENV === 'production' ? null : err.message,
+  });
+});
 
 // Local development only
 if (require.main === module && process.env.NODE_ENV !== 'production') {

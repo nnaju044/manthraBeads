@@ -1,77 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teacher Dashboard | ManthraBeads</title>
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
-    <link rel="shortcut icon" href="/images/apple-touch-icon.png" />
-    <meta
-      name="description"
-      content="ManthraBeads Teacher Management Dashboard — Track active students, attendance sessions, and class package payments."
-    />
 
-    <!-- Tailwind CSS (CDN build w/ inline config) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
-              body: ['"Poppins"', 'sans-serif'],
-            },
-            colors: {
-              night: {
-                950: '#070a1f',
-                900: '#0b0f2e',
-                800: '#12183f',
-                700: '#1a2150',
-              },
-            },
-            boxShadow: {
-              glow: '0 0 25px rgba(255, 200, 60, 0.55)',
-              'glow-blue': '0 0 30px rgba(80, 140, 255, 0.45)',
-              'glow-pink': '0 0 25px rgba(255, 90, 200, 0.5)',
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Dashboard | ManthraBeads</title>
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png" />
+  <link rel="shortcut icon" href="/images/apple-touch-icon.png" />
+  <meta name="description"
+    content="ManthraBeads Teacher Management Dashboard — Track active students, attendance sessions, and class package payments." />
+
+  <!-- Tailwind CSS (CDN build w/ inline config) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+            body: ['"Poppins"', 'sans-serif'],
+          },
+          colors: {
+            night: {
+              950: '#070a1f',
+              900: '#0b0f2e',
+              800: '#12183f',
+              700: '#1a2150',
             },
           },
+          boxShadow: {
+            glow: '0 0 25px rgba(255, 200, 60, 0.55)',
+            'glow-blue': '0 0 30px rgba(80, 140, 255, 0.45)',
+            'glow-pink': '0 0 25px rgba(255, 90, 200, 0.5)',
+          },
         },
-      };
-    </script>
+      },
+    };
+  </script>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Site-wide CSS & Teacher Panel CSS -->
-    <link rel="stylesheet" href="/css/site.css" />
-    <link rel="stylesheet" href="/css/teacher.css" />
-  </head>
+  <!-- Site-wide CSS & Teacher Panel CSS -->
+  <link rel="stylesheet" href="/css/site.css" />
+  <link rel="stylesheet" href="/css/teacher.css" />
+</head>
 
-  <body class="font-body bg-night-950 overflow-x-hidden min-h-screen text-slate-100">
-    <section class="relative w-full min-h-screen bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] pb-20">
+<body class="font-body bg-night-950 overflow-x-hidden min-h-screen text-slate-100">
+  <section class="relative w-full min-h-screen bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740] pb-20">
 
-      <!-- ── Starfield / Ambient Glow Orbs ── -->
-      <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
-        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
-        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
+    <!-- ── Starfield / Ambient Glow Orbs ── -->
+    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
+      <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+      <div
+        class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]">
       </div>
+      <div
+        class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72">
+      </div>
+    </div>
 
-      <!-- ── Shared Site Navbar ── -->
-      <%- include('../partials/navbar') %>
+    <!-- ── Shared Site Navbar ── -->
+    <%- include('../partials/navbar') %>
 
       <!-- ── Dashboard Main Wrapper ── -->
       <main id="main-content" class="relative z-10 mx-auto max-w-[1340px] px-4 pt-6 sm:px-8 sm:pt-8 lg:px-12">
@@ -83,7 +81,8 @@
               <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">
                 Welcome back, <%= teacher.name %>
               </h1>
-              <span class="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-300">
+              <span
+                class="hidden sm:inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2.5 py-0.5 text-xs font-semibold text-emerald-300">
                 <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
                 Active Session
               </span>
@@ -95,11 +94,9 @@
 
           <div class="flex items-center gap-3">
             <!-- Quick Action: Add Student -->
-            <a
-              href="/teacher/students/new"
+            <a href="/teacher/students/new"
               class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2.5 text-sm font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] transition hover:brightness-110"
-              title="Add a new student"
-            >
+              title="Add a new student">
               <i class="fa-solid fa-user-plus text-xs"></i>
               <span>Add Student</span>
             </a>
@@ -107,11 +104,7 @@
             <!-- Logout -->
             <form action="/teacher/logout" method="POST" class="inline">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-              <button
-                type="submit"
-                class="btn-ghost"
-                title="Sign out of teacher panel"
-              >
+              <button type="submit" class="btn-ghost" title="Sign out of teacher panel">
                 <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
                 <span class="hidden sm:inline">Logout</span>
               </button>
@@ -122,442 +115,474 @@
         <!-- ── Dashboard Horizontal Navigation Tabs ── -->
         <nav
           class="mb-8 flex overflow-x-auto gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 backdrop-blur-md no-scrollbar"
-          aria-label="Teacher Dashboard Navigation"
-        >
-          <a
-            href="/teacher/dashboard"
+          aria-label="Teacher Dashboard Navigation">
+          <a href="/teacher/dashboard"
             class="teacher-tab <%= (locals.activeSection || 'dashboard') === 'dashboard' ? 'active' : '' %>"
-            aria-current="<%= (locals.activeSection || 'dashboard') === 'dashboard' ? 'page' : 'false' %>"
-          >
+            aria-current="<%= (locals.activeSection || 'dashboard') === 'dashboard' ? 'page' : 'false' %>">
             <i class="fa-solid fa-gauge-high text-sm"></i>
             <span>Dashboard</span>
           </a>
-          <a
-            href="/teacher/students"
-            class="teacher-tab <%= (locals.activeSection || '') === 'students' ? 'active' : '' %>"
-          >
+          <a href="/teacher/students"
+            class="teacher-tab <%= (locals.activeSection || '') === 'students' ? 'active' : '' %>">
             <i class="fa-solid fa-user-graduate text-sm"></i>
             <span>Students</span>
           </a>
-          <a
-            href="/teacher/attendance"
-            class="teacher-tab <%= (locals.activeSection || '') === 'attendance' ? 'active' : '' %>"
-          >
+          <a href="/teacher/attendance"
+            class="teacher-tab <%= (locals.activeSection || '') === 'attendance' ? 'active' : '' %>">
             <i class="fa-solid fa-clipboard-check text-sm"></i>
             <span>Attendance</span>
           </a>
-          <a
-            href="/teacher/packages"
-            class="teacher-tab <%= (locals.activeSection || '') === 'packages' ? 'active' : '' %>"
-          >
+          <a href="/teacher/packages"
+            class="teacher-tab <%= (locals.activeSection || '') === 'packages' ? 'active' : '' %>">
             <i class="fa-solid fa-credit-card text-sm"></i>
             <span>Packages & Payments</span>
           </a>
-          <a
-            href="/teacher/reports"
-            class="teacher-tab <%= (locals.activeSection || '') === 'reports' ? 'active' : '' %>"
-          >
+          <a href="/teacher/notifications"
+            class="teacher-tab <%= (locals.activeSection || '') === 'notifications' ? 'active' : '' %>">
+            <i class="fa-solid fa-envelope-open-text text-sm"></i>
+            <span>Notifications</span>
+          </a>
+          <a href="/teacher/reports"
+            class="teacher-tab <%= (locals.activeSection || '') === 'reports' ? 'active' : '' %>">
             <i class="fa-solid fa-chart-pie text-sm"></i>
             <span>Reports</span>
-            <span class="tab-badge">Stage 6</span>
           </a>
         </nav>
 
         <!-- ── Error Alert (if present) ── -->
-        <% if (typeof error !== 'undefined' && error) { %>
-        <div class="teacher-alert error mb-6">
-          <i class="fa-solid fa-triangle-exclamation shrink-0 text-rose-400"></i>
-          <span><%= error %></span>
-        </div>
-        <% } %>
-
-        <!-- ── 4 SUMMARY METRIC CARDS ── -->
-        <section aria-labelledby="metrics-heading" class="mb-8">
-          <h2 id="metrics-heading" class="sr-only">Key Metrics Overview</h2>
-
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            
-            <!-- 1. Total Active Students -->
-            <a href="/teacher/students" class="stat-card group block">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
-                    Active Students
-                  </p>
-                  <div class="mt-2 flex items-baseline gap-2">
-                    <span class="font-display text-3xl font-bold text-white tracking-tight">
-                      <%= stats && stats.activeStudents && stats.activeStudents.isReady ? stats.activeStudents.value : '0' %>
-                    </span>
-                    <% if (!stats || !stats.activeStudents || !stats.activeStudents.isReady) { %>
-                    <span class="text-xs text-indigo-200/50">enrolled</span>
-                    <% } %>
-                  </div>
-                </div>
-                <div class="stat-icon-wrap bg-indigo-500/15 text-indigo-300 group-hover:scale-105 transition-transform">
-                  <i class="fa-solid fa-users text-lg"></i>
-                </div>
-              </div>
-              <div class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
-                <span>Manage directory</span>
-                <i class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform"></i>
-              </div>
-            </a>
-
-            <!-- 2. Today's Classes -->
-            <a href="/teacher/attendance" class="stat-card group block">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
-                    Today's Classes
-                  </p>
-                  <div class="mt-2 flex items-baseline gap-2">
-                    <span class="font-display text-3xl font-bold text-white tracking-tight">
-                      <%= stats && stats.todayClasses && stats.todayClasses.isReady ? stats.todayClasses.value : '0' %>
-                    </span>
-                    <span class="text-xs text-indigo-200/50">scheduled</span>
-                  </div>
-                </div>
-                <div class="stat-icon-wrap bg-violet-500/15 text-violet-300 group-hover:scale-105 transition-transform">
-                  <i class="fa-solid fa-chalkboard text-lg"></i>
-                </div>
-              </div>
-              <div class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
-                <span>View class schedule</span>
-                <i class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform"></i>
-              </div>
-            </a>
-
-            <!-- 3. Today's Attendance Percentage -->
-            <a href="/teacher/attendance" class="stat-card group block">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
-                    Today's Attendance
-                  </p>
-                  <div class="mt-2 flex items-baseline gap-2">
-                    <span class="font-display text-3xl font-bold text-white tracking-tight">
-                      <%= stats && stats.todayAttendancePct && stats.todayAttendancePct.isReady && stats.todayAttendancePct.value !== null ? stats.todayAttendancePct.value + '%' : '—' %>
-                    </span>
-                    <span class="text-xs text-indigo-200/50">turnout</span>
-                  </div>
-                </div>
-                <div class="stat-icon-wrap bg-emerald-500/15 text-emerald-300 group-hover:scale-105 transition-transform">
-                  <i class="fa-solid fa-clipboard-check text-lg"></i>
-                </div>
-              </div>
-              <div class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
-                <span>Mark attendance</span>
-                <i class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform"></i>
-              </div>
-            </a>
-
-            <!-- 4. Outstanding Payments -->
-            <a href="/teacher/packages" class="stat-card group block">
-              <div class="flex items-start justify-between">
-                <div>
-                  <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
-                    Outstanding Dues
-                  </p>
-                  <div class="mt-2 flex items-baseline gap-2">
-                    <span class="font-display text-3xl font-bold text-white tracking-tight">
-                      <%= stats && stats.pendingPayments && stats.pendingPayments.isReady ? '₹' + stats.pendingPayments.value : '₹0' %>
-                    </span>
-                    <span class="text-xs text-indigo-200/50">due</span>
-                  </div>
-                </div>
-                <div class="stat-icon-wrap bg-amber-500/15 text-amber-300 group-hover:scale-105 transition-transform">
-                  <i class="fa-solid fa-indian-rupee-sign text-lg"></i>
-                </div>
-              </div>
-              <div class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
-                <span>Review ledger</span>
-                <i class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform"></i>
-              </div>
-            </a>
-
+        <% if (typeof error !=='undefined' && error) { %>
+          <div class="teacher-alert error mb-6">
+            <i class="fa-solid fa-triangle-exclamation shrink-0 text-rose-400"></i>
+            <span>
+              <%= error %>
+            </span>
           </div>
-        </section>
+          <% } %>
 
-        <!-- ── MAIN CONTENT 2-COLUMN GRID ── -->
-        <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+            <!-- ── 4 SUMMARY METRIC CARDS ── -->
+            <section aria-labelledby="metrics-heading" class="mb-8">
+              <h2 id="metrics-heading" class="sr-only">Key Metrics Overview</h2>
 
-          <!-- ── Left Column (2 Cols on lg) ── -->
-          <div class="flex flex-col gap-8 lg:col-span-2">
+              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 
-            <!-- Card: Today's Class / Session Overview -->
-            <section class="glass-card p-6 sm:p-7">
-              <div class="mb-5 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                  <div class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-indigo-500/15 text-indigo-300">
-                    <i class="fa-solid fa-calendar-day text-sm"></i>
-                  </div>
-                  <div>
-                    <h2 class="font-display text-lg font-bold text-white">Today's Class Schedule</h2>
-                    <p class="text-xs text-indigo-200/60">Scheduled batches & session timings</p>
-                  </div>
-                </div>
-
-                <a href="/teacher/attendance" class="text-xs text-indigo-300 transition hover:text-white">
-                  View All <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
-                </a>
-              </div>
-
-              <% if (locals.todayClasses && todayClasses.length > 0) { %>
-              <div class="space-y-3">
-                <% todayClasses.forEach(function(sess) { %>
-                <div class="flex items-center justify-between p-3.5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition">
-                  <div class="flex items-center gap-3">
-                    <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-300 font-mono text-xs font-bold">
-                      <i class="fa-solid fa-chalkboard"></i>
-                    </div>
+                <!-- 1. Total Active Students -->
+                <a href="/teacher/students" class="stat-card group block">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <h4 class="font-semibold text-sm text-white"><%= sess.sessionName %></h4>
-                      <p class="text-xs text-indigo-200/60 font-mono"><%= sess.startTime %> &ndash; <%= sess.endTime %> &bull; <span class="text-slate-400 font-sans"><%= sess.level %></span></p>
+                      <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                        Active Students
+                      </p>
+                      <div class="mt-2 flex items-baseline gap-2">
+                        <span class="font-display text-3xl font-bold text-white tracking-tight">
+                          <%= stats && stats.activeStudents && stats.activeStudents.isReady ? stats.activeStudents.value
+                            : '0' %>
+                        </span>
+                        <% if (!stats || !stats.activeStudents || !stats.activeStudents.isReady) { %>
+                          <span class="text-xs text-indigo-200/50">enrolled</span>
+                          <% } %>
+                      </div>
+                    </div>
+                    <div
+                      class="stat-icon-wrap bg-indigo-500/15 text-indigo-300 group-hover:scale-105 transition-transform">
+                      <i class="fa-solid fa-users text-lg"></i>
                     </div>
                   </div>
-                  <%
-                    let sDate = '';
-                    try {
-                      const dt = new Date(sess.date);
-                      sDate = isNaN(dt.getTime()) ? '' : dt.toISOString().split('T')[0];
-                    } catch (e) { sDate = ''; }
-                  %>
-                  <a
-                    href="/teacher/attendance?date=<%= sDate %>&sessionId=<%= sess._id %>"
-                    class="rounded-lg border border-indigo-400/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-200 hover:bg-indigo-500/20 hover:text-white transition"
-                  >
-                    Take Roll
-                  </a>
-                </div>
-                <% }); %>
-              </div>
-              <% } else { %>
-              <!-- Genuine empty state -->
-              <div class="empty-state-box">
-                <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-indigo-200/40">
-                  <i class="fa-solid fa-calendar-xmark text-2xl"></i>
-                </div>
-                <h3 class="font-display text-base font-semibold text-white">No classes scheduled for today</h3>
-                <p class="mt-1 max-w-sm text-xs text-indigo-200/60 leading-relaxed">
-                  Start by creating a class session to track attendance and automated package deductions for your students.
-                </p>
-                <a
-                  href="/teacher/attendance"
-                  class="mt-4 inline-flex items-center gap-2 rounded-xl border border-indigo-400/30 bg-indigo-500/10 px-4 py-2 text-xs font-semibold text-indigo-200 transition hover:bg-indigo-500/20 hover:text-white"
-                >
-                  <i class="fa-solid fa-plus text-[10px]"></i>
-                  <span>Create Class Session</span>
-                </a>
-              </div>
-              <% } %>
-            </section>
-
-            <!-- Card: Recent Attendance Activity -->
-            <section class="glass-card p-6 sm:p-7">
-              <div class="mb-5 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                  <div class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-emerald-500/15 text-emerald-300">
-                    <i class="fa-solid fa-clipboard-user text-sm"></i>
+                  <div
+                    class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
+                    <span>Manage directory</span>
+                    <i
+                      class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform"></i>
                   </div>
-                  <div>
-                    <h2 class="font-display text-lg font-bold text-white">Recent Attendance Activity</h2>
-                    <p class="text-xs text-indigo-200/60">Session logs & student participation</p>
-                  </div>
-                </div>
-
-                <a href="/teacher/attendance" class="text-xs text-indigo-300 transition hover:text-white">
-                  Open Sheet <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
                 </a>
-              </div>
 
-              <% if (locals.recentAttendance && recentAttendance.length > 0) { %>
-              <div class="overflow-x-auto">
-                <table class="w-full text-left text-xs">
-                  <thead class="border-b border-white/10 text-[10px] uppercase text-indigo-200/50">
-                    <tr>
-                      <th class="py-2.5 px-3">Student</th>
-                      <th class="py-2.5 px-3">Session</th>
-                      <th class="py-2.5 px-3">Status</th>
-                      <th class="py-2.5 px-3">Credit</th>
-                      <th class="py-2.5 px-3 text-right">Time</th>
-                    </tr>
-                  </thead>
-                  <tbody class="divide-y divide-white/5">
-                    <% recentAttendance.forEach(function(att) { %>
-                    <tr class="hover:bg-white/[0.02]">
-                      <td class="py-2.5 px-3 font-semibold text-white">
-                        <%= att.student ? att.student.name : 'Student' %>
-                      </td>
-                      <td class="py-2.5 px-3 text-indigo-200/70">
-                        <%= att.session ? att.session.sessionName : 'Session' %>
-                      </td>
-                      <td class="py-2.5 px-3">
-                        <% if (att.status === 'present') { %>
-                        <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Present</span>
-                        <% } else if (att.status === 'late') { %>
-                        <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-amber-500/20 text-amber-300 border border-amber-400/30">Late</span>
-                        <% } else if (att.status === 'absent') { %>
-                        <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-rose-500/20 text-rose-300 border border-rose-400/30">Absent</span>
-                        <% } else { %>
-                        <span class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-blue-500/20 text-blue-300 border border-blue-400/30">Excused</span>
-                        <% } %>
-                      </td>
-                      <td class="py-2.5 px-3">
-                        <% if (att.creditConsumed) { %>
-                        <span class="text-emerald-300 font-semibold text-[10px]">1 Deducted</span>
-                        <% } else { %>
-                        <span class="text-slate-500 text-[10px]">None</span>
-                        <% } %>
-                      </td>
-                      <td class="py-2.5 px-3 text-right text-indigo-200/50">
-                        <%= new Date(att.createdAt || att.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) %>
-                      </td>
-                    </tr>
-                    <% }); %>
-                  </tbody>
-                </table>
-              </div>
-              <% } else { %>
-              <!-- Genuine empty state -->
-              <div class="empty-state-box">
-                <div class="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-indigo-200/40">
-                  <i class="fa-solid fa-clipboard-list text-2xl"></i>
-                </div>
-                <h3 class="font-display text-base font-semibold text-white">No recent attendance records</h3>
-                <p class="mt-1 max-w-sm text-xs text-indigo-200/60 leading-relaxed">
-                  Attendance logs, present/absent counts, and automated package credit deductions will display here once daily sessions are marked.
-                </p>
-              </div>
-              <% } %>
-            </section>
-
-          </div>
-
-          <!-- ── Right Column (1 Col on lg) ── -->
-          <div class="flex flex-col gap-8">
-
-            <!-- Card: Quick Actions Panel -->
-            <section class="glass-card p-6">
-              <div class="mb-4 flex items-center gap-2.5">
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-violet-500/15 text-violet-300">
-                  <i class="fa-solid fa-bolt text-sm"></i>
-                </div>
-                <div>
-                  <h2 class="font-display text-base font-bold text-white">Quick Actions</h2>
-                  <p class="text-xs text-indigo-200/60">Common teacher workflows</p>
-                </div>
-              </div>
-
-              <div class="flex flex-col gap-2.5">
-                <a href="/teacher/students/new" class="quick-action-item group">
-                  <div class="flex items-center gap-3">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-300">
-                      <i class="fa-solid fa-user-plus text-xs"></i>
-                    </div>
+                <!-- 2. Today's Classes -->
+                <a href="/teacher/attendance" class="stat-card group block">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <p class="text-xs font-semibold text-white group-hover:text-indigo-200">Add Student</p>
-                      <p class="text-[11px] text-indigo-200/50">Register student profile</p>
+                      <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                        Today's Classes
+                      </p>
+                      <div class="mt-2 flex items-baseline gap-2">
+                        <span class="font-display text-3xl font-bold text-white tracking-tight">
+                          <%= stats && stats.todayClasses && stats.todayClasses.isReady ? stats.todayClasses.value : '0'
+                            %>
+                        </span>
+                        <span class="text-xs text-indigo-200/50">scheduled</span>
+                      </div>
+                    </div>
+                    <div
+                      class="stat-icon-wrap bg-violet-500/15 text-violet-300 group-hover:scale-105 transition-transform">
+                      <i class="fa-solid fa-chalkboard text-lg"></i>
                     </div>
                   </div>
-                  <span class="tab-badge">Stage 3</span>
+                  <div
+                    class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
+                    <span>View class schedule</span>
+                    <i
+                      class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform"></i>
+                  </div>
                 </a>
 
-                <a href="/teacher/attendance" class="quick-action-item group">
-                  <div class="flex items-center gap-3">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
-                      <i class="fa-solid fa-calendar-check text-xs"></i>
-                    </div>
+                <!-- 3. Today's Attendance Percentage -->
+                <a href="/teacher/attendance" class="stat-card group block">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <p class="text-xs font-semibold text-white group-hover:text-emerald-200">Mark Attendance</p>
-                      <p class="text-[11px] text-indigo-200/50">Take daily class roll</p>
+                      <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                        Today's Attendance
+                      </p>
+                      <div class="mt-2 flex items-baseline gap-2">
+                        <span class="font-display text-3xl font-bold text-white tracking-tight">
+                          <%= stats && stats.todayAttendancePct && stats.todayAttendancePct.isReady &&
+                            stats.todayAttendancePct.value !==null ? stats.todayAttendancePct.value + '%' : '—' %>
+                        </span>
+                        <span class="text-xs text-indigo-200/50">turnout</span>
+                      </div>
+                    </div>
+                    <div
+                      class="stat-icon-wrap bg-emerald-500/15 text-emerald-300 group-hover:scale-105 transition-transform">
+                      <i class="fa-solid fa-clipboard-check text-lg"></i>
                     </div>
                   </div>
-                  <span class="tab-badge">Stage 5</span>
+                  <div
+                    class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
+                    <span>Mark attendance</span>
+                    <i
+                      class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform"></i>
+                  </div>
                 </a>
 
-                <a href="/teacher/packages" class="quick-action-item group">
-                  <div class="flex items-center gap-3">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-300">
-                      <i class="fa-solid fa-receipt text-xs"></i>
-                    </div>
+                <!-- 4. Outstanding Payments -->
+                <a href="/teacher/packages" class="stat-card group block">
+                  <div class="flex items-start justify-between">
                     <div>
-                      <p class="text-xs font-semibold text-white group-hover:text-amber-200">Record Payment</p>
-                      <p class="text-[11px] text-indigo-200/50">Assign class package</p>
+                      <p class="text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                        Outstanding Dues
+                      </p>
+                      <div class="mt-2 flex items-baseline gap-2">
+                        <span class="font-display text-3xl font-bold text-white tracking-tight">
+                          <%= stats && stats.pendingPayments && stats.pendingPayments.isReady ? '₹' +
+                            stats.pendingPayments.value : '₹0' %>
+                        </span>
+                        <span class="text-xs text-indigo-200/50">due</span>
+                      </div>
+                    </div>
+                    <div
+                      class="stat-icon-wrap bg-amber-500/15 text-amber-300 group-hover:scale-105 transition-transform">
+                      <i class="fa-solid fa-indian-rupee-sign text-lg"></i>
                     </div>
                   </div>
-                  <span class="tab-badge">Stage 4</span>
+                  <div
+                    class="mt-3 flex items-center justify-between border-t border-white/5 pt-2 text-xs text-indigo-200/60">
+                    <span>Review ledger</span>
+                    <i
+                      class="fa-solid fa-arrow-right text-[10px] opacity-60 group-hover:translate-x-1 transition-transform"></i>
+                  </div>
                 </a>
 
-                <a href="/teacher/reports" class="quick-action-item group">
-                  <div class="flex items-center gap-3">
-                    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/15 text-sky-300">
-                      <i class="fa-solid fa-file-excel text-xs"></i>
-                    </div>
-                    <div>
-                      <p class="text-xs font-semibold text-white group-hover:text-sky-200">Export Reports</p>
-                      <p class="text-[11px] text-indigo-200/50">Download attendance Excel</p>
-                    </div>
-                  </div>
-                  <span class="tab-badge">Stage 5</span>
-                </a>
               </div>
             </section>
 
-            <!-- Card: Account & System Status -->
-            <section class="glass-card p-6">
-              <div class="mb-4 flex items-center gap-2.5">
-                <div class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-cyan-500/15 text-cyan-300">
-                  <i class="fa-solid fa-shield-halved text-sm"></i>
-                </div>
-                <div>
-                  <h2 class="font-display text-base font-bold text-white">System Status</h2>
-                  <p class="text-xs text-indigo-200/60">Session & database integrity</p>
-                </div>
+            <!-- ── MAIN CONTENT 2-COLUMN GRID ── -->
+            <div class="grid grid-cols-1 gap-8 lg:grid-cols-3">
+
+              <!-- ── Left Column (2 Cols on lg) ── -->
+              <div class="flex flex-col gap-8 lg:col-span-2">
+
+                <!-- Card: Today's Class / Session Overview -->
+                <section class="glass-card p-6 sm:p-7">
+                  <div class="mb-5 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <div
+                        class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-indigo-500/15 text-indigo-300">
+                        <i class="fa-solid fa-calendar-day text-sm"></i>
+                      </div>
+                      <div>
+                        <h2 class="font-display text-lg font-bold text-white">Today's Class Schedule</h2>
+                        <p class="text-xs text-indigo-200/60">Scheduled batches & session timings</p>
+                      </div>
+                    </div>
+
+                    <a href="/teacher/attendance" class="text-xs text-indigo-300 transition hover:text-white">
+                      View All <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+                    </a>
+                  </div>
+
+                  <% if (locals.todayClasses && todayClasses.length> 0) { %>
+                    <div class="space-y-3">
+                      <% todayClasses.forEach(function(sess) { %>
+                        <div
+                          class="flex items-center justify-between p-3.5 rounded-xl border border-white/5 bg-white/[0.02] hover:bg-white/[0.04] transition">
+                          <div class="flex items-center gap-3">
+                            <div
+                              class="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-300 font-mono text-xs font-bold">
+                              <i class="fa-solid fa-chalkboard"></i>
+                            </div>
+                            <div>
+                              <h4 class="font-semibold text-sm text-white">
+                                <%= sess.sessionName %>
+                              </h4>
+                              <p class="text-xs text-indigo-200/60 font-mono">
+                                <%= sess.startTime %> &ndash; <%= sess.endTime %> &bull; <span
+                                      class="text-slate-400 font-sans">
+                                      <%= sess.level %>
+                                    </span>
+                              </p>
+                            </div>
+                          </div>
+                          <% let sDate='' ; try { const dt=new Date(sess.date); sDate=isNaN(dt.getTime()) ? '' :
+                            dt.toISOString().split('T')[0]; } catch (e) { sDate='' ; } %>
+                            <a href="/teacher/attendance?date=<%= sDate %>&sessionId=<%= sess._id %>"
+                              class="rounded-lg border border-indigo-400/30 bg-indigo-500/10 px-3 py-1.5 text-xs font-semibold text-indigo-200 hover:bg-indigo-500/20 hover:text-white transition">
+                              Take Roll
+                            </a>
+                        </div>
+                        <% }); %>
+                    </div>
+                    <% } else { %>
+                      <!-- Genuine empty state -->
+                      <div class="empty-state-box">
+                        <div
+                          class="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-indigo-200/40">
+                          <i class="fa-solid fa-calendar-xmark text-2xl"></i>
+                        </div>
+                        <h3 class="font-display text-base font-semibold text-white">No classes scheduled for today</h3>
+                        <p class="mt-1 max-w-sm text-xs text-indigo-200/60 leading-relaxed">
+                          Start by creating a class session to track attendance and automated package deductions for
+                          your students.
+                        </p>
+                        <a href="/teacher/attendance"
+                          class="mt-4 inline-flex items-center gap-2 rounded-xl border border-indigo-400/30 bg-indigo-500/10 px-4 py-2 text-xs font-semibold text-indigo-200 transition hover:bg-indigo-500/20 hover:text-white">
+                          <i class="fa-solid fa-plus text-[10px]"></i>
+                          <span>Create Class Session</span>
+                        </a>
+                      </div>
+                      <% } %>
+                </section>
+
+                <!-- Card: Recent Attendance Activity -->
+                <section class="glass-card p-6 sm:p-7">
+                  <div class="mb-5 flex items-center justify-between">
+                    <div class="flex items-center gap-2.5">
+                      <div
+                        class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-emerald-500/15 text-emerald-300">
+                        <i class="fa-solid fa-clipboard-user text-sm"></i>
+                      </div>
+                      <div>
+                        <h2 class="font-display text-lg font-bold text-white">Recent Attendance Activity</h2>
+                        <p class="text-xs text-indigo-200/60">Session logs & student participation</p>
+                      </div>
+                    </div>
+
+                    <a href="/teacher/attendance" class="text-xs text-indigo-300 transition hover:text-white">
+                      Open Sheet <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+                    </a>
+                  </div>
+
+                  <% if (locals.recentAttendance && recentAttendance.length> 0) { %>
+                    <div class="overflow-x-auto">
+                      <table class="w-full text-left text-xs">
+                        <thead class="border-b border-white/10 text-[10px] uppercase text-indigo-200/50">
+                          <tr>
+                            <th class="py-2.5 px-3">Student</th>
+                            <th class="py-2.5 px-3">Session</th>
+                            <th class="py-2.5 px-3">Status</th>
+                            <th class="py-2.5 px-3">Credit</th>
+                            <th class="py-2.5 px-3 text-right">Time</th>
+                          </tr>
+                        </thead>
+                        <tbody class="divide-y divide-white/5">
+                          <% recentAttendance.forEach(function(att) { %>
+                            <tr class="hover:bg-white/[0.02]">
+                              <td class="py-2.5 px-3 font-semibold text-white">
+                                <%= att.student ? att.student.name : 'Student' %>
+                              </td>
+                              <td class="py-2.5 px-3 text-indigo-200/70">
+                                <%= att.session ? att.session.sessionName : 'Session' %>
+                              </td>
+                              <td class="py-2.5 px-3">
+                                <% if (att.status==='present' ) { %>
+                                  <span
+                                    class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">Present</span>
+                                  <% } else if (att.status==='late' ) { %>
+                                    <span
+                                      class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-amber-500/20 text-amber-300 border border-amber-400/30">Late</span>
+                                    <% } else if (att.status==='absent' ) { %>
+                                      <span
+                                        class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-rose-500/20 text-rose-300 border border-rose-400/30">Absent</span>
+                                      <% } else { %>
+                                        <span
+                                          class="rounded px-2 py-0.5 text-[10px] font-semibold uppercase bg-blue-500/20 text-blue-300 border border-blue-400/30">Excused</span>
+                                        <% } %>
+                              </td>
+                              <td class="py-2.5 px-3">
+                                <% if (att.creditConsumed) { %>
+                                  <span class="text-emerald-300 font-semibold text-[10px]">1 Deducted</span>
+                                  <% } else { %>
+                                    <span class="text-slate-500 text-[10px]">None</span>
+                                    <% } %>
+                              </td>
+                              <td class="py-2.5 px-3 text-right text-indigo-200/50">
+                                <%= new Date(att.createdAt || att.date).toLocaleDateString('en-IN', { day: '2-digit' ,
+                                  month: 'short' }) %>
+                              </td>
+                            </tr>
+                            <% }); %>
+                        </tbody>
+                      </table>
+                    </div>
+                    <% } else { %>
+                      <!-- Genuine empty state -->
+                      <div class="empty-state-box">
+                        <div
+                          class="mb-3 flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.04] text-indigo-200/40">
+                          <i class="fa-solid fa-clipboard-list text-2xl"></i>
+                        </div>
+                        <h3 class="font-display text-base font-semibold text-white">No recent attendance records</h3>
+                        <p class="mt-1 max-w-sm text-xs text-indigo-200/60 leading-relaxed">
+                          Attendance logs, present/absent counts, and automated package credit deductions will display
+                          here once daily sessions are marked.
+                        </p>
+                      </div>
+                      <% } %>
+                </section>
+
               </div>
 
-              <div class="space-y-3 text-xs text-indigo-200/70">
-                <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
-                  <span class="text-indigo-200/50">Authenticated As</span>
-                  <span class="font-medium text-white truncate max-w-[150px]"><%= teacher.email %></span>
-                </div>
+              <!-- ── Right Column (1 Col on lg) ── -->
+              <div class="flex flex-col gap-8">
 
-                <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
-                  <span class="text-indigo-200/50">Database Connection</span>
-                  <span class="inline-flex items-center gap-1.5 font-medium <%= dbConnected ? 'text-emerald-300' : 'text-amber-300' %>">
-                    <span class="h-1.5 w-1.5 rounded-full <%= dbConnected ? 'bg-emerald-400' : 'bg-amber-400' %>"></span>
-                    <%= dbConnected ? 'Connected (Atlas)' : 'Connecting...' %>
-                  </span>
-                </div>
+                <!-- Card: Quick Actions Panel -->
+                <section class="glass-card p-6">
+                  <div class="mb-4 flex items-center gap-2.5">
+                    <div
+                      class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-violet-500/15 text-violet-300">
+                      <i class="fa-solid fa-bolt text-sm"></i>
+                    </div>
+                    <div>
+                      <h2 class="font-display text-base font-bold text-white">Quick Actions</h2>
+                      <p class="text-xs text-indigo-200/60">Common teacher workflows</p>
+                    </div>
+                  </div>
 
-                <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
-                  <span class="text-indigo-200/50">Session Security</span>
-                  <span class="font-medium text-emerald-300">CSRF Active &bull; 8h</span>
-                </div>
+                  <div class="flex flex-col gap-2.5">
+                    <a href="/teacher/students/new" class="quick-action-item group">
+                      <div class="flex items-center gap-3">
+                        <div
+                          class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-500/15 text-indigo-300">
+                          <i class="fa-solid fa-user-plus text-xs"></i>
+                        </div>
+                        <div>
+                          <p class="text-xs font-semibold text-white group-hover:text-indigo-200">Add Student</p>
+                          <p class="text-[11px] text-indigo-200/50">Register student profile</p>
+                        </div>
+                      </div>
+                      <span class="tab-badge">Stage 3</span>
+                    </a>
 
-                <div class="flex items-center justify-between pt-1">
-                  <span class="text-indigo-200/50">Current Stage</span>
-                  <span class="rounded-md border border-indigo-400/30 bg-indigo-500/15 px-2 py-0.5 font-semibold text-indigo-200 text-[11px]">
-                    Stage 2 Completed
-                  </span>
-                </div>
+                    <a href="/teacher/attendance" class="quick-action-item group">
+                      <div class="flex items-center gap-3">
+                        <div
+                          class="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-300">
+                          <i class="fa-solid fa-calendar-check text-xs"></i>
+                        </div>
+                        <div>
+                          <p class="text-xs font-semibold text-white group-hover:text-emerald-200">Mark Attendance</p>
+                          <p class="text-[11px] text-indigo-200/50">Take daily class roll</p>
+                        </div>
+                      </div>
+                      <span class="tab-badge">Stage 5</span>
+                    </a>
+
+                    <a href="/teacher/packages" class="quick-action-item group">
+                      <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/15 text-amber-300">
+                          <i class="fa-solid fa-receipt text-xs"></i>
+                        </div>
+                        <div>
+                          <p class="text-xs font-semibold text-white group-hover:text-amber-200">Record Payment</p>
+                          <p class="text-[11px] text-indigo-200/50">Assign class package</p>
+                        </div>
+                      </div>
+                      <span class="tab-badge">Stage 4</span>
+                    </a>
+
+                    <a href="/teacher/reports" class="quick-action-item group">
+                      <div class="flex items-center gap-3">
+                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500/15 text-sky-300">
+                          <i class="fa-solid fa-file-excel text-xs"></i>
+                        </div>
+                        <div>
+                          <p class="text-xs font-semibold text-white group-hover:text-sky-200">Export Reports</p>
+                          <p class="text-[11px] text-indigo-200/50">Download attendance Excel</p>
+                        </div>
+                      </div>
+                      <span class="tab-badge">Stage 5</span>
+                    </a>
+                  </div>
+                </section>
+
+                <!-- Card: Account & System Status -->
+                <section class="glass-card p-6">
+                  <div class="mb-4 flex items-center gap-2.5">
+                    <div
+                      class="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-cyan-500/15 text-cyan-300">
+                      <i class="fa-solid fa-shield-halved text-sm"></i>
+                    </div>
+                    <div>
+                      <h2 class="font-display text-base font-bold text-white">System Status</h2>
+                      <p class="text-xs text-indigo-200/60">Session & database integrity</p>
+                    </div>
+                  </div>
+
+                  <div class="space-y-3 text-xs text-indigo-200/70">
+                    <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
+                      <span class="text-indigo-200/50">Authenticated As</span>
+                      <span class="font-medium text-white truncate max-w-[150px]">
+                        <%= teacher.email %>
+                      </span>
+                    </div>
+
+                    <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
+                      <span class="text-indigo-200/50">Database Connection</span>
+                      <span
+                        class="inline-flex items-center gap-1.5 font-medium <%= dbConnected ? 'text-emerald-300' : 'text-amber-300' %>">
+                        <span
+                          class="h-1.5 w-1.5 rounded-full <%= dbConnected ? 'bg-emerald-400' : 'bg-amber-400' %>"></span>
+                        <%= dbConnected ? 'Connected (Atlas)' : 'Connecting...' %>
+                      </span>
+                    </div>
+
+                    <div class="flex items-center justify-between border-b border-white/5 pb-2.5">
+                      <span class="text-indigo-200/50">Session Security</span>
+                      <span class="font-medium text-emerald-300">CSRF Active &bull; 8h</span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-1">
+                      <span class="text-indigo-200/50">Current Stage</span>
+                      <span
+                        class="rounded-md border border-indigo-400/30 bg-indigo-500/15 px-2 py-0.5 font-semibold text-indigo-200 text-[11px]">
+                        Stage 2 Completed
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="mt-5 pt-4 border-t border-white/10">
+                    <form action="/teacher/logout" method="POST">
+                      <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                      <button type="submit" class="btn-ghost w-full justify-center">
+                        <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                        <span>Sign Out of Dashboard</span>
+                      </button>
+                    </form>
+                  </div>
+                </section>
+
               </div>
 
-              <div class="mt-5 pt-4 border-t border-white/10">
-                <form action="/teacher/logout" method="POST">
-                  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
-                  <button type="submit" class="btn-ghost w-full justify-center">
-                    <i class="fa-solid fa-right-from-bracket text-xs"></i>
-                    <span>Sign Out of Dashboard</span>
-                  </button>
-                </form>
-              </div>
-            </section>
-
-          </div>
-
-        </div>
+            </div>
 
       </main>
-    </section>
-  </body>
+  </section>
+</body>
+
 </html>

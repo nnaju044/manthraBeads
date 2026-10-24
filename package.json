@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test tests/stage1-auth.test.js tests/stage2-dashboard.test.js tests/stage3-student.test.js tests/stage4-package.test.js tests/stage5-attendance.test.js",
+    "test": "node --test tests/stage1-auth.test.js tests/stage2-dashboard.test.js tests/stage3-student.test.js tests/stage4-package.test.js tests/stage5-attendance.test.js tests/stage6-notification.test.js tests/stage7-security-integration.test.js tests/stage9-password-reset.test.js",
     "build": "vite build",
     "build:whiteboard": "vite build",
     "seed:teacher": "node scripts/seedTeacher.js"
@@ -20,8 +20,10 @@
     "express": "^4.22.2",
     "express-rate-limit": "^8.7.1",
     "express-session": "^1.19.0",
+    "google-auth-library": "^11.3.1",
     "method-override": "^3.0.0",
     "mongoose": "^9.11.2",
+    "nodemailer": "^10.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

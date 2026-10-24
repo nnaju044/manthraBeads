@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Post-Class Notifications — ManthraBeads Teacher Portal</title>
+    <meta
+      name="description"
+      content="Monitor and manage automated post-class email notifications for students and parents at ManthraBeads Abacus Academy."
+    />
+    <link rel="icon" type="image/png" href="/images/logo.png" />
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    />
+
+    <!-- Tailwind CSS (CDN for teacher portal shell) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+              display: ['"Outfit"', 'sans-serif'],
+            },
+            colors: {
+              space: {
+                950: '#060714',
+                900: '#0b0d26',
+                850: '#0f1235',
+                800: '#141843',
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/teacher.css" />
+  </head>
+  <body class="min-h-full bg-space-950 text-slate-100 antialiased selection:bg-indigo-500/30 selection:text-white">
+    <!-- Background glow shapes -->
+    <div class="pointer-events-none fixed inset-0 overflow-hidden">
+      <div class="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[900px] rounded-full bg-gradient-to-tr from-indigo-600/20 via-purple-600/15 to-pink-600/10 blur-[130px]"></div>
+      <div class="absolute bottom-10 right-10 h-[400px] w-[500px] rounded-full bg-blue-600/10 blur-[120px]"></div>
+    </div>
+
+    <div class="relative flex min-h-screen flex-col">
+      <!-- ── Teacher Top Bar ── -->
+      <header class="sticky top-0 z-40 border-b border-white/10 bg-space-950/80 backdrop-blur-xl">
+        <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
+          <div class="flex items-center gap-4">
+            <a href="/teacher/dashboard" class="flex items-center gap-3 group">
+              <div class="relative flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-tr from-indigo-500 to-purple-500 p-0.5 shadow-[0_0_20px_rgba(99,102,241,0.5)] transition group-hover:scale-105">
+                <div class="flex h-full w-full items-center justify-center rounded-[10px] bg-space-950">
+                  <i class="fa-solid fa-envelope-open-text text-sm text-indigo-400"></i>
+                </div>
+              </div>
+              <div class="flex flex-col">
+                <span class="font-display text-base font-bold tracking-tight text-white group-hover:text-indigo-200 transition">
+                  ManthraBeads
+                </span>
+                <span class="text-[10px] font-semibold uppercase tracking-wider text-indigo-300/70">
+                  Teacher Portal
+                </span>
+              </div>
+            </a>
+          </div>
+
+          <div class="flex items-center gap-3 sm:gap-4">
+            <!-- SMTP Status Chip -->
+            <div class="hidden sm:flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs">
+              <% if (isSmtpConfigured) { %>
+                <span class="relative flex h-2 w-2">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span class="text-emerald-300 font-medium">SMTP Configured</span>
+              <% } else { %>
+                <span class="h-2 w-2 rounded-full bg-amber-400"></span>
+                <span class="text-amber-300 font-medium">SMTP Unconfigured</span>
+              <% } %>
+            </div>
+
+            <!-- Teacher Profile & Logout -->
+            <div class="flex items-center gap-3 border-l border-white/10 pl-3 sm:pl-4">
+              <div class="hidden text-right md:block">
+                <p class="text-xs font-semibold text-white">
+                  <%= teacher ? teacher.name : 'Teacher' %>
+                </p>
+                <p class="text-[10px] text-indigo-200/60">
+                  <%= teacher ? teacher.email : '' %>
+                </p>
+              </div>
+              <form action="/teacher/logout" method="POST" class="inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button
+                  type="submit"
+                  class="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-white/5 text-slate-300 hover:bg-rose-500/20 hover:border-rose-500/40 hover:text-rose-200 transition"
+                  title="Sign Out"
+                >
+                  <i class="fa-solid fa-arrow-right-from-bracket text-xs"></i>
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- ── Main Content Area ── -->
+      <main class="flex-1 py-8 px-4 sm:px-6 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+
+          <!-- Alert Flash Messages -->
+          <% if (alertMessage) { %>
+          <div class="mb-6 flex items-center justify-between rounded-xl border <%= alertType === 'error' ? 'border-rose-500/30 bg-rose-500/10 text-rose-200' : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-200' %> px-4 py-3 text-sm backdrop-blur-md">
+            <div class="flex items-center gap-3">
+              <i class="fa-solid <%= alertType === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check' %>"></i>
+              <span><%= alertMessage %></span>
+            </div>
+            <button type="button" onclick="this.parentElement.remove()" class="text-xs opacity-70 hover:opacity-100">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+          <% } %>
+
+          <!-- SMTP Unconfigured Notice (Non-blocking resilience warning) -->
+          <% if (!isSmtpConfigured) { %>
+          <div class="mb-6 rounded-2xl border border-amber-500/30 bg-amber-500/10 p-4 sm:p-5 text-amber-200 backdrop-blur-md">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+              <div class="flex items-start gap-3">
+                <div class="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-amber-500/20 text-amber-300">
+                  <i class="fa-solid fa-triangle-exclamation text-sm"></i>
+                </div>
+                <div>
+                  <h3 class="text-sm font-semibold text-white">SMTP Transport Not Configured</h3>
+                  <p class="mt-0.5 text-xs text-amber-200/80">
+                    Attendance records and package deductions will save normally. Post-class emails are logged as 
+                    <span class="font-semibold text-amber-300">Pending/Failed</span> in this outbox until SMTP environment variables 
+                    (<code class="bg-black/30 px-1 py-0.5 rounded text-amber-100">SMTP_HOST</code>, <code class="bg-black/30 px-1 py-0.5 rounded text-amber-100">SMTP_USER</code>, <code class="bg-black/30 px-1 py-0.5 rounded text-amber-100">SMTP_PASS</code>) are configured.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <% } %>
+
+          <!-- ── Page Header ── -->
+          <header class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <div class="flex items-center gap-3">
+                <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">
+                  Email Notifications
+                </h1>
+                <span class="rounded-full border border-purple-400/30 bg-purple-500/15 px-2.5 py-0.5 text-xs font-semibold text-purple-300">
+                  Outbox Ledger
+                </span>
+              </div>
+              <p class="mt-1 text-xs text-indigo-200/60 sm:text-sm">
+                Automated post-class delivery logs, parent updates, and retry queue
+              </p>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <% if (counts.failed > 0) { %>
+              <form action="/teacher/notifications/retry-failed" method="POST" class="inline">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <button
+                  type="submit"
+                  class="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/20 px-3.5 py-2 text-xs font-semibold text-rose-200 hover:bg-rose-500/30 hover:border-rose-500/50 transition shadow-sm"
+                >
+                  <i class="fa-solid fa-rotate-right text-xs"></i>
+                  <span>Retry All Failed (<%= counts.failed %>)</span>
+                </button>
+              </form>
+              <% } %>
+
+              <a
+                href="/teacher/attendance"
+                class="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-indigo-500 to-violet-500 px-4 py-2 text-xs font-semibold text-white shadow-[0_0_20px_rgba(99,102,241,0.35)] transition hover:brightness-110"
+              >
+                <i class="fa-solid fa-clipboard-check text-xs"></i>
+                <span>Mark Attendance</span>
+              </a>
+            </div>
+          </header>
+
+          <!-- ── Navigation Tabs ── -->
+          <nav
+            class="mb-8 flex overflow-x-auto gap-2 rounded-2xl border border-white/10 bg-white/[0.03] p-1.5 backdrop-blur-md no-scrollbar"
+            aria-label="Teacher Dashboard Navigation"
+          >
+            <a href="/teacher/dashboard" class="teacher-tab">
+              <i class="fa-solid fa-gauge-high text-sm"></i>
+              <span>Dashboard</span>
+            </a>
+            <a href="/teacher/students" class="teacher-tab">
+              <i class="fa-solid fa-user-graduate text-sm"></i>
+              <span>Students</span>
+            </a>
+            <a href="/teacher/attendance" class="teacher-tab">
+              <i class="fa-solid fa-clipboard-check text-sm"></i>
+              <span>Attendance</span>
+            </a>
+            <a href="/teacher/packages" class="teacher-tab">
+              <i class="fa-solid fa-credit-card text-sm"></i>
+              <span>Packages & Payments</span>
+            </a>
+            <a href="/teacher/notifications" class="teacher-tab active" aria-current="page">
+              <i class="fa-solid fa-envelope-open-text text-sm"></i>
+              <span>Notifications</span>
+            </a>
+            <a href="/teacher/reports" class="teacher-tab">
+              <i class="fa-solid fa-chart-pie text-sm"></i>
+              <span>Reports</span>
+            </a>
+          </nav>
+
+          <!-- ── 5 Metric Cards ── -->
+          <section class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 mb-8">
+            <!-- 1. Total Generated -->
+            <div class="stat-card">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-indigo-200/60">
+                Total Logged
+              </p>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="font-display text-2xl font-bold text-white tracking-tight">
+                  <%= counts.total %>
+                </span>
+                <span class="text-[10px] text-indigo-200/50">records</span>
+              </div>
+            </div>
+
+            <!-- 2. Sent -->
+            <div class="stat-card">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-emerald-300/80">
+                Delivered
+              </p>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="font-display text-2xl font-bold text-emerald-400 tracking-tight">
+                  <%= counts.sent %>
+                </span>
+                <span class="text-[10px] text-emerald-200/50">emails</span>
+              </div>
+            </div>
+
+            <!-- 3. Failed -->
+            <div class="stat-card">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-rose-300/80">
+                Failed
+              </p>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="font-display text-2xl font-bold text-rose-400 tracking-tight">
+                  <%= counts.failed %>
+                </span>
+                <span class="text-[10px] text-rose-200/50">retryable</span>
+              </div>
+            </div>
+
+            <!-- 4. Pending -->
+            <div class="stat-card">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-amber-300/80">
+                Pending
+              </p>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="font-display text-2xl font-bold text-amber-400 tracking-tight">
+                  <%= counts.pending %>
+                </span>
+                <span class="text-[10px] text-amber-200/50">queued</span>
+              </div>
+            </div>
+
+            <!-- 5. Skipped -->
+            <div class="stat-card">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-slate-300/80">
+                Skipped
+              </p>
+              <div class="mt-2 flex items-baseline gap-2">
+                <span class="font-display text-2xl font-bold text-slate-300 tracking-tight">
+                  <%= counts.skipped %>
+                </span>
+                <span class="text-[10px] text-slate-400">no email</span>
+              </div>
+            </div>
+          </section>
+
+          <!-- ── Filter & Search Toolbar ── -->
+          <div class="mb-6 rounded-2xl border border-white/10 bg-white/[0.03] p-4 backdrop-blur-md">
+            <form action="/teacher/notifications" method="GET" class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+              <!-- Status Filter Chips -->
+              <div class="flex flex-wrap items-center gap-2">
+                <a
+                  href="/teacher/notifications?status=all<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold transition <%= statusFilter === 'all' ? 'bg-indigo-600 text-white shadow-[0_0_15px_rgba(99,102,241,0.4)]' : 'bg-white/5 text-slate-300 hover:bg-white/10' %>"
+                >
+                  All (<%= counts.total %>)
+                </a>
+                <a
+                  href="/teacher/notifications?status=sent<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold transition <%= statusFilter === 'sent' ? 'bg-emerald-600 text-white shadow-[0_0_15px_rgba(16,185,129,0.4)]' : 'bg-white/5 text-slate-300 hover:bg-white/10' %>"
+                >
+                  Sent (<%= counts.sent %>)
+                </a>
+                <a
+                  href="/teacher/notifications?status=failed<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold transition <%= statusFilter === 'failed' ? 'bg-rose-600 text-white shadow-[0_0_15px_rgba(244,63,94,0.4)]' : 'bg-white/5 text-slate-300 hover:bg-white/10' %>"
+                >
+                  Failed (<%= counts.failed %>)
+                </a>
+                <a
+                  href="/teacher/notifications?status=pending<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold transition <%= statusFilter === 'pending' ? 'bg-amber-600 text-white shadow-[0_0_15px_rgba(245,158,11,0.4)]' : 'bg-white/5 text-slate-300 hover:bg-white/10' %>"
+                >
+                  Pending (<%= counts.pending %>)
+                </a>
+                <a
+                  href="/teacher/notifications?status=skipped<%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>"
+                  class="rounded-lg px-3 py-1.5 text-xs font-semibold transition <%= statusFilter === 'skipped' ? 'bg-slate-600 text-white' : 'bg-white/5 text-slate-300 hover:bg-white/10' %>"
+                >
+                  Skipped (<%= counts.skipped %>)
+                </a>
+              </div>
+
+              <!-- Search Bar -->
+              <div class="relative w-full md:w-72">
+                <input type="hidden" name="status" value="<%= statusFilter %>" />
+                <input
+                  type="text"
+                  name="search"
+                  value="<%= searchQuery %>"
+                  placeholder="Search recipient or student..."
+                  class="w-full rounded-xl border border-white/10 bg-white/5 py-1.5 pl-9 pr-8 text-xs text-white placeholder-slate-400 focus:border-indigo-400 focus:outline-none focus:ring-1 focus:ring-indigo-400"
+                />
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-xs text-slate-400"></i>
+                <% if (searchQuery) { %>
+                <a href="/teacher/notifications?status=<%= statusFilter %>" class="absolute right-2.5 top-2 text-xs text-slate-400 hover:text-white">
+                  <i class="fa-solid fa-xmark"></i>
+                </a>
+                <% } %>
+              </div>
+            </form>
+          </div>
+
+          <!-- ── Notifications Table ── -->
+          <div class="overflow-hidden rounded-2xl border border-white/10 bg-white/[0.02] shadow-xl backdrop-blur-md">
+            <% if (notifications.length === 0) { %>
+            <div class="py-16 text-center">
+              <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-indigo-400 shadow-inner">
+                <i class="fa-solid fa-envelope-circle-check text-2xl"></i>
+              </div>
+              <h3 class="mt-4 font-display text-base font-semibold text-white">No notifications found</h3>
+              <p class="mt-1 text-xs text-indigo-200/60 max-w-sm mx-auto">
+                <% if (searchQuery || statusFilter !== 'all') { %>
+                  No notifications match your current filter criteria.
+                <% } else { %>
+                  Post-class email notifications will automatically be queued and logged here after an attendance roster is saved.
+                <% } %>
+              </p>
+              <% if (searchQuery || statusFilter !== 'all') { %>
+              <div class="mt-4">
+                <a href="/teacher/notifications" class="text-xs font-semibold text-indigo-400 hover:underline">
+                  Reset Filters
+                </a>
+              </div>
+              <% } %>
+            </div>
+            <% } else { %>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="border-b border-white/10 bg-white/[0.04] text-[11px] font-semibold uppercase tracking-wider text-indigo-200/70">
+                  <tr>
+                    <th scope="col" class="py-3 px-4">Student</th>
+                    <th scope="col" class="py-3 px-4">Recipient</th>
+                    <th scope="col" class="py-3 px-4">Class / Session</th>
+                    <th scope="col" class="py-3 px-4">Attendance</th>
+                    <th scope="col" class="py-3 px-4">Package Balance</th>
+                    <th scope="col" class="py-3 px-4">Status</th>
+                    <th scope="col" class="py-3 px-4">Timestamp / Details</th>
+                    <th scope="col" class="py-3 px-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-white/5">
+                  <% notifications.forEach(item => { %>
+                  <tr class="hover:bg-white/[0.02] transition">
+                    
+                    <!-- Student -->
+                    <td class="py-3.5 px-4 font-medium text-white">
+                      <% if (item.student) { %>
+                        <div class="flex items-center gap-2">
+                          <a href="/teacher/students/<%= item.student._id %>" class="hover:text-indigo-300 transition font-semibold">
+                            <%= item.student.name %>
+                          </a>
+                          <span class="rounded bg-white/5 px-1.5 py-0.5 text-[10px] text-indigo-200/70">
+                            <%= item.student.studentId || 'ID' %>
+                          </span>
+                        </div>
+                      <% } else { %>
+                        <span class="text-slate-400">—</span>
+                      <% } %>
+                    </td>
+
+                    <!-- Recipient -->
+                    <td class="py-3.5 px-4">
+                      <% if (item.recipientEmail) { %>
+                        <div class="flex flex-col">
+                          <span class="text-slate-200 font-mono text-[11px]">
+                            <%= item.recipientEmail %>
+                          </span>
+                          <span class="text-[10px] text-indigo-200/60 capitalize">
+                            <%= item.recipientType %>: <%= item.recipientName %>
+                          </span>
+                        </div>
+                      <% } else { %>
+                        <span class="inline-flex items-center gap-1 text-[11px] text-amber-400">
+                          <i class="fa-solid fa-triangle-exclamation text-[10px]"></i> No email on file
+                        </span>
+                      <% } %>
+                    </td>
+
+                    <!-- Session & Date -->
+                    <td class="py-3.5 px-4">
+                      <div class="flex flex-col">
+                        <span class="text-white font-medium">
+                          <%= item.sessionName || 'Abacus Session' %>
+                        </span>
+                        <span class="text-[10px] text-indigo-200/50">
+                          <%= item.sessionDate ? new Date(item.sessionDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—' %>
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- Attendance Status -->
+                    <td class="py-3.5 px-4">
+                      <% if (item.attendanceStatus === 'present') { %>
+                        <span class="inline-flex items-center gap-1 rounded-md border border-emerald-400/30 bg-emerald-500/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
+                          <span class="h-1.5 w-1.5 rounded-full bg-emerald-400"></span> Present
+                        </span>
+                      <% } else if (item.attendanceStatus === 'late') { %>
+                        <span class="inline-flex items-center gap-1 rounded-md border border-amber-400/30 bg-amber-500/15 px-2 py-0.5 text-[11px] font-semibold text-amber-300">
+                          <span class="h-1.5 w-1.5 rounded-full bg-amber-400"></span> Late
+                        </span>
+                      <% } else if (item.attendanceStatus === 'absent') { %>
+                        <span class="inline-flex items-center gap-1 rounded-md border border-rose-400/30 bg-rose-500/15 px-2 py-0.5 text-[11px] font-semibold text-rose-300">
+                          <span class="h-1.5 w-1.5 rounded-full bg-rose-400"></span> Absent
+                        </span>
+                      <% } else { %>
+                        <span class="inline-flex items-center gap-1 rounded-md border border-blue-400/30 bg-blue-500/15 px-2 py-0.5 text-[11px] font-semibold text-blue-300">
+                          <%= item.attendanceStatus %>
+                        </span>
+                      <% } %>
+                    </td>
+
+                    <!-- Package & Remaining Classes -->
+                    <td class="py-3.5 px-4">
+                      <div class="flex flex-col">
+                        <span class="text-slate-200">
+                          <%= item.packageName || 'Active Pack' %>
+                        </span>
+                        <span class="text-[10px] text-indigo-300">
+                          <% if (typeof item.remainingClasses === 'number') { %>
+                            <%= item.remainingClasses %> classes left
+                          <% } else { %>
+                            —
+                          <% } %>
+                        </span>
+                      </div>
+                    </td>
+
+                    <!-- Delivery Status -->
+                    <td class="py-3.5 px-4">
+                      <% if (item.status === 'sent') { %>
+                        <span class="inline-flex items-center gap-1 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-300">
+                          <i class="fa-solid fa-check text-[10px]"></i> Sent
+                        </span>
+                      <% } else if (item.status === 'failed') { %>
+                        <span class="inline-flex items-center gap-1 rounded-full border border-rose-400/30 bg-rose-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-rose-300" title="<%= item.lastError || 'Failed' %>">
+                          <i class="fa-solid fa-triangle-exclamation text-[10px]"></i> Failed
+                        </span>
+                      <% } else if (item.status === 'pending') { %>
+                        <span class="inline-flex items-center gap-1 rounded-full border border-amber-400/30 bg-amber-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-amber-300">
+                          <i class="fa-solid fa-clock text-[10px]"></i> Pending
+                        </span>
+                      <% } else if (item.status === 'skipped') { %>
+                        <span class="inline-flex items-center gap-1 rounded-full border border-slate-500/30 bg-slate-500/15 px-2.5 py-0.5 text-[11px] font-semibold text-slate-300" title="<%= item.skipReason %>">
+                          <i class="fa-solid fa-forward text-[10px]"></i> Skipped
+                        </span>
+                      <% } %>
+                    </td>
+
+                    <!-- Timestamp / Last Error Details -->
+                    <td class="py-3.5 px-4">
+                      <div class="flex flex-col max-w-xs">
+                        <% if (item.status === 'sent' && item.sentAt) { %>
+                          <span class="text-slate-300 text-[11px]">
+                            <%= new Date(item.sentAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short' }) %> at <%= new Date(item.sentAt).toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' }) %>
+                          </span>
+                          <span class="text-[10px] text-emerald-400/70">
+                            Attempt #<%= item.attemptCount || 1 %>
+                          </span>
+                        <% } else if (item.status === 'failed') { %>
+                          <span class="text-rose-300 text-[11px] truncate" title="<%= item.lastError %>">
+                            <%= item.lastError ? item.lastError.slice(0, 40) + '...' : 'Delivery failed' %>
+                          </span>
+                          <span class="text-[10px] text-rose-300/70">
+                            <%= item.attemptCount %> attempt(s)
+                          </span>
+                        <% } else if (item.status === 'skipped') { %>
+                          <span class="text-slate-400 text-[11px]">
+                            <%= item.skipReason === 'no_recipient_email' ? 'Missing email address' : item.skipReason %>
+                          </span>
+                        <% } else { %>
+                          <span class="text-amber-300 text-[11px]">
+                            Queued for delivery
+                          </span>
+                        <% } %>
+                      </div>
+                    </td>
+
+                    <!-- Actions -->
+                    <td class="py-3.5 px-4 text-right">
+                      <% if (item.status === 'failed' || item.status === 'pending') { %>
+                        <form action="/teacher/notifications/<%= item._id %>/retry" method="POST" class="inline">
+                          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                          <button
+                            type="submit"
+                            class="inline-flex items-center gap-1.5 rounded-lg border border-indigo-400/30 bg-indigo-500/15 px-2.5 py-1 text-[11px] font-semibold text-indigo-200 hover:bg-indigo-500/30 hover:border-indigo-400 transition"
+                            title="Retry sending notification"
+                          >
+                            <i class="fa-solid fa-rotate-right text-[10px]"></i>
+                            <span>Retry</span>
+                          </button>
+                        </form>
+                      <% } else if (item.status === 'sent' && item.attendance) { %>
+                        <form action="/teacher/notifications/resend-attendance/<%= item.attendance._id || item.attendance %>" method="POST" class="inline">
+                          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                          <button
+                            type="submit"
+                            class="inline-flex items-center gap-1 rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-[11px] font-medium text-slate-300 hover:bg-white/10 hover:text-white transition"
+                            title="Resend email"
+                          >
+                            <i class="fa-solid fa-paper-plane text-[9px]"></i>
+                            <span>Resend</span>
+                          </button>
+                        </form>
+                      <% } else { %>
+                        <span class="text-slate-500 text-[11px]">—</span>
+                      <% } %>
+                    </td>
+
+                  </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Pagination Footer -->
+            <% if (totalPages > 1) { %>
+            <div class="flex items-center justify-between border-t border-white/10 px-4 py-3 bg-white/[0.01]">
+              <div class="text-xs text-indigo-200/60">
+                Showing page <span class="font-semibold text-white"><%= currentPage %></span> of <span class="font-semibold text-white"><%= totalPages %></span>
+              </div>
+              <div class="flex items-center gap-2">
+                <% if (currentPage > 1) { %>
+                <a
+                  href="/teacher/notifications?page=<%= currentPage - 1 %>&status=<%= statusFilter %><%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>"
+                  class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300 hover:bg-white/10"
+                >
+                  Previous
+                </a>
+                <% } %>
+                <% if (currentPage < totalPages) { %>
+                <a
+                  href="/teacher/notifications?page=<%= currentPage + 1 %>&status=<%= statusFilter %><%= searchQuery ? '&search=' + encodeURIComponent(searchQuery) : '' %>"
+                  class="rounded-lg border border-white/10 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-300 hover:bg-white/10"
+                >
+                  Next
+                </a>
+                <% } %>
+              </div>
+            </div>
+            <% } %>
+
+            <% } %>
+          </div>
+
+        </div>
+      </main>
+
+      <!-- ── Footer ── -->
+      <footer class="border-t border-white/10 py-6 text-center text-xs text-indigo-200/50">
+        <p>ManthraBeads Abacus Academy — Stage 6 Automated Notification System</p>
+      </footer>
+    </div>
+  </body>
+</html>

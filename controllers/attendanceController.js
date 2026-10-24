@@ -4,6 +4,7 @@ const Student = require('../models/Student');
 const Package = require('../models/Package');
 const Session = require('../models/Session');
 const Attendance = require('../models/Attendance');
+const emailService = require('../services/emailService');
 
 /* ──────────────────────────────────────────────────────────
    Attendance & Class-Credit Controller — Stage 5
@@ -11,15 +12,25 @@ const Attendance = require('../models/Attendance');
 
 /**
  * Formula injection sanitizer for spreadsheet export.
- * Prepends a single quote if string starts with sensitive characters.
+ * Neutralizes Excel/Calc formula execution prefixes (=, +, -, @, \t, \r),
+ * including any leading whitespace before formula symbols, while preserving numbers.
  */
 function sanitizeForSpreadsheet(val) {
   if (val === null || val === undefined) return '';
-  const str = String(val).trim();
-  if (/^[=+\-@\t\r]/.test(str)) {
-    return `'${str}`;
+
+  // Preserve legitimate numeric types
+  if (typeof val === 'number') {
+    return isNaN(val) ? '' : val;
   }
-  return str;
+
+  const raw = String(val);
+
+  // Check if string begins with or has leading whitespace followed by dangerous prefixes: =, +, -, @, \t, \r
+  if (/^[\s\t\r\n]*[=+\-@\t\r]/.test(raw)) {
+    return `'${raw}`;
+  }
+
+  return raw;
 }
 
 /**
@@ -258,6 +269,8 @@ exports.saveAttendance = async (req, res) => {
     const notesData = req.body.attendanceNotes || {};
     const studentIds = Object.keys(attendanceData);
 
+    const savedAttendanceIds = [];
+
     for (const studentId of studentIds) {
       if (!mongoose.Types.ObjectId.isValid(studentId)) continue;
 
@@ -312,7 +325,7 @@ exports.saveAttendance = async (req, res) => {
       }
 
       // Upsert Attendance record
-      await Attendance.findOneAndUpdate(
+      const savedRecord = await Attendance.findOneAndUpdate(
         { student: studentId, session: session._id },
         {
           student: studentId,
@@ -327,10 +340,24 @@ exports.saveAttendance = async (req, res) => {
         },
         { upsert: true, new: true, setDefaultsOnInsert: true }
       );
+
+      if (savedRecord && savedRecord._id) {
+        savedAttendanceIds.push(savedRecord._id);
+      }
     }
 
     session.status = 'completed';
     await session.save();
+
+    // Stage 6: Automated Post-Class Email Notifications
+    // Dispatched safely and reliably. Will never fail the attendance save if SMTP is unconfigured or encounters an error.
+    try {
+      await Promise.allSettled(
+        savedAttendanceIds.map((attId) => emailService.dispatchClassNotification(attId))
+      );
+    } catch (notifyErr) {
+      console.warn('[Attendance] Post-class notification dispatch warning:', notifyErr.message);
+    }
 
     const dateStr = session.date.toISOString().split('T')[0];
     res.redirect(`/teacher/attendance?date=${dateStr}&sessionId=${session._id}&saved=true`);
@@ -471,3 +498,5 @@ exports.exportAttendanceExcel = async (req, res) => {
     res.status(500).redirect('/teacher/attendance?error=export_failed');
   }
 };
+
+exports.sanitizeForSpreadsheet = sanitizeForSpreadsheet;

@@ -166,6 +166,38 @@
         verifyRulesPasscode();
       });
     }
+
+    var $toggleRulesPasscode = document.getElementById('toggleRulesPasscode');
+    var $eyeRulesIcon = document.getElementById('eyeRulesIcon');
+    var $showRulesPasscodeCheckbox = document.getElementById('showRulesPasscodeCheckbox');
+
+    function setRulesPasscodeVisibility(show) {
+      if (!$rulesPasscodeInput) return;
+      $rulesPasscodeInput.type = show ? 'text' : 'password';
+      if ($eyeRulesIcon) {
+        $eyeRulesIcon.classList.toggle('fa-eye', !show);
+        $eyeRulesIcon.classList.toggle('fa-eye-slash', show);
+      }
+      if ($toggleRulesPasscode) {
+        $toggleRulesPasscode.setAttribute('aria-label', show ? 'Hide passcode' : 'Show passcode');
+      }
+      if ($showRulesPasscodeCheckbox && $showRulesPasscodeCheckbox.checked !== show) {
+        $showRulesPasscodeCheckbox.checked = show;
+      }
+    }
+
+    if ($toggleRulesPasscode && $rulesPasscodeInput) {
+      $toggleRulesPasscode.addEventListener('click', function () {
+        setRulesPasscodeVisibility($rulesPasscodeInput.type === 'password');
+      });
+    }
+
+    if ($showRulesPasscodeCheckbox && $rulesPasscodeInput) {
+      $showRulesPasscodeCheckbox.addEventListener('change', function () {
+        setRulesPasscodeVisibility($showRulesPasscodeCheckbox.checked);
+      });
+    }
+
     if ($rulesAuthModal) {
       $rulesAuthModal.addEventListener('click', function (e) {
         if (e.target === $rulesAuthModal) {
@@ -230,6 +262,7 @@
     if ($rulesPasscodeError) {
       $rulesPasscodeError.classList.add('hidden');
     }
+    setRulesPasscodeVisibility(false);
   }
 
   function verifyRulesPasscode() {

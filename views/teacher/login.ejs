@@ -1,81 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Teacher Login | ManthraBeads</title>
-    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
-    <link rel="shortcut icon" href="/images/apple-touch-icon.png">
-    <meta name="description" content="ManthraBeads teacher portal — sign in to manage students, attendance, and class packages." />
 
-    <!-- Tailwind CSS (CDN build w/ inline config) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
-              body: ['"Poppins"', 'sans-serif'],
-            },
-            colors: {
-              night: {
-                950: '#070a1f',
-                900: '#0b0f2e',
-                800: '#12183f',
-                700: '#1a2150',
-              },
-            },
-            boxShadow: {
-              glow: '0 0 25px rgba(255, 200, 60, 0.55)',
-              'glow-blue': '0 0 30px rgba(80, 140, 255, 0.45)',
-              'glow-pink': '0 0 25px rgba(255, 90, 200, 0.5)',
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teacher Login | ManthraBeads</title>
+  <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+  <link rel="shortcut icon" href="/images/apple-touch-icon.png">
+  <meta name="description"
+    content="ManthraBeads teacher portal — sign in to manage students, attendance, and class packages." />
+
+  <!-- Tailwind CSS (CDN build w/ inline config) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['"Baloo 2"', '"Poppins"', 'sans-serif'],
+            body: ['"Poppins"', 'sans-serif'],
+          },
+          colors: {
+            night: {
+              950: '#070a1f',
+              900: '#0b0f2e',
+              800: '#12183f',
+              700: '#1a2150',
             },
           },
+          boxShadow: {
+            glow: '0 0 25px rgba(255, 200, 60, 0.55)',
+            'glow-blue': '0 0 30px rgba(80, 140, 255, 0.45)',
+            'glow-pink': '0 0 25px rgba(255, 90, 200, 0.5)',
+          },
         },
-      };
-    </script>
+      },
+    };
+  </script>
 
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet" />
 
-    <!-- Font Awesome -->
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <!-- Site-wide responsive CSS -->
-    <link rel="stylesheet" href="/css/site.css" />
-    <!-- Teacher panel CSS -->
-    <link rel="stylesheet" href="/css/teacher.css" />
-  </head>
+  <!-- Site-wide responsive CSS -->
+  <link rel="stylesheet" href="/css/site.css" />
+  <!-- Teacher panel CSS -->
+  <link rel="stylesheet" href="/css/teacher.css" />
+</head>
 
-  <body class="font-body bg-night-950 overflow-x-hidden">
-    <section class="relative w-full min-h-screen overflow-x-hidden bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740]">
+<body class="font-body bg-night-950 overflow-x-hidden">
+  <section
+    class="relative w-full min-h-screen overflow-x-hidden bg-gradient-to-b from-[#0b1030] via-[#141b4d] to-[#0a1740]">
 
-      <!-- ── Starfield / ambient glow ── -->
-      <div class="pointer-events-none absolute inset-0" aria-hidden="true">
-        <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
-        <div class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]"></div>
-        <div class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72"></div>
-        <span class="absolute top-[8%] left-[15%] h-1 w-1 rounded-full bg-white/70"></span>
-        <span class="absolute top-[18%] left-[45%] h-1 w-1 rounded-full bg-white/50"></span>
-        <span class="absolute top-[6%] left-[70%] h-1.5 w-1.5 rounded-full bg-white/60"></span>
-        <span class="absolute top-[40%] left-[8%] h-1 w-1 rounded-full bg-white/40"></span>
-        <span class="absolute top-[65%] left-[92%] h-1 w-1 rounded-full bg-white/50"></span>
+    <!-- ── Starfield / ambient glow ── -->
+    <div class="pointer-events-none absolute inset-0" aria-hidden="true">
+      <div class="absolute -top-24 left-1/4 h-72 w-72 rounded-full bg-indigo-500/20 blur-[100px] sm:h-96 sm:w-96"></div>
+      <div
+        class="absolute top-1/3 right-0 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-[120px] sm:h-[28rem] sm:w-[28rem]">
       </div>
+      <div
+        class="absolute bottom-0 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-cyan-400/10 blur-[100px] sm:h-72 sm:w-72">
+      </div>
+      <span class="absolute top-[8%] left-[15%] h-1 w-1 rounded-full bg-white/70"></span>
+      <span class="absolute top-[18%] left-[45%] h-1 w-1 rounded-full bg-white/50"></span>
+      <span class="absolute top-[6%] left-[70%] h-1.5 w-1.5 rounded-full bg-white/60"></span>
+      <span class="absolute top-[40%] left-[8%] h-1 w-1 rounded-full bg-white/40"></span>
+      <span class="absolute top-[65%] left-[92%] h-1 w-1 rounded-full bg-white/50"></span>
+    </div>
 
-      <!-- ── Navbar ── -->
-      <%- include('../partials/navbar') %>
+    <!-- ── Navbar ── -->
+    <%- include('../partials/navbar') %>
 
       <!-- ── Login Card ── -->
       <main id="main-content" class="relative z-10 flex items-center justify-center px-4 pt-12 pb-16 sm:pt-16">
@@ -86,23 +88,32 @@
 
             <!-- Logo & heading -->
             <div class="mb-6 text-center sm:mb-8">
-              <div class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-indigo-500/20 to-violet-500/20">
+              <div
+                class="mx-auto mb-3 flex h-16 w-16 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-indigo-500/20 to-violet-500/20">
                 <i class="fa-solid fa-chalkboard-user text-2xl text-indigo-300" aria-hidden="true"></i>
               </div>
               <h1 class="font-display text-2xl font-bold text-white sm:text-3xl">Teacher Portal</h1>
               <p class="mt-1 text-sm text-indigo-200/60">Sign in to manage your classes</p>
             </div>
 
+            <!-- Success alert -->
+            <% if (typeof success !== 'undefined' && success) { %>
+              <div class="mb-4 flex items-center gap-2.5 rounded-xl border border-emerald-500/30 bg-emerald-500/15 p-3 text-xs text-emerald-200">
+                <i class="fa-solid fa-circle-check shrink-0 text-emerald-400" aria-hidden="true"></i>
+                <span><%= success %></span>
+              </div>
+            <% } %>
+
             <!-- Error alert -->
             <% if (typeof error !== 'undefined' && error) { %>
-            <div class="teacher-alert error">
-              <i class="fa-solid fa-circle-exclamation shrink-0 text-rose-400" aria-hidden="true"></i>
-              <span><%= error %></span>
-            </div>
+              <div class="teacher-alert error mb-4">
+                <i class="fa-solid fa-circle-exclamation shrink-0 text-rose-400" aria-hidden="true"></i>
+                <span><%= error %></span>
+              </div>
             <% } %>
 
             <!-- Login form -->
-            <form action="/teacher/login" method="POST" class="flex flex-col gap-4" autocomplete="on">
+            <form action="/teacher/login" method="POST" id="teacherLoginForm" class="flex flex-col gap-4" autocomplete="on">
               <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 
               <div>
@@ -121,9 +132,18 @@
               </div>
 
               <div>
-                <label for="loginPassword" class="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
-                  Password
-                </label>
+                <div class="flex items-center justify-between mb-1.5">
+                  <label for="loginPassword" class="block text-xs font-semibold uppercase tracking-wider text-indigo-200/60">
+                    Password
+                  </label>
+                  <a
+                    href="/teacher/forgot-password"
+                    class="text-xs font-medium text-indigo-300 hover:text-white transition"
+                    title="Reset your password via Email OTP"
+                  >
+                    Forgot password?
+                  </a>
+                </div>
                 <div class="relative">
                   <input
                     type="password"
@@ -144,10 +164,22 @@
                     <i id="eyeIcon" class="fa-solid fa-eye text-sm"></i>
                   </button>
                 </div>
+
+                <!-- Show password option -->
+                <div class="mt-2 flex items-center">
+                  <label for="showPasswordCheckbox" class="flex items-center gap-2 cursor-pointer select-none text-xs text-indigo-200/70 hover:text-indigo-100 transition">
+                    <input
+                      type="checkbox"
+                      id="showPasswordCheckbox"
+                      class="h-3.5 w-3.5 rounded border-white/20 bg-white/5 text-indigo-500 focus:ring-1 focus:ring-indigo-400 focus:ring-offset-0 cursor-pointer"
+                    />
+                    <span>Show password</span>
+                  </label>
+                </div>
               </div>
 
-              <button type="submit" class="btn-primary mt-2">
-                Sign In
+              <button type="submit" id="submitLoginBtn" class="btn-primary mt-2">
+                <span>Sign In</span>
                 <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
               </button>
             </form>
@@ -161,23 +193,55 @@
           </div>
         </div>
       </main>
-    </section>
+  </section>
 
-    <!-- Password toggle script -->
-    <script>
+  <!-- Password toggle script -->
+  <script>
     (function () {
-      var btn  = document.getElementById('togglePassword');
-      var inp  = document.getElementById('loginPassword');
+      var btn = document.getElementById('togglePassword');
+      var inp = document.getElementById('loginPassword');
       var icon = document.getElementById('eyeIcon');
-      if (!btn || !inp) return;
-      btn.addEventListener('click', function () {
-        var hidden = inp.type === 'password';
-        inp.type = hidden ? 'text' : 'password';
-        icon.classList.toggle('fa-eye', !hidden);
-        icon.classList.toggle('fa-eye-slash', hidden);
-        btn.setAttribute('aria-label', hidden ? 'Hide password' : 'Show password');
-      });
+      var checkbox = document.getElementById('showPasswordCheckbox');
+
+      function setPasswordVisibility(show) {
+        if (!inp) return;
+        inp.type = show ? 'text' : 'password';
+        if (icon) {
+          icon.classList.toggle('fa-eye', !show);
+          icon.classList.toggle('fa-eye-slash', show);
+        }
+        if (btn) {
+          btn.setAttribute('aria-label', show ? 'Hide password' : 'Show password');
+        }
+        if (checkbox && checkbox.checked !== show) {
+          checkbox.checked = show;
+        }
+      }
+
+      if (btn && inp) {
+        btn.addEventListener('click', function () {
+          setPasswordVisibility(inp.type === 'password');
+        });
+      }
+
+      if (checkbox && inp) {
+        checkbox.addEventListener('change', function () {
+          setPasswordVisibility(checkbox.checked);
+        });
+      }
+
+      // Prevent duplicate login submissions
+      var loginForm = document.getElementById('teacherLoginForm');
+      var submitBtn = document.getElementById('submitLoginBtn');
+      if (loginForm && submitBtn) {
+        loginForm.addEventListener('submit', function () {
+          submitBtn.disabled = true;
+          submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+          submitBtn.innerHTML = '<span>Signing In...</span> <i class="fa-solid fa-circle-notch fa-spin"></i>';
+        });
+      }
     })();
-    </script>
-  </body>
+  </script>
+</body>
+
 </html>

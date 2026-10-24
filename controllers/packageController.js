@@ -172,6 +172,15 @@ exports.assignPackage = async (req, res) => {
 
     if (isNaN(totalClasses) || totalClasses < 1 || totalClasses > 500) {
       errors.totalClasses = 'Please enter a valid class count between 1 and 500.';
+    } else {
+      // Consistency check: prevent "4-Class Starter Pack" with 6 classes mismatch
+      const classCountMatch = packageName.match(/\b(\d+)\s*[-_]?\s*class(?:es)?\b/i);
+      if (classCountMatch) {
+        const statedClasses = parseInt(classCountMatch[1], 10);
+        if (statedClasses !== totalClasses) {
+          errors.totalClasses = `Package name indicates ${statedClasses} classes, but ${totalClasses} was entered. Please adjust the class count or package name to match.`;
+        }
+      }
     }
 
     if (isNaN(priceRupees) || priceRupees < 0) {
@@ -199,6 +208,10 @@ exports.assignPackage = async (req, res) => {
     const totalPricePaise = Math.round(priceRupees * 100);
     const initialPaymentPaise = Math.round(initialPaymentRupees * 100);
 
+    const teacherRef = (req.session && mongoose.Types.ObjectId.isValid(req.session.teacherId))
+      ? req.session.teacherId
+      : null;
+
     // Create Package record
     const newPackage = await Package.create({
       student: student._id,
@@ -210,7 +223,7 @@ exports.assignPackage = async (req, res) => {
       status: 'active',
       purchaseDate: req.body.purchaseDate ? new Date(req.body.purchaseDate) : new Date(),
       notes: (req.body.notes || '').trim(),
-      recordedBy: req.session.teacherId,
+      recordedBy: teacherRef,
     });
 
     // If initial payment was made, record payment transaction
@@ -224,7 +237,7 @@ exports.assignPackage = async (req, res) => {
         paymentMethod: req.body.paymentMethod || 'upi',
         referenceNumber: (req.body.referenceNumber || '').trim(),
         notes: 'Initial payment recorded during package assignment',
-        recordedBy: req.session.teacherId,
+        recordedBy: teacherRef,
         status: 'valid',
       });
     }
